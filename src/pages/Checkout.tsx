@@ -260,7 +260,7 @@ function BookingSummarySidebar() {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                      <p className="font-body text-xs">Early bird discount — 10% off for booking 30+ days in advance</p>
+                      <p className="font-body text-xs">Early bird discount — 10% off for bookings 30+ days in advance</p>
                     </TooltipContent>
                   </Tooltip>
                 </span>

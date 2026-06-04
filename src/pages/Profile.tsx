@@ -541,6 +541,11 @@ function SavedPropertiesTab() {
     }
   };
 
+  const cancelRemove = () => {
+    setDialogOpen(false);
+    setPendingRemoveId(null);
+  };
+
   if (properties.length === 0) {
     return (
       <motion.div
@@ -643,16 +648,18 @@ function SavedPropertiesTab() {
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Saved Property</AlertDialogTitle>
+            <AlertDialogTitle>Remove Property</AlertDialogTitle>
             <AlertDialogDescription>
-              Remove this property from saved?
+              Are you sure you want to remove this property from your saved list?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={cancelRemove} variant="outline">
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmRemove}
-              className="bg-[#D93838] hover:bg-[#B82D2D] text-white"
+              variant="destructive"
             >
               Remove
             </AlertDialogAction>
@@ -664,9 +671,9 @@ function SavedPropertiesTab() {
 }
 
 const nationalities = [
-  'Australian', 'American', 'British', 'Canadian', 'Chinese', 'French',
-  'German', 'Indian', 'Irish', 'Italian', 'Japanese', 'Mexican',
-  'New Zealander', 'Singaporean', 'South Korean', 'Spanish', 'Other',
+  'US', 'UK', 'Canada', 'Australia', 'Germany', 'France', 'Spain', 'Italy',
+  'Japan', 'China', 'India', 'Brazil', 'Mexico', 'Russia', 'UAE', 'South Korea',
+  'Netherlands',
 ];
 
 /* ─── Account Settings Tab ─── */
