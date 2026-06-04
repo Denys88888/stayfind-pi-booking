@@ -34,9 +34,9 @@ function YoutubeIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-function PiLogo({ size = 18 }: { size?: number }) {
+function PiLogo({ size = 18, className }: { size?: number; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className}>
       <circle cx="16" cy="16" r="16" fill="currentColor" />
       <text x="16" y="21" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">π</text>
     </svg>
