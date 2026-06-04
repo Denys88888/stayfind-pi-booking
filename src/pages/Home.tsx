@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import {
@@ -470,9 +471,10 @@ function DealsSection() {
                 7 nights all-inclusive resort with private beach access and complimentary spa treatments
               </p>
               <div className="flex items-center gap-3 mt-4">
-                <span className="font-body text-sm text-white/50 line-through">$2,400</span>
-                <span className="font-display text-2xl font-semibold text-[#E85D4A]">$1,440</span>
+                <span className="font-body text-sm text-white/50 line-through">{formatPiAmount(usdToPi(2400))}</span>
+                <span className="font-display text-2xl font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(1440))}</span>
               </div>
+              <p className="font-body text-[11px] text-white/50 mt-1">≈ $1,440 USD</p>
               <button
                 onClick={() => navigate('/search?destination=Maldives')}
                 className="mt-4 bg-white text-[#1A2B47] font-body text-sm font-semibold px-5 py-3 rounded-xl hover:bg-[#F8F9FB] transition-colors"
@@ -601,9 +603,9 @@ function PropertiesSection() {
                     <span className="font-body text-xs text-[#7A8494]">Excellent</span>
                   </div>
                   <div className="text-right">
-                    <span className="font-body text-xs text-[#7A8494]">from </span>
-                    <span className="font-body text-lg font-semibold text-[#E85D4A]">${prop.price}</span>
+                    <span className="font-body text-lg font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(prop.price))}</span>
                     <span className="font-body text-xs text-[#7A8494]">/night</span>
+                    <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${prop.price} USD</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 mt-3">

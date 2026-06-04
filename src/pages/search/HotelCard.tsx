@@ -4,6 +4,7 @@ import { MapPin, Heart, ChevronLeft, ChevronRight, Star, Check, Wifi, Waves, Ute
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import type { Hotel } from '@/types/search';
+import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 
 interface HotelCardProps {
   hotel: Hotel;
@@ -79,9 +80,10 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
             <span className="font-body text-xs text-[#7A8494]">{hotel.ratingLabel}</span>
           </div>
           <p className="font-body text-sm font-bold text-[#E85D4A] mt-1">
-            ${hotel.price}
+            {formatPiAmount(usdToPi(hotel.price))}
             <span className="text-xs font-normal text-[#7A8494]">/night</span>
           </p>
+          <p className="font-body text-[10px] text-[#C5CBD4]">≈ ${hotel.price} USD</p>
         </div>
       </motion.div>
     );
@@ -280,14 +282,14 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
               <div className="text-right shrink-0 ml-4">
                 {hotel.originalPrice > hotel.price && (
                   <span className="font-body text-sm text-[#C5CBD4] line-through mr-2">
-                    ${hotel.originalPrice}
+                    {formatPiAmount(usdToPi(hotel.originalPrice))}
                   </span>
                 )}
                 <span className="font-display text-xl sm:text-2xl font-bold text-[#E85D4A]">
-                  ${hotel.price}
+                  {formatPiAmount(usdToPi(hotel.price))}
                 </span>
                 <p className="font-body text-[11px] text-[#7A8494]">per night</p>
-                <p className="font-body text-[11px] text-[#C5CBD4]">Includes taxes & fees</p>
+                <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${hotel.price} USD</p>
                 <Link
                   to={`/property/${hotel.id}`}
                   className="inline-block mt-2 px-5 py-2.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)]"

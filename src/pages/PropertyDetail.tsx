@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Layout from '@/components/Layout';
 import { getHotelById } from '@/data/propertyData';
+import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 import type { HotelData, RoomType } from '@/data/propertyData';
 
 import {
@@ -772,14 +773,17 @@ function RoomsSection({
                     <div className="lg:w-[220px] flex-shrink-0 border-t lg:border-t-0 lg:border-l border-[#F0F2F5] pt-4 lg:pt-0 lg:pl-6 flex flex-col justify-between">
                       <div>
                         <p className="font-display text-2xl sm:text-3xl font-semibold text-[#E85D4A]">
-                          ${room.pricePerNight.toLocaleString()}
+                          {formatPiAmount(usdToPi(room.pricePerNight))}
                         </p>
                         <p className="font-body text-xs text-[#7A8494] mt-0.5">per night</p>
+                        <p className="font-body text-[11px] text-[#C5CBD4] mt-0.5">
+                          ≈ ${room.pricePerNight.toLocaleString()} USD
+                        </p>
                         <p className="font-body text-sm text-[#4A5468] mt-2">
-                          ${room.totalPrice.toLocaleString()} for 7 nights
+                          {formatPiAmount(usdToPi(room.totalPrice))} for 7 nights
                         </p>
                         <p className="font-body text-xs text-[#C5CBD4] mt-0.5">
-                          + ${room.taxes.toLocaleString()} taxes and fees
+                          + {formatPiAmount(usdToPi(room.taxes))} taxes and fees
                         </p>
                       </div>
 
@@ -1274,9 +1278,12 @@ function SimilarProperties({ hotel }: { hotel: HotelData }) {
                       ({prop.reviewCount.toLocaleString()})
                     </span>
                   </div>
-                  <p className="font-display text-lg font-semibold text-[#E85D4A]">
-                    ${prop.price.toLocaleString()}
-                  </p>
+                  <div className="text-right">
+                    <p className="font-display text-lg font-semibold text-[#E85D4A]">
+                      {formatPiAmount(usdToPi(prop.price))}
+                    </p>
+                    <p className="font-body text-[10px] text-[#C5CBD4]">≈ ${prop.price.toLocaleString()} USD</p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -1330,19 +1337,24 @@ function BookingSidebar({
         <div className="flex flex-col gap-2 mb-4 pb-4 border-b border-[#F0F2F5]">
           <div className="flex justify-between font-body text-sm">
             <span className="text-[#7A8494]">7 nights</span>
-            <span className="text-[#1A2B47]">${selectedRoom.totalPrice.toLocaleString()}</span>
+            <span className="text-[#1A2B47]">{formatPiAmount(usdToPi(selectedRoom.totalPrice))}</span>
           </div>
           <div className="flex justify-between font-body text-sm">
             <span className="text-[#7A8494]">Taxes & fees</span>
-            <span className="text-[#1A2B47]">${selectedRoom.taxes.toLocaleString()}</span>
+            <span className="text-[#1A2B47]">{formatPiAmount(usdToPi(selectedRoom.taxes))}</span>
           </div>
         </div>
 
         <div className="flex justify-between mb-5">
           <span className="font-body text-base font-semibold text-[#0F1B2E]">Total</span>
-          <span className="font-display text-xl font-semibold text-[#E85D4A]">
-            ${(selectedRoom.totalPrice + selectedRoom.taxes).toLocaleString()}
-          </span>
+          <div className="text-right">
+            <span className="font-display text-xl font-semibold text-[#E85D4A]">
+              {formatPiAmount(usdToPi(selectedRoom.totalPrice + selectedRoom.taxes))}
+            </span>
+            <p className="font-body text-[11px] text-[#C5CBD4]">
+              ≈ ${(selectedRoom.totalPrice + selectedRoom.taxes).toLocaleString()} USD
+            </p>
+          </div>
         </div>
 
         <button
@@ -1383,9 +1395,10 @@ function MobileBookingBar({
       <div className="flex items-center justify-between">
         <div>
           <p className="font-display text-lg font-semibold text-[#E85D4A]">
-            ${selectedRoom.pricePerNight.toLocaleString()}
+            {formatPiAmount(usdToPi(selectedRoom.pricePerNight))}
             <span className="font-body text-xs text-[#7A8494] font-normal">/night</span>
           </p>
+          <p className="font-body text-[10px] text-[#C5CBD4]">≈ ${selectedRoom.pricePerNight.toLocaleString()} USD</p>
           <p className="font-body text-xs text-[#2D9F5E]">{selectedRoom.name} selected</p>
         </div>
         <button

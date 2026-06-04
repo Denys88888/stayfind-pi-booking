@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 import Layout from '@/components/Layout';
 import CompactSearchBar from './search/CompactSearchBar';
 import FilterSidebar from './search/FilterSidebar';
@@ -367,7 +368,7 @@ export default function Search() {
                 <span className="font-body text-xs text-[#7A8494]">Active:</span>
                 {filters.priceRange[0] > 0 || filters.priceRange[1] < 600 ? (
                   <ActivePill
-                    label={`$${filters.priceRange[0]} - $${filters.priceRange[1]}`}
+                    label={`${formatPiAmount(usdToPi(filters.priceRange[0]))} - ${formatPiAmount(usdToPi(filters.priceRange[1]))}`}
                     onRemove={() =>
                       setFilters((f) => ({ ...f, priceRange: [0, 600] }))
                     }
