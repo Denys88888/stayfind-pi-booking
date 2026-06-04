@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { usePiAuth } from '@/hooks/usePiAuth';
 import Layout from '@/components/Layout';
@@ -43,8 +42,6 @@ import {
 } from 'lucide-react';
 
 /* ─── easing ─── */
-const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];
-const easeBounce = [0.34, 1.56, 0.64, 1] as [number, number, number, number];
 
 /* ─── static stats (bookings data) ─── */
 const userStats = {
@@ -199,24 +196,16 @@ function ProfileHeader() {
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 pt-12 pb-8">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           {/* Avatar */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: easeBounce }}
-          >
+          <div          >
             <img
               src={user ? `https://pi-backend.com/user/${user.uid}/avatar` : '/reviewer-1.jpg'}
               alt={user?.username ?? 'Guest'}
               className="w-20 h-20 rounded-full object-cover border-[3px] border-white/30"
             />
-          </motion.div>
+          </div>
 
           {/* Text Content */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, ease: easeSmooth }}
-            className="text-center sm:text-left flex-1"
+          <div            className="text-center sm:text-left flex-1"
           >
             <p className="font-body text-base text-white/75">
               Welcome back,
@@ -233,23 +222,15 @@ function ProfileHeader() {
                 {user ? `UID: ${user.uid.slice(0, 8)}...` : 'Not signed in'}
               </span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="grid grid-cols-2 sm:flex sm:flex-row gap-4 sm:gap-0 mt-6 sm:mt-8"
+        <div          className="grid grid-cols-2 sm:flex sm:flex-row gap-4 sm:gap-0 mt-6 sm:mt-8"
         >
           {stats.map((stat, idx) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + idx * 0.08, duration: 0.4 }}
-              className={cn(
+            <div
+              key={stat.label}              className={cn(
                 'text-center sm:text-left sm:px-8',
                 idx > 0 && 'sm:border-l sm:border-white/15'
               )}
@@ -260,9 +241,9 @@ function ProfileHeader() {
               <p className="font-body text-xs text-white/60 mt-0.5">
                 {stat.label}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -307,10 +288,9 @@ function TabNav({
                   </span>
                 )}
                 {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
+                  <div
+                    id="activeTab"
                     className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#E85D4A]"
-                    transition={{ duration: 0.25, ease: easeSmooth }}
                   />
                 )}
               </button>
@@ -371,12 +351,8 @@ function MyBookingsTab() {
       </div>
 
       {/* Booking Cards */}
-      <AnimatePresence mode="popLayout">
-        {filtered.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16"
+              {filtered.length === 0 ? (
+          <div            className="text-center py-16"
           >
             <div className="w-20 h-20 rounded-full bg-[#F0F2F5] flex items-center justify-center mx-auto">
               <Calendar size={36} className="text-[#C5CBD4]" />
@@ -390,23 +366,14 @@ function MyBookingsTab() {
             <Button className="mt-4 bg-[#E85D4A] hover:bg-[#D14A38] text-white rounded-xl px-6 py-5 font-body font-semibold hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98] transition-all">
               Explore Destinations
             </Button>
-          </motion.div>
+          </div>
         ) : (
           <div className="flex flex-col gap-4">
-            {filtered.map((booking, idx) => {
+            {filtered.map((booking) => {
               const config = statusConfig[booking.status];
               return (
-                <motion.div
-                  key={booking.id}
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{
-                    delay: idx * 0.08,
-                    duration: 0.4,
-                    ease: easeSmooth,
-                  }}
-                  whileHover={{ y: -2 }}
-                  className={cn(
+                <div
+                  key={booking.id}                  className={cn(
                     'bg-white rounded-2xl shadow-[0_1px_3px_rgba(15,27,46,0.06)] overflow-hidden flex flex-col sm:flex-row border-l-4 transition-shadow duration-300 hover:shadow-[0_6px_24px_rgba(15,27,46,0.08)]',
                     config.border
                   )}
@@ -503,20 +470,18 @@ function MyBookingsTab() {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         )}
-      </AnimatePresence>
-    </div>
+          </div>
   );
 }
 
 /* ─── Saved Properties Tab ─── */
 function SavedPropertiesTab() {
   const [properties, setProperties] = useState(savedPropertiesData);
-  const [removingId, setRemovingId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingRemoveId, setPendingRemoveId] = useState<string | null>(null);
 
@@ -527,13 +492,9 @@ function SavedPropertiesTab() {
 
   const confirmRemove = () => {
     if (pendingRemoveId) {
-      setRemovingId(pendingRemoveId);
       setDialogOpen(false);
-      setTimeout(() => {
-        setProperties((prev) => prev.filter((p) => p.id !== pendingRemoveId));
-        setRemovingId(null);
-        setPendingRemoveId(null);
-      }, 300);
+      setProperties((prev) => prev.filter((p) => p.id !== pendingRemoveId));
+      setPendingRemoveId(null);
     }
   };
 
@@ -544,10 +505,7 @@ function SavedPropertiesTab() {
 
   if (properties.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center py-16"
+      <div        className="text-center py-16"
       >
         <div className="w-20 h-20 rounded-full bg-[#F0F2F5] flex items-center justify-center mx-auto">
           <Heart size={36} className="text-[#C5CBD4]" />
@@ -561,30 +519,16 @@ function SavedPropertiesTab() {
         <Button className="mt-4 bg-[#E85D4A] hover:bg-[#D14A38] text-white rounded-xl px-6 py-5 font-body font-semibold hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98] transition-all">
           Explore Properties
         </Button>
-      </motion.div>
+      </div>
     );
   }
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AnimatePresence>
-          {properties.map((prop, idx) => (
-            <motion.div
-              key={prop.id}
-              initial={{ y: 30, opacity: 0 }}
-              animate={
-                removingId === prop.id
-                  ? { scale: 0.95, opacity: 0, x: 50 }
-                  : { y: 0, opacity: 1 }
-              }
-              exit={{ scale: 0.95, opacity: 0, x: 50 }}
-              transition={{
-                delay: removingId === prop.id ? 0 : idx * 0.08,
-                duration: removingId === prop.id ? 0.3 : 0.5,
-                ease: easeSmooth,
-              }}
-              className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(15,27,46,0.06)] overflow-hidden group transition-shadow duration-350 hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)]"
+                  {properties.map((prop) => (
+            <div
+              key={prop.id}              className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(15,27,46,0.06)] overflow-hidden group transition-shadow duration-350 hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)]"
             >
               {/* Image */}
               <div className="relative overflow-hidden aspect-[4/3]">
@@ -635,10 +579,9 @@ function SavedPropertiesTab() {
                   </Button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </AnimatePresence>
-      </div>
+              </div>
 
       {/* Confirmation Dialog */}
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -719,11 +662,7 @@ function AccountSettingsTab() {
   return (
     <div className="max-w-[720px] mx-auto space-y-4">
       {/* Personal Information */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6"
+      <div        className="bg-white rounded-2xl p-6"
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
@@ -871,14 +810,10 @@ function AccountSettingsTab() {
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
 
       {/* Payment Methods */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.08, duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6"
+      <div        className="bg-white rounded-2xl p-6"
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
@@ -926,14 +861,10 @@ function AccountSettingsTab() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Notification Preferences */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.16, duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6"
+      <div        className="bg-white rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-5">
           <Bell size={18} className="text-[#1A2B47]" />
@@ -958,14 +889,10 @@ function AccountSettingsTab() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Loyalty Program */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.24, duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6"
+      <div        className="bg-white rounded-2xl p-6"
       >
         <h3 className="font-display text-lg font-semibold text-[#1A2B47] mb-4">
           StayFind Rewards
@@ -1017,14 +944,10 @@ function AccountSettingsTab() {
             ))}
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Danger Zone */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.32, duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6 border border-[rgba(217,56,56,0.2)]"
+      <div        className="bg-white rounded-2xl p-6 border border-[rgba(217,56,56,0.2)]"
       >
         <div className="flex items-center gap-2 mb-3">
           <AlertTriangle size={18} className="text-[#D93838]" />
@@ -1049,7 +972,7 @@ function AccountSettingsTab() {
             Delete Account
           </Button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Log Out */}
       <div className="pt-4 pb-8 text-center">
@@ -1087,42 +1010,25 @@ export default function Profile() {
 
         {/* Tab Content */}
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
-          <AnimatePresence mode="wait">
-            {activeTab === 'bookings' && (
-              <motion.div
-                key="bookings"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
+                      {activeTab === 'bookings' && (
+              <div
+                key="bookings"              >
                 <MyBookingsTab />
-              </motion.div>
+              </div>
             )}
             {activeTab === 'saved' && (
-              <motion.div
-                key="saved"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div
+                key="saved"              >
                 <SavedPropertiesTab />
-              </motion.div>
+              </div>
             )}
             {activeTab === 'settings' && (
-              <motion.div
-                key="settings"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div
+                key="settings"              >
                 <AccountSettingsTab />
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
-        </div>
+                  </div>
       </div>
     </Layout>
   );

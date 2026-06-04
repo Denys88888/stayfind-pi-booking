@@ -5,11 +5,17 @@
  * Uses a fixed conversion rate: 1 Pi = $45 USD.
  */
 
-const PI_CONVERSION_RATE = 45; // 1 Pi = $45 USD
+// Pi Network realistic market rate: 1 PI ≈ $0.15 USD
+const PI_USD_RATE = 0.15;
 
 /** Convert a USD amount to Pi */
 export function usdToPi(usdAmount: number): number {
-  return usdAmount / PI_CONVERSION_RATE;
+  return Math.round((usdAmount / PI_USD_RATE) * 100) / 100;
+}
+
+/** Convert Pi amount back to USD string */
+export function piToUsd(piAmount: number): string {
+  return `$${(piAmount * PI_USD_RATE).toFixed(2)}`;
 }
 
 /** Format a Pi amount for display, e.g. 6.33 π */

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -45,11 +44,9 @@ import {
 } from '@/lib/piPayments';
 
 /* ─── easing token ─── */
-const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];
-const easeBounce = [0.34, 1.56, 0.64, 1] as [number, number, number, number];
 
 /* ─── Pi conversion rate for reference ─── */
-const PI_RATE = 45;
+const PI_RATE = 0.15;
 
 /* ─── mock booking data ─── */
 const bookingData = {
@@ -119,19 +116,8 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
       <div className="flex items-center justify-between relative">
         {/* Connecting lines */}
         <div className="absolute top-[15px] left-[16px] right-[16px] h-[2px] bg-[#E2E6EC] z-0">
-          <motion.div
-            className="h-full bg-[#E85D4A]"
-            initial={{ width: '0%' }}
-            animate={{
-              width:
-                currentStep === 1
-                  ? '0%'
-                  : currentStep === 2
-                    ? '50%'
-                    : '100%',
-            }}
-            transition={{ duration: 0.4, ease: easeSmooth }}
-          />
+          <div
+            className="h-full bg-[#E85D4A]"          />
         </div>
 
         {steps.map((label, idx) => {
@@ -144,11 +130,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
               key={label}
               className="flex flex-col items-center gap-2 relative z-10"
             >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: idx * 0.15, duration: 0.3 }}
-                className={cn(
+              <div                className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300',
                   isCompleted
                     ? 'bg-[#2D9F5E] text-white'
@@ -162,7 +144,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
                 ) : (
                   stepNum
                 )}
-              </motion.div>
+              </div>
               <span
                 className={cn(
                   'text-xs font-medium hidden sm:block',
@@ -186,11 +168,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
 /* ─── Property Summary Strip ─── */
 function PropertySummaryStrip() {
   return (
-    <motion.div
-      initial={{ y: 10, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.4, ease: easeSmooth }}
-      className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-5 p-4 bg-[#F8F9FB] rounded-xl"
+    <div      className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-5 p-4 bg-[#F8F9FB] rounded-xl"
     >
       <img
         src={bookingData.image}
@@ -213,18 +191,14 @@ function PropertySummaryStrip() {
         <Users size={14} className="inline mr-1" />
         {bookingData.guests}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 /* ─── Booking Summary Sidebar ─── */
 function BookingSummarySidebar() {
   return (
-    <motion.div
-      initial={{ x: 20, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.5, ease: easeSmooth }}
-      className="bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
+    <div      className="bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
     >
       <img
         src={bookingData.image}
@@ -343,7 +317,7 @@ function BookingSummarySidebar() {
           Secured by Pi Blockchain
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -385,11 +359,7 @@ function StepDetails({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
       {/* Form */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: easeSmooth }}
-        className="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
+      <div        className="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
       >
         {/* Lead Guest */}
         <div>
@@ -583,7 +553,7 @@ function StepDetails({
           Continue to Pi Payment
           <ChevronRight size={18} className="ml-1" />
         </Button>
-      </motion.div>
+      </div>
 
       {/* Sidebar */}
       <div className="lg:col-span-2">
@@ -656,11 +626,7 @@ function StepPayment({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
       {/* Pi Payment Form */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: easeSmooth }}
-        className="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
+      <div        className="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
       >
         {/* Payment Method */}
         <div>
@@ -801,14 +767,11 @@ function StepPayment({
 
         {/* Error Message */}
         {paymentError && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4 flex items-center gap-2 bg-[#FEF2F0] rounded-lg p-3 text-[#D93838]"
+          <div            className="mt-4 flex items-center gap-2 bg-[#FEF2F0] rounded-lg p-3 text-[#D93838]"
           >
             <AlertCircle size={16} />
             <span className="font-body text-sm">{paymentError}</span>
-          </motion.div>
+          </div>
         )}
 
         {/* Pay Button */}
@@ -882,7 +845,7 @@ function StepPayment({
             Pi Network
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Sidebar */}
       <div className="lg:col-span-2">
@@ -907,53 +870,30 @@ function StepConfirmation({ txId }: { txId: string }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-[720px] mx-auto text-center"
+    <div      className="max-w-[720px] mx-auto text-center"
     >
       {/* Success Animation */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: [0, 1.2, 1] }}
-        transition={{ duration: 0.6, ease: easeBounce }}
-        className="w-20 h-20 rounded-full bg-[#2D9F5E] flex items-center justify-center mx-auto"
+      <div        className="w-20 h-20 rounded-full bg-[#2D9F5E] flex items-center justify-center mx-auto"
       >
         <Check size={36} className="text-white" strokeWidth={3} />
-      </motion.div>
+      </div>
       {/* Pulse ring */}
-      <motion.div
-        initial={{ scale: 1, opacity: 0.3 }}
-        animate={{ scale: 1.3, opacity: 0 }}
-        transition={{ delay: 0.6, duration: 0.8 }}
-        className="w-20 h-20 rounded-full bg-[#2D9F5E] mx-auto -mt-20 pointer-events-none"
+      <div        className="w-20 h-20 rounded-full bg-[#2D9F5E] mx-auto -mt-20 pointer-events-none"
       />
 
       {/* Headline */}
-      <motion.h2
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.5, ease: easeSmooth }}
-        className="font-display text-3xl sm:text-4xl font-semibold text-[#0F1B2E] mt-6"
+      <h2        className="font-display text-3xl sm:text-4xl font-semibold text-[#0F1B2E] mt-6"
       >
         Booking Confirmed!
-      </motion.h2>
+      </h2>
 
-      <motion.p
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.5, ease: easeSmooth }}
-        className="font-body text-base text-[#7A8494] mt-2"
+      <p        className="font-body text-base text-[#7A8494] mt-2"
       >
         A confirmation email has been sent to sarah.mitchell@email.com
-      </motion.p>
+      </p>
 
       {/* Booking Reference */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
-        className="mt-6 bg-white rounded-xl p-4 border border-[#E2E6EC] flex items-center justify-between"
+      <div        className="mt-6 bg-white rounded-xl p-4 border border-[#E2E6EC] flex items-center justify-between"
       >
         <div className="text-left">
           <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
@@ -979,14 +919,10 @@ function StepConfirmation({ txId }: { txId: string }) {
             </>
           )}
         </button>
-      </motion.div>
+      </div>
 
       {/* Pi Transaction */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.65, duration: 0.4 }}
-        className="mt-3 bg-gradient-to-r from-[#0F1B2E] to-[#1A2B47] rounded-xl p-4 flex items-center justify-between"
+      <div        className="mt-3 bg-gradient-to-r from-[#0F1B2E] to-[#1A2B47] rounded-xl p-4 flex items-center justify-between"
       >
         <div className="text-left">
           <p className="font-body text-xs text-white/50 uppercase tracking-wider">
@@ -1002,14 +938,10 @@ function StepConfirmation({ txId }: { txId: string }) {
             {formatPiAmount(piTotal)}
           </p>
         </div>
-      </motion.div>
+      </div>
 
       {/* Booking Details Card */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.5, ease: easeSmooth }}
-        className="mt-6 bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)] text-left"
+      <div        className="mt-6 bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)] text-left"
       >
         <img
           src={bookingData.image}
@@ -1072,14 +1004,10 @@ function StepConfirmation({ txId }: { txId: string }) {
             </p>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Action Buttons */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.9, duration: 0.4 }}
-        className="mt-6 flex flex-col sm:flex-row gap-3 justify-center"
+      <div        className="mt-6 flex flex-col sm:flex-row gap-3 justify-center"
       >
         <Button
           variant="outline"
@@ -1101,14 +1029,10 @@ function StepConfirmation({ txId }: { txId: string }) {
         >
           View My Bookings
         </Button>
-      </motion.div>
+      </div>
 
       {/* Help */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.0, duration: 0.4 }}
-        className="mt-8"
+      <div        className="mt-8"
       >
         <p className="font-body text-sm text-[#7A8494]">
           Need help with your booking?
@@ -1124,8 +1048,8 @@ function StepConfirmation({ txId }: { txId: string }) {
             Cancel Booking
           </span>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -1161,41 +1085,25 @@ export default function Checkout() {
 
         {/* Step Content */}
         <div className="max-w-[960px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
-          <AnimatePresence mode="wait">
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
+                      {step === 1 && (
+              <div
+                key="step1"              >
                 <StepDetails onContinue={handleContinue} />
-              </motion.div>
+              </div>
             )}
             {step === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div
+                key="step2"              >
                 <StepPayment onPay={handlePay} onBack={() => setStep(1)} />
-              </motion.div>
+              </div>
             )}
             {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <div
+                key="step3"              >
                 <StepConfirmation txId={txId} />
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
-        </div>
+                  </div>
       </div>
     </Layout>
   );
