@@ -779,7 +779,7 @@ function RoomsSection({
                           ${room.totalPrice.toLocaleString()} for 7 nights
                         </p>
                         <p className="font-body text-xs text-[#C5CBD4] mt-0.5">
-                          + ${room.taxes} taxes and fees
+                          + ${room.taxes.toLocaleString()} taxes and fees
                         </p>
                       </div>
 
@@ -1334,7 +1334,7 @@ function BookingSidebar({
           </div>
           <div className="flex justify-between font-body text-sm">
             <span className="text-[#7A8494]">Taxes & fees</span>
-            <span className="text-[#1A2B47]">${selectedRoom.taxes}</span>
+            <span className="text-[#1A2B47]">${selectedRoom.taxes.toLocaleString()}</span>
           </div>
         </div>
 
