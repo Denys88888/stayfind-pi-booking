@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { usePiAuth } from '@/hooks/usePiAuth';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,19 +46,12 @@ import {
 const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];
 const easeBounce = [0.34, 1.56, 0.64, 1] as [number, number, number, number];
 
-/* ─── mock data ─── */
-const userData = {
-  name: 'Sarah Mitchell',
-  email: 'sarah.mitchell@email.com',
-  avatar: '/reviewer-1.jpg',
-  memberSince: 2021,
-  tier: 'Gold' as const,
-  stats: {
-    bookings: 12,
-    nights: 47,
-    saved: 28,
-    savings: '$1,240',
-  },
+/* ─── static stats (bookings data) ─── */
+const userStats = {
+  bookings: 12,
+  nights: 47,
+  saved: 28,
+  savings: '$1,240',
 };
 
 const bookingsData = [
@@ -191,11 +185,13 @@ const loyaltyBenefits = [
 
 /* ─── Profile Header ─── */
 function ProfileHeader() {
+  const { user } = usePiAuth();
+
   const stats = [
-    { value: userData.stats.bookings, label: 'Total Bookings' },
-    { value: userData.stats.nights, label: 'Nights Stayed' },
-    { value: userData.stats.saved, label: 'Saved Properties' },
-    { value: userData.stats.savings, label: 'Total Savings' },
+    { value: userStats.bookings, label: 'Total Bookings' },
+    { value: userStats.nights, label: 'Nights Stayed' },
+    { value: userStats.saved, label: 'Saved Properties' },
+    { value: userStats.savings, label: 'Total Savings' },
   ];
 
   return (
@@ -209,8 +205,8 @@ function ProfileHeader() {
             transition={{ duration: 0.5, ease: easeBounce }}
           >
             <img
-              src={userData.avatar}
-              alt={userData.name}
+              src={user ? `https://pi-backend.com/user/${user.uid}/avatar` : '/reviewer-1.jpg'}
+              alt={user?.username ?? 'Guest'}
               className="w-20 h-20 rounded-full object-cover border-[3px] border-white/30"
             />
           </motion.div>
@@ -226,15 +222,15 @@ function ProfileHeader() {
               Welcome back,
             </p>
             <h1 className="font-display text-3xl sm:text-4xl font-semibold text-white mt-0.5">
-              {userData.name}
+              {user ? `@${user.username}` : 'Guest'}
             </h1>
             <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
               <Star size={14} className="text-amber-400 fill-amber-400" />
               <span className="font-body text-xs font-medium uppercase tracking-wider text-amber-400">
-                {userData.tier} Member
+                {user ? 'Pi Network Member' : 'Guest'}
               </span>
               <span className="font-body text-xs text-white/50">
-                Since {userData.memberSince}
+                {user ? `UID: ${user.uid.slice(0, 8)}...` : 'Not signed in'}
               </span>
             </div>
           </motion.div>
@@ -654,12 +650,12 @@ function SavedPropertiesTab() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={cancelRemove} variant="outline">
+            <AlertDialogCancel onClick={cancelRemove}>
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmRemove}
-              variant="destructive"
+              className="bg-[#D93838] text-white hover:bg-[#B52E2E]"
             >
               Remove
             </AlertDialogAction>
@@ -678,11 +674,12 @@ const nationalities = [
 
 /* ─── Account Settings Tab ─── */
 function AccountSettingsTab() {
+  const { user } = usePiAuth();
   const [editMode, setEditMode] = useState(false);
   const defaultProfile = {
-    firstName: 'Sarah',
-    lastName: 'Mitchell',
-    email: 'sarah.mitchell@email.com',
+    firstName: user?.username ? user.username.split(' ')[0] : 'Sarah',
+    lastName: user?.username ? (user.username.split(' ')[1] || '') : 'Mitchell',
+    email: user?.username ? `${user.username}@pi.network` : 'sarah.mitchell@email.com',
     phone: '+61 412 345 678',
     dob: '1990-03-15',
     nationality: 'Australian',
@@ -876,54 +873,11 @@ function AccountSettingsTab() {
         )}
       </motion.div>
 
-      {/* Password & Security */}
-      <motion.div
-        initial={{ y: 15, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.08, duration: 0.4, ease: easeSmooth }}
-        className="bg-white rounded-2xl p-6"
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
-            Password &amp; Security
-          </h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="font-body text-sm text-[#1A2B47] hover:text-[#E85D4A] hover:bg-[#F8F9FB] rounded-lg"
-          >
-            Change Password
-          </Button>
-        </div>
-        <div className="flex items-center gap-4">
-          <div>
-            <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Current Password
-            </p>
-            <p className="font-body text-sm text-[#4A5468] mt-0.5">
-              &bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;
-            </p>
-          </div>
-          <div>
-            <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Last Changed
-            </p>
-            <p className="font-body text-sm text-[#7A8494] mt-0.5">
-              3 months ago
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5 ml-auto">
-            <Check size={14} className="text-[#2D9F5E]" />
-            <span className="font-body text-sm text-[#2D9F5E]">2FA Enabled</span>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Payment Methods */}
       <motion.div
         initial={{ y: 15, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.16, duration: 0.4, ease: easeSmooth }}
+        transition={{ delay: 0.08, duration: 0.4, ease: easeSmooth }}
         className="bg-white rounded-2xl p-6"
       >
         <div className="flex items-center justify-between mb-4">
@@ -978,7 +932,7 @@ function AccountSettingsTab() {
       <motion.div
         initial={{ y: 15, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.24, duration: 0.4, ease: easeSmooth }}
+        transition={{ delay: 0.16, duration: 0.4, ease: easeSmooth }}
         className="bg-white rounded-2xl p-6"
       >
         <div className="flex items-center gap-2 mb-5">
@@ -1010,7 +964,7 @@ function AccountSettingsTab() {
       <motion.div
         initial={{ y: 15, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.32, duration: 0.4, ease: easeSmooth }}
+        transition={{ delay: 0.24, duration: 0.4, ease: easeSmooth }}
         className="bg-white rounded-2xl p-6"
       >
         <h3 className="font-display text-lg font-semibold text-[#1A2B47] mb-4">
@@ -1020,7 +974,7 @@ function AccountSettingsTab() {
           <div className="flex items-start justify-between">
             <div>
               <p className="font-display text-xl font-semibold text-white">
-                {userData.name}
+                {user?.username ? `@${user.username}` : 'Guest'}
               </p>
               <p className="font-body text-sm text-white/80 mt-0.5">
                 SF-GOLD-78432
@@ -1069,7 +1023,7 @@ function AccountSettingsTab() {
       <motion.div
         initial={{ y: 15, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.4, ease: easeSmooth }}
+        transition={{ delay: 0.32, duration: 0.4, ease: easeSmooth }}
         className="bg-white rounded-2xl p-6 border border-[rgba(217,56,56,0.2)]"
       >
         <div className="flex items-center gap-2 mb-3">
@@ -1099,15 +1053,25 @@ function AccountSettingsTab() {
 
       {/* Log Out */}
       <div className="pt-4 pb-8 text-center">
-        <Button
-          variant="ghost"
-          className="font-body text-sm text-[#7A8494] hover:text-[#D93838] hover:bg-[#FDEBEB] rounded-lg"
-        >
-          <LogOut size={16} className="mr-1" />
-          Sign Out
-        </Button>
+        <SignOutButton />
       </div>
     </div>
+  );
+}
+
+/* ─── Sign Out Button ─── */
+function SignOutButton() {
+  const { signOut } = usePiAuth();
+
+  return (
+    <Button
+      variant="ghost"
+      onClick={signOut}
+      className="font-body text-sm text-[#7A8494] hover:text-[#D93838] hover:bg-[#FDEBEB] rounded-lg"
+    >
+      <LogOut size={16} className="mr-1" />
+      Sign Out
+    </Button>
   );
 }
 
