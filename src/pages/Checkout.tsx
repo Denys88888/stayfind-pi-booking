@@ -22,6 +22,7 @@ import {
   Copy,
   Download,
   AlertCircle,
+  AlertTriangle,
   MapPin,
   Star,
   Wallet,
@@ -40,6 +41,8 @@ import {
   usdToPi,
   formatPiAmount,
 } from '@/lib/piPayments';
+import { isPiSdkAvailable } from '@/hooks/usePiAuth';
+import PiBrowserRequired from '@/components/PiBrowserRequired';
 
 /* ─── Pi conversion rate for reference ─── */
 const PI_RATE = 0.15;
@@ -548,6 +551,10 @@ function StepPayment({
   const [errors, setErrors] = useState<FormErrors>({});
   const [processing, setProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
+
+  const sdkAvailable = isPiSdkAvailable();
+  const showPiBrowserRequired = isAuthenticated && !sdkAvailable && !demoMode;
 
   const validate = useCallback(() => {
     const newErrors: FormErrors = {};
@@ -594,11 +601,37 @@ function StepPayment({
     }
   };
 
+  /* Show Pi Browser required screen if authenticated but SDK not available */
+  if (showPiBrowserRequired) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3">
+          <PiBrowserRequired onContinueDemo={() => setDemoMode(true)} />
+        </div>
+        <div className="lg:col-span-2">
+          <div className="lg:sticky lg:top-[100px]">
+            <BookingSummarySidebar />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
       {/* Pi Payment Form */}
       <div        className="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
       >
+        {/* Demo Mode Banner */}
+        {demoMode && (
+          <div className="mb-4 flex items-center gap-2 bg-[#E8A838]/15 border border-[#E8A838]/30 rounded-xl px-4 py-2.5">
+            <AlertTriangle size={14} className="text-[#E8A838] shrink-0" />
+            <span className="font-body text-xs text-[#B07D1A]">
+              Demo Mode — No real Pi transaction. Open in Pi Browser for live payments.
+            </span>
+          </div>
+        )}
+
         {/* Payment Method */}
         <div>
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
