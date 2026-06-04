@@ -23,12 +23,11 @@ import {
   Download,
   Calendar,
   AlertCircle,
-  HelpCircle,
   MapPin,
   Star,
   Users,
   Bed,
-  CreditCard,
+  Wallet,
   ChevronRight,
   Info,
 } from 'lucide-react';
@@ -38,10 +37,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { usePiAuth } from '@/hooks/usePiAuth';
+import {
+  createPiPayment,
+  usdToPi,
+  formatPiAmount,
+} from '@/lib/piPayments';
 
 /* ─── easing token ─── */
 const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];
 const easeBounce = [0.34, 1.56, 0.64, 1] as [number, number, number, number];
+
+/* ─── Pi conversion rate for reference ─── */
+const PI_RATE = 45;
 
 /* ─── mock booking data ─── */
 const bookingData = {
@@ -62,22 +70,49 @@ const bookingData = {
   address: '123 Luxury Avenue, Paris, France',
 };
 
+/* ─── Pi prices ─── */
+const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
+const piTaxes = usdToPi(bookingData.taxes);
+const piDiscount = usdToPi(bookingData.discount);
+const piTotal = usdToPi(bookingData.total);
+
 /* ─── form error type ─── */
 interface FormErrors {
   firstName?: string;
   lastName?: string;
   email?: string;
   phone?: string;
-  cardNumber?: string;
-  expiry?: string;
-  cvv?: string;
-  cardName?: string;
   terms?: string;
+}
+
+/* ─── Pi Logo SVG ─── */
+function PiLogoPay({ className }: { className?: string }) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 32 32"
+      fill="none"
+      className={className}
+    >
+      <circle cx="16" cy="16" r="16" fill="white" />
+      <text
+        x="16"
+        y="22"
+        textAnchor="middle"
+        fill="#E85D4A"
+        fontSize="16"
+        fontWeight="bold"
+      >
+        π
+      </text>
+    </svg>
+  );
 }
 
 /* ─── Progress Bar Component ─── */
 function ProgressBar({ currentStep }: { currentStep: number }) {
-  const steps = ['Your Details', 'Payment', 'Confirmation'];
+  const steps = ['Your Details', 'Pi Payment', 'Confirmation'];
 
   return (
     <div className="w-full max-w-[500px] mx-auto">
@@ -238,6 +273,9 @@ function BookingSummarySidebar() {
             </span>
             <span className="font-body text-sm text-[#4A5468]">
               ${(bookingData.pricePerNight * bookingData.nights).toLocaleString()}
+              <span className="text-[#7A8494] ml-1">
+                ({formatPiAmount(piSubtotal)})
+              </span>
             </span>
           </div>
           <div className="flex justify-between">
@@ -246,6 +284,9 @@ function BookingSummarySidebar() {
             </span>
             <span className="font-body text-sm text-[#4A5468]">
               ${bookingData.taxes.toLocaleString()}
+              <span className="text-[#7A8494] ml-1">
+                ({formatPiAmount(piTaxes)})
+              </span>
             </span>
           </div>
           {bookingData.discount > 0 && (
@@ -266,6 +307,9 @@ function BookingSummarySidebar() {
                 </span>
                 <span className="font-body text-sm text-[#2D9F5E]">
                   - ${bookingData.discount.toLocaleString()}
+                  <span className="text-[#7A8494] ml-1">
+                    (-{formatPiAmount(piDiscount)})
+                  </span>
                 </span>
               </div>
             </TooltipProvider>
@@ -276,9 +320,12 @@ function BookingSummarySidebar() {
                 Total
               </span>
               <span className="font-display text-xl font-semibold text-[#0F1B2E]">
-                ${bookingData.total.toLocaleString()}
+                {formatPiAmount(piTotal)}
               </span>
             </div>
+            <p className="font-body text-xs text-[#7A8494] text-right mt-0.5">
+              ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+            </p>
           </div>
         </div>
       </div>
@@ -293,7 +340,7 @@ function BookingSummarySidebar() {
       <div className="mt-4 flex items-center gap-2 text-[#C5CBD4]">
         <Lock size={14} />
         <span className="font-body text-xs text-[#7A8494]">
-          Secure SSL encryption
+          Secured by Pi Blockchain
         </span>
       </div>
     </motion.div>
@@ -533,7 +580,7 @@ function StepDetails({
           onClick={handleContinue}
           className="w-full mt-6 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold rounded-xl py-6 text-base transition-all duration-250 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]"
         >
-          Continue to Payment
+          Continue to Pi Payment
           <ChevronRight size={18} className="ml-1" />
         </Button>
       </motion.div>
@@ -548,60 +595,67 @@ function StepDetails({
   );
 }
 
-/* ─── Step 2: Payment ─── */
+/* ─── Step 2: Pi Payment ─── */
 function StepPayment({
   onPay,
   onBack,
 }: {
-  onPay: () => void;
+  onPay: (txId: string) => void;
   onBack: () => void;
 }) {
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [cardName, setCardName] = useState('');
+  const { isAuthenticated, authenticate } = usePiAuth();
   const [terms, setTerms] = useState(false);
-  const [saveCard, setSaveCard] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [processing, setProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const validate = useCallback(() => {
     const newErrors: FormErrors = {};
-    if (!cardNumber.trim() || cardNumber.replace(/\s/g, '').length < 13)
-      newErrors.cardNumber = 'Enter a valid card number';
-    if (!expiry.trim() || !/^\d{2}\s\/\s\d{2}$/.test(expiry))
-      newErrors.expiry = 'Enter valid expiry (MM / YY)';
-    if (!cvv.trim() || cvv.length < 3) newErrors.cvv = 'Enter valid CVV';
-    if (!cardName.trim()) newErrors.cardName = 'Enter cardholder name';
     if (!terms) newErrors.terms = 'You must agree to the terms';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [cardNumber, expiry, cvv, cardName, terms]);
+  }, [terms]);
 
-  const handlePay = () => {
-    if (validate()) {
-      setProcessing(true);
-      setTimeout(() => {
-        setProcessing(false);
-        onPay();
-      }, 2000);
+  const handlePay = async () => {
+    if (!validate()) return;
+
+    if (!isAuthenticated) {
+      await authenticate(['username', 'payments']);
+      return;
     }
-  };
 
-  const formatCardNumber = (val: string) => {
-    const digits = val.replace(/\D/g, '').slice(0, 16);
-    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
-  };
+    setProcessing(true);
+    setPaymentError(null);
 
-  const formatExpiry = (val: string) => {
-    const digits = val.replace(/\D/g, '').slice(0, 4);
-    if (digits.length >= 3) return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-    return digits;
+    try {
+      await createPiPayment({
+        amount: piTotal,
+        memo: `StayFind: ${bookingData.hotelName} - ${bookingData.roomType}`,
+        metadata: {
+          hotelName: bookingData.hotelName,
+          roomType: bookingData.roomType,
+          checkIn: bookingData.checkIn,
+          checkOut: bookingData.checkOut,
+          nights: bookingData.nights,
+          guests: bookingData.guests,
+          totalPi: piTotal,
+        },
+        onTransactionId: (txid) => {
+          setProcessing(false);
+          onPay(txid);
+        },
+      });
+    } catch (err: unknown) {
+      setProcessing(false);
+      const message =
+        err instanceof Error ? err.message : 'Payment failed. Please try again.';
+      setPaymentError(message);
+    }
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-      {/* Payment Form */}
+      {/* Pi Payment Form */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -617,152 +671,90 @@ function StepPayment({
             <div className="w-5 h-5 rounded-full border-2 border-[#E85D4A] flex items-center justify-center shrink-0">
               <div className="w-2.5 h-2.5 rounded-full bg-[#E85D4A]" />
             </div>
-            <CreditCard size={24} className="text-[#1A2B47]" />
+            <PiLogoPay />
             <div>
               <p className="font-body text-sm font-medium text-[#1A2B47]">
-                Credit or Debit Card
+                Pi Cryptocurrency
               </p>
-              <p className="font-body text-xs text-[#7A8494]">Most popular</p>
+              <p className="font-body text-xs text-[#7A8494]">
+                Fast, secure blockchain payments
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Card Details */}
-        <div className="mt-6">
-          <Label
-            htmlFor="cardNumber"
-            className="font-body text-sm text-[#4A5468]"
-          >
-            Card Number
-          </Label>
-          <Input
-            id="cardNumber"
-            placeholder="1234 5678 9012 3456"
-            value={cardNumber}
-            onChange={(e) => {
-              setCardNumber(formatCardNumber(e.target.value));
-              if (errors.cardNumber)
-                setErrors((p) => ({ ...p, cardNumber: undefined }));
-            }}
-            className={cn(
-              'mt-1.5 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]',
-              errors.cardNumber && 'border-[#D93838]'
-            )}
-          />
-          {errors.cardNumber && (
-            <p className="flex items-center gap-1 mt-1 font-body text-xs text-[#D93838]">
-              <AlertCircle size={12} />
-              {errors.cardNumber}
-            </p>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div>
-              <Label
-                htmlFor="expiry"
-                className="font-body text-sm text-[#4A5468]"
-              >
-                Expiry Date
-              </Label>
-              <Input
-                id="expiry"
-                placeholder="MM / YY"
-                value={expiry}
-                onChange={(e) => {
-                  setExpiry(formatExpiry(e.target.value));
-                  if (errors.expiry)
-                    setErrors((p) => ({ ...p, expiry: undefined }));
-                }}
-                className={cn(
-                  'mt-1.5 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]',
-                  errors.expiry && 'border-[#D93838]'
-                )}
-              />
-              {errors.expiry && (
-                <p className="flex items-center gap-1 mt-1 font-body text-xs text-[#D93838]">
-                  <AlertCircle size={12} />
-                  {errors.expiry}
-                </p>
-              )}
+        {/* Pi Payment Card */}
+        <div className="mt-6 rounded-2xl bg-gradient-to-br from-[#0F1B2E] to-[#1A2B47] p-6 text-white">
+          {/* Header */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+              <Wallet size={20} className="text-white" />
             </div>
             <div>
-              <Label
-                htmlFor="cvv"
-                className="font-body text-sm text-[#4A5468] flex items-center gap-1"
-              >
-                CVV
-                <span title="3 digits on back of card" className="cursor-help">
-                  <HelpCircle size={14} className="text-[#C5CBD4]" />
+              <p className="font-body text-sm font-medium text-white/80">
+                Pay with Pi
+              </p>
+              <p className="font-display text-2xl font-semibold text-white">
+                {formatPiAmount(piTotal)}
+              </p>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="my-4 border-t border-white/10" />
+
+          {/* Price Breakdown */}
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="font-body text-sm text-white/60">
+                ${bookingData.pricePerNight} × {bookingData.nights} nights
+              </span>
+              <span className="font-body text-sm text-white/80">
+                {formatPiAmount(piSubtotal)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-body text-sm text-white/60">
+                Taxes &amp; fees
+              </span>
+              <span className="font-body text-sm text-white/80">
+                {formatPiAmount(piTaxes)}
+              </span>
+            </div>
+            {bookingData.discount > 0 && (
+              <div className="flex justify-between">
+                <span className="font-body text-sm text-white/60">
+                  Discount
                 </span>
-              </Label>
-              <Input
-                id="cvv"
-                placeholder="CVV"
-                maxLength={4}
-                value={cvv}
-                onChange={(e) => {
-                  setCvv(e.target.value.replace(/\D/g, '').slice(0, 4));
-                  if (errors.cvv)
-                    setErrors((p) => ({ ...p, cvv: undefined }));
-                }}
-                className={cn(
-                  'mt-1.5 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]',
-                  errors.cvv && 'border-[#D93838]'
-                )}
-              />
-              {errors.cvv && (
-                <p className="flex items-center gap-1 mt-1 font-body text-xs text-[#D93838]">
-                  <AlertCircle size={12} />
-                  {errors.cvv}
-                </p>
-              )}
+                <span className="font-body text-sm text-[#4ADE80]">
+                  -{formatPiAmount(piDiscount)}
+                </span>
+              </div>
+            )}
+            <div className="border-t border-white/10 pt-2 mt-2">
+              <div className="flex justify-between">
+                <span className="font-body text-sm font-medium text-white">
+                  Total
+                </span>
+                <span className="font-body text-base font-semibold text-white">
+                  {formatPiAmount(piTotal)}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="mt-4">
-            <Label
-              htmlFor="cardName"
-              className="font-body text-sm text-[#4A5468]"
-            >
-              Name on Card
-            </Label>
-            <Input
-              id="cardName"
-              placeholder="Name as it appears on card"
-              value={cardName}
-              onChange={(e) => {
-                setCardName(e.target.value);
-                if (errors.cardName)
-                  setErrors((p) => ({ ...p, cardName: undefined }));
-              }}
-              className={cn(
-                'mt-1.5 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]',
-                errors.cardName && 'border-[#D93838]'
-              )}
-            />
-            {errors.cardName && (
-              <p className="flex items-center gap-1 mt-1 font-body text-xs text-[#D93838]">
-                <AlertCircle size={12} />
-                {errors.cardName}
-              </p>
-            )}
-          </div>
-        </div>
+          {/* Conversion Note */}
+          <p className="font-body text-xs text-white/40 mt-3">
+            ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+          </p>
 
-        {/* Save Card */}
-        <div className="flex items-center gap-3 mt-6">
-          <Checkbox
-            id="saveCard"
-            checked={saveCard}
-            onCheckedChange={(c) => setSaveCard(c === true)}
-            className="rounded border-[#E2E6EC] data-[state=checked]:bg-[#E85D4A] data-[state=checked]:border-[#E85D4A]"
-          />
-          <Label
-            htmlFor="saveCard"
-            className="font-body text-sm text-[#4A5468] cursor-pointer"
-          >
-            Save this card for future bookings
-          </Label>
+          {/* Security Badge */}
+          <div className="flex items-center gap-1.5 mt-4">
+            <Check size={12} className="text-[#4ADE80]" />
+            <span className="font-body text-xs text-white/50">
+              Secured by Pi Blockchain
+            </span>
+          </div>
         </div>
 
         {/* Terms */}
@@ -807,12 +799,24 @@ function StepPayment({
           )}
         </div>
 
+        {/* Error Message */}
+        {paymentError && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 flex items-center gap-2 bg-[#FEF2F0] rounded-lg p-3 text-[#D93838]"
+          >
+            <AlertCircle size={16} />
+            <span className="font-body text-sm">{paymentError}</span>
+          </motion.div>
+        )}
+
         {/* Pay Button */}
         <Button
           onClick={handlePay}
           disabled={processing}
           className={cn(
-            'w-full mt-6 font-body font-semibold rounded-xl py-6 text-base transition-all duration-250',
+            'w-full mt-6 font-body font-semibold rounded-xl py-6 text-base transition-all duration-250 flex items-center justify-center gap-2',
             processing
               ? 'bg-[#E85D4A]/80 text-white cursor-not-allowed'
               : 'bg-[#E85D4A] hover:bg-[#D14A38] text-white hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]'
@@ -842,8 +846,16 @@ function StepPayment({
               </svg>
               Processing...
             </span>
+          ) : isAuthenticated ? (
+            <>
+              <PiLogoPay />
+              Pay {formatPiAmount(piTotal)} with Pi
+            </>
           ) : (
-            <span>Complete Booking · ${bookingData.total.toLocaleString()}</span>
+            <>
+              <PiLogoPay />
+              Sign In with Pi to Pay
+            </>
           )}
         </Button>
 
@@ -859,15 +871,15 @@ function StepPayment({
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4 text-[#7A8494]">
           <span className="flex items-center gap-1 font-body text-xs">
             <Lock size={12} />
-            SSL Secure
+            Pi Blockchain Secure
           </span>
           <span className="flex items-center gap-1 font-body text-xs">
             <Shield size={12} />
-            256-bit Encryption
+            Decentralized Payment
           </span>
           <span className="flex items-center gap-1 font-body text-xs">
-            <CreditCard size={12} />
-            Visa · Mastercard · Amex
+            <Wallet size={12} />
+            Pi Network
           </span>
         </div>
       </motion.div>
@@ -883,7 +895,7 @@ function StepPayment({
 }
 
 /* ─── Step 3: Confirmation ─── */
-function StepConfirmation() {
+function StepConfirmation({ txId }: { txId: string }) {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const bookingRef = 'SF-2025-78432';
@@ -969,6 +981,29 @@ function StepConfirmation() {
         </button>
       </motion.div>
 
+      {/* Pi Transaction */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.65, duration: 0.4 }}
+        className="mt-3 bg-gradient-to-r from-[#0F1B2E] to-[#1A2B47] rounded-xl p-4 flex items-center justify-between"
+      >
+        <div className="text-left">
+          <p className="font-body text-xs text-white/50 uppercase tracking-wider">
+            Pi Transaction
+          </p>
+          <p className="font-body text-sm font-semibold text-white font-mono truncate max-w-[200px] sm:max-w-[400px]">
+            {txId}
+          </p>
+        </div>
+        <div className="text-right shrink-0 ml-3">
+          <p className="font-body text-xs text-white/50">Paid</p>
+          <p className="font-body text-base font-semibold text-white">
+            {formatPiAmount(piTotal)}
+          </p>
+        </div>
+      </motion.div>
+
       {/* Booking Details Card */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
@@ -1028,9 +1063,14 @@ function StepConfirmation() {
 
         <div className="border-t border-[#F0F2F5] mt-5 pt-4 flex justify-between items-center">
           <span className="font-body text-sm text-[#7A8494]">Total paid</span>
-          <span className="font-display text-xl font-semibold text-[#0F1B2E]">
-            ${bookingData.total.toLocaleString()}
-          </span>
+          <div className="text-right">
+            <span className="font-display text-xl font-semibold text-[#0F1B2E]">
+              {formatPiAmount(piTotal)}
+            </span>
+            <p className="font-body text-xs text-[#7A8494]">
+              ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+            </p>
+          </div>
         </div>
       </motion.div>
 
@@ -1092,16 +1132,16 @@ function StepConfirmation() {
 /* ─── Main Checkout Page ─── */
 export default function Checkout() {
   const [step, setStep] = useState(1);
-  const [, setDetailsData] = useState<Record<string, string> | null>(
-    null
-  );
+  const [, setDetailsData] = useState<Record<string, string> | null>(null);
+  const [txId, setTxId] = useState('');
 
   const handleContinue = (data: Record<string, string>) => {
     setDetailsData(data);
     setStep(2);
   };
 
-  const handlePay = () => {
+  const handlePay = (paymentTxId: string) => {
+    setTxId(paymentTxId);
     setStep(3);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1151,7 +1191,7 @@ export default function Checkout() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <StepConfirmation />
+                <StepConfirmation txId={txId} />
               </motion.div>
             )}
           </AnimatePresence>

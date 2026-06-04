@@ -1,12 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePiAuth } from '@/hooks/usePiAuth';
+
+/* ─── Pi Logo SVG ─── */
+function PiLogo({ className }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 32 32" fill="none" className={className}>
+      <circle cx="16" cy="16" r="16" fill="currentColor" />
+      <text x="16" y="21" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">π</text>
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { user, isAuthenticated, authenticate, signOut } = usePiAuth();
 
   const isHome = location.pathname === '/';
 
@@ -80,17 +92,45 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            to="/profile"
-            className={cn(
-              'px-4 py-2 rounded-lg font-body text-sm font-medium transition-all duration-200',
-              isOverHero
-                ? 'text-white hover:bg-white/10'
-                : 'text-[#1A2B47] hover:bg-[#F8F9FB] hover:text-[#E85D4A]'
-            )}
-          >
-            Sign In
-          </Link>
+          {isAuthenticated && user ? (
+            <>
+              <div
+                className={cn(
+                  'flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm font-medium',
+                  isOverHero
+                    ? 'text-white'
+                    : 'text-[#1A2B47]'
+                )}
+              >
+                <User size={16} className="shrink-0" />
+                <span>@{user.username}</span>
+              </div>
+              <button
+                onClick={signOut}
+                className={cn(
+                  'px-4 py-2 rounded-lg font-body text-sm font-medium transition-all duration-200',
+                  isOverHero
+                    ? 'text-white/80 hover:text-white hover:bg-white/10'
+                    : 'text-[#7A8494] hover:bg-[#F8F9FB] hover:text-[#E85D4A]'
+                )}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => authenticate()}
+              className={cn(
+                'flex items-center gap-2 px-4 py-2 rounded-lg font-body text-sm font-medium transition-all duration-200',
+                isOverHero
+                  ? 'text-white hover:bg-white/10'
+                  : 'text-[#1A2B47] hover:bg-[#F8F9FB] hover:text-[#E85D4A]'
+              )}
+            >
+              <PiLogo className={isOverHero ? 'text-white' : 'text-[#E85D4A]'} />
+              Sign In with Pi
+            </button>
+          )}
           <Link
             to="/search"
             className={cn(
@@ -132,12 +172,28 @@ export default function Navbar() {
               </Link>
             ))}
             <hr className="border-[#E2E6EC]" />
-            <Link
-              to="/profile"
-              className="font-body text-base font-medium text-[#243B5D] py-2"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated && user ? (
+              <>
+                <div className="flex items-center gap-2 font-body text-base font-medium text-[#1A2B47] py-2">
+                  <User size={18} />
+                  <span>@{user.username}</span>
+                </div>
+                <button
+                  onClick={signOut}
+                  className="font-body text-base font-medium text-[#7A8494] py-2 text-left hover:text-[#E85D4A] transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => authenticate()}
+                className="flex items-center gap-2 font-body text-base font-medium text-[#243B5D] py-2 hover:text-[#E85D4A] transition-colors"
+              >
+                <PiLogo className="text-[#E85D4A]" />
+                Sign In with Pi
+              </button>
+            )}
             <Link
               to="/search"
               className="bg-[#E85D4A] text-white font-body text-base font-semibold py-3 px-5 rounded-xl text-center hover:bg-[#D14A38]"

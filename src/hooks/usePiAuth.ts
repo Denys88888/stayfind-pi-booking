@@ -17,6 +17,21 @@ interface AuthResult {
 
 type AuthScope = 'username' | 'payments' | 'wallet_address';
 
+/* Pi SDK Payment types */
+interface PiPaymentData {
+  amount: number;
+  memo: string;
+  metadata: Record<string, unknown>;
+  uid: string;
+}
+
+interface PiPaymentCallbacks {
+  onReadyForServerApproval: (paymentId: string) => void;
+  onReadyForServerCompletion: (paymentId: string, txid: string) => void;
+  onCancel: (paymentId: string, error?: unknown) => void;
+  onError: (error: Error, payment?: unknown) => void;
+}
+
 declare global {
   interface Window {
     Pi?: {
@@ -25,6 +40,10 @@ declare global {
         scopes: AuthScope[],
         onIncompletePaymentFound: (payment: unknown) => void | Promise<void>
       ) => Promise<AuthResult>;
+      createPayment: (
+        paymentData: PiPaymentData,
+        callbacks: PiPaymentCallbacks
+      ) => Promise<void>;
     };
   }
 }
@@ -82,7 +101,7 @@ export function usePiAuth() {
 
         const authResult = await window.Pi.authenticate(
           scopes,
-          (onIncompletePaymentFound) => {
+          (onIncompletePaymentFound: unknown) => {
             console.log(
               '[PiAuth] Incomplete payment found:',
               onIncompletePaymentFound
