@@ -9,13 +9,13 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { AlertCircle } from 'lucide-react';
-import type { IncompletePayment } from '@/hooks/usePiAuth';
+import type { PaymentDTO } from '@/hooks/usePiAuth';
 
 interface IncompletePaymentDialogProps {
-  payment: IncompletePayment | null;
+  payment: PaymentDTO | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onComplete: (payment: IncompletePayment) => void;
+  onComplete: (payment: PaymentDTO) => void;
   onDismiss: () => void;
 }
 
@@ -82,7 +82,7 @@ export default function IncompletePaymentDialog({
                 Status
               </span>
               <span className="font-body text-xs font-medium px-2 py-0.5 rounded-full bg-[#E8A838]/15 text-[#B07D1A]">
-                {payment.status}
+                {payment.status.developer_approved ? 'Approved' : 'Pending'}
               </span>
             </div>
           )}
