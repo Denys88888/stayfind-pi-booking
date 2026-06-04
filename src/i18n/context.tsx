@@ -88,11 +88,21 @@ const I18nContext = createContext<I18nContextType | null>(null);
 
 /* ─── Resolve initial language ─── */
 function getInitialLang(): LangCode {
-  // Check URL parameter first
+  // Check URL search params (?lang=ru)
   try {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang');
     if (urlLang && urlLang in translationsMap) return urlLang as LangCode;
+  } catch { /* ignore */ }
+  // Check URL hash params (HashRouter: #/?lang=ru)
+  try {
+    const hash = window.location.hash;
+    const hashQueryIdx = hash.indexOf('?');
+    if (hashQueryIdx !== -1) {
+      const hashParams = new URLSearchParams(hash.slice(hashQueryIdx));
+      const hashLang = hashParams.get('lang');
+      if (hashLang && hashLang in translationsMap) return hashLang as LangCode;
+    }
   } catch { /* ignore */ }
   // Check localStorage
   try {
@@ -135,21 +145,37 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, [currentLang]);
 
-  /* Sync language with URL parameter (?lang=ru) */
+  /* Sync language with URL parameter (?lang=ru or #/?lang=ru) */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const urlLang = params.get('lang');
+    let urlLang: string | null = null;
+    // Check search params
+    try { urlLang = new URLSearchParams(window.location.search).get('lang'); } catch { /* ignore */ }
+    // Check hash params (HashRouter)
+    if (!urlLang) {
+      try {
+        const hash = window.location.hash;
+        const idx = hash.indexOf('?');
+        if (idx !== -1) urlLang = new URLSearchParams(hash.slice(idx)).get('lang');
+      } catch { /* ignore */ }
+    }
     if (urlLang && urlLang in translationsMap && urlLang !== currentLang) {
       setCurrentLang(urlLang as LangCode);
     }
   }, []); // Run once on mount
 
-  /* Update URL when language changes */
+  /* Update URL when language changes (works with HashRouter) */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('lang', currentLang);
-    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
-    window.history.replaceState(null, '', newUrl);
+    const hash = window.location.hash;
+    const hashQueryIdx = hash.indexOf('?');
+    let baseHash = hash;
+    let hashParams = new URLSearchParams();
+    if (hashQueryIdx !== -1) {
+      baseHash = hash.slice(0, hashQueryIdx);
+      hashParams = new URLSearchParams(hash.slice(hashQueryIdx));
+    }
+    hashParams.set('lang', currentLang);
+    const newHash = `${baseHash}?${hashParams.toString()}`;
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${newHash}`);
   }, [currentLang]);
 
   /* Translation function with nested key support and fallback */
