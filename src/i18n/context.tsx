@@ -119,7 +119,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [currentLang, setCurrentLang] = useState<LangCode>(getInitialLang);
 
   const setLang = useCallback((lang: LangCode) => {
-    console.log('[I18nContext] setLang called:', lang, 'available:', lang in translationsMap);
     if (lang in translationsMap) {
       setCurrentLang(lang);
       try {
@@ -131,7 +130,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const tSet = translationsMap[lang];
       if (tSet) {
         document.documentElement.dir = tSet.dir;
-        console.log('[I18nContext] Language changed to:', lang, 'dir:', tSet.dir);
       }
     }
   }, []);
