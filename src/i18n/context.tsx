@@ -88,6 +88,13 @@ const I18nContext = createContext<I18nContextType | null>(null);
 
 /* ─── Resolve initial language ─── */
 function getInitialLang(): LangCode {
+  // Check URL parameter first
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang && urlLang in translationsMap) return urlLang as LangCode;
+  } catch { /* ignore */ }
+  // Check localStorage
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && stored in translationsMap) return stored as LangCode;
@@ -126,6 +133,23 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       document.documentElement.lang = currentLang;
       document.documentElement.dir = tSet.dir;
     }
+  }, [currentLang]);
+
+  /* Sync language with URL parameter (?lang=ru) */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang && urlLang in translationsMap && urlLang !== currentLang) {
+      setCurrentLang(urlLang as LangCode);
+    }
+  }, []); // Run once on mount
+
+  /* Update URL when language changes */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('lang', currentLang);
+    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    window.history.replaceState(null, '', newUrl);
   }, [currentLang]);
 
   /* Translation function with nested key support and fallback */
