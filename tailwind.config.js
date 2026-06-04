@@ -4,6 +4,10 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["'Playfair Display'", "serif"],
+        body: ["'Inter'", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -38,16 +42,28 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        navy: {
+          900: "#0F1B2E",
+          800: "#1A2B47",
+          700: "#243B5D",
         },
+        coral: {
+          500: "#E85D4A",
+          600: "#D14A38",
+          50: "#FEF2F0",
+        },
+        "sf-gray": {
+          50: "#F8F9FB",
+          100: "#F0F2F5",
+          200: "#E2E6EC",
+          300: "#C5CBD4",
+          500: "#7A8494",
+          700: "#4A5468",
+        },
+        success: "#2D9F5E",
+        warning: "#E8A838",
+        error: "#D93838",
+        info: "#3B82C6",
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
@@ -55,6 +71,8 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
         xs: "calc(var(--radius) - 6px)",
+        "2xl": "16px",
+        "3xl": "20px",
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
