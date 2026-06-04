@@ -13,7 +13,7 @@ interface MapViewProps {
 }
 
 /* Fix default Leaflet icon paths */
-delete (L.Icon.Default.prototype as Record<string, unknown>)._getIconUrl;
+delete ((L.Icon.Default.prototype as unknown) as Record<string, unknown>)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
@@ -67,7 +67,7 @@ function BoundsFitter({ hotels }: { hotels: Hotel[] }) {
   const map = useMap();
   useEffect(() => {
     if (hotels.length === 0) return;
-    const group = new L.featureGroup(
+    const group = L.featureGroup(
       hotels.map((h) => L.marker([h.coordinates[0], h.coordinates[1]]))
     );
     map.fitBounds(group.getBounds().pad(0.1), { animate: true, duration: 0.5 });
@@ -81,7 +81,7 @@ export default function MapView({ hotels, activeHotelId, onHotelHover, onHotelSe
     [hotels]
   );
 
-  const [mapReady, setMapReady] = useState(false);
+  const [, setMapReady] = useState(false);
 
   return (
     <div className="relative w-full h-full min-h-[400px] rounded-2xl overflow-hidden">

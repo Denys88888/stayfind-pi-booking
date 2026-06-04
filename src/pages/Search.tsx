@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Filter,
   LayoutList,
   Map,
   Search as SearchIcon,
@@ -18,7 +17,7 @@ import FilterSidebar from './search/FilterSidebar';
 import HotelCard from './search/HotelCard';
 import MapView from './search/MapView';
 import { hotels, SORT_OPTIONS, GUEST_RATING_OPTIONS } from '@/data/hotelData';
-import type { Hotel, FilterState, SortOption } from '@/types/search';
+import type { FilterState, SortOption } from '@/types/search';
 
 const INITIAL_FILTERS: FilterState = {
   priceRange: [0, 600],
@@ -33,8 +32,7 @@ const INITIAL_FILTERS: FilterState = {
 const ITEMS_PER_PAGE = 6;
 
 export default function Search() {
-  const [searchParams] = useSearchParams();
-  const destination = searchParams.get('destination') || 'Paris, France';
+  useSearchParams();
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [sortBy, setSortBy] = useState<SortOption>('top-picks');
@@ -264,7 +262,7 @@ export default function Search() {
                         'px-3.5 py-2 border rounded-full font-body text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer',
                         isQuickActive(qf.filter)
                           ? 'bg-[#0F1B2E] border-[#0F1B2E] text-white'
-                          : 'border-[#E2E6EC] text-[#243B5D] hover:border-[#C5CBD4]'
+                          : 'border-[#E2E6EC] text-[#243B5D] hover:border-[#C5CBD4] hover:bg-gray-100'
                       )}
                     >
                       {qf.label}

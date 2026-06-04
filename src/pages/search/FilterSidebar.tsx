@@ -14,15 +14,6 @@ interface FilterSidebarProps {
   resultCount: number;
 }
 
-const ACCORDION_SECTIONS = [
-  { key: 'price', label: 'Price Range' },
-  { key: 'star', label: 'Star Rating' },
-  { key: 'guest', label: 'Guest Rating' },
-  { key: 'type', label: 'Property Type' },
-  { key: 'amenities', label: 'Amenities' },
-  { key: 'policy', label: 'Booking Policy' },
-];
-
 export default function FilterSidebar({
   filters,
   onFiltersChange,
@@ -305,7 +296,7 @@ export default function FilterSidebar({
           )}
           <button
             onClick={onClose}
-            className="w-full py-3.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)]"
+            className="w-full py-3.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] lg:hidden"
           >
             Show {resultCount} Result{resultCount !== 1 ? 's' : ''}
           </button>
