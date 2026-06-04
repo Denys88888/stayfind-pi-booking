@@ -1,16 +1,19 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 /* ------------------------------------------------------------------ */
-/*  Pi Network SDK Types (from official docs)                           */
+/*  Pi Network SDK Types (from official docs:                           */
+/*  https://github.com/pi-apps/pi-platform-docs/blob/master/SDK_reference.md) */
 /* ------------------------------------------------------------------ */
 
 export interface PiUser {
   uid: string;
-  username: string;
-  accessToken?: string;
+      // App-local identifier (from /me)
+  username: string;   // Pi username (scope: username)
+  accessToken: string;
+  wallet_address?: string; // Pi wallet address (scope: wallet_address)
 }
 
-/** PaymentDTO from Pi SDK — represents a payment object */
+/** PaymentDTO — represents a payment object from Pi SDK */
 export interface PaymentDTO {
   identifier: string;
   user_uid: string;
@@ -44,6 +47,17 @@ interface AuthResult {
     uid: string;
     username: string;
   };
+}
+
+/** UserDTO from Platform API /me endpoint */
+interface MeResponse {
+  uid: string;
+  credentials: {
+    scopes: AuthScope[];
+    valid_until: { timestamp: number; iso8601: string };
+  };
+  username?: string;
+  wallet_address?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -84,7 +98,6 @@ declare global {
 /** Detect if running inside Pi Browser */
 export function isPiBrowser(): boolean {
   if (typeof window === 'undefined') return false;
-  // Pi Browser sets navigator.userAgent containing 'PiBrowser' or similar
   const ua = navigator.userAgent || '';
   return ua.includes('PiBrowser') || ua.includes('Pi Browser') || !!window.Pi;
 }
@@ -92,6 +105,30 @@ export function isPiBrowser(): boolean {
 /** Detect if Pi SDK is available */
 export function isPiSdkAvailable(): boolean {
   return typeof window !== 'undefined' && !!window.Pi;
+}
+
+/* ------------------------------------------------------------------ */
+/*  User Verification via /me endpoint                                  */
+/*  Per Pi docs: https://github.com/pi-apps/pi-platform-docs/blob/master/authentication.md */
+/*  "You can verify the user's identity by requesting the /me endpoint */
+/*   from your backend, using the access token obtained with this method." */
+/* ------------------------------------------------------------------ */
+
+async function verifyUserWithMeEndpoint(accessToken: string): Promise<MeResponse | null> {
+  try {
+    const res = await fetch('https://api.minepi.com/v2/me', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) {
+      console.error('[PiAuth] /me verification failed:', res.status);
+      return null;
+    }
+    return await res.json() as MeResponse;
+  } catch (err) {
+    console.error('[PiAuth] /me network error:', err);
+    // For Testnet sandbox: fall through — allow unverified user
+    return null;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -127,11 +164,9 @@ export function usePiAuth() {
       if (cancelled) return;
 
       if (typeof window !== 'undefined' && window.Pi) {
-        // Pi SDK loaded (Pi Browser or script loaded)
         setIsReady(true);
       } else if (!checkedRef.current) {
         checkedRef.current = true;
-        // Give SDK a short window, then fall back to sandbox
         setTimeout(() => {
           if (cancelled) return;
           if (!window.Pi) {
@@ -151,15 +186,16 @@ export function usePiAuth() {
   /**
    * Handle incomplete payment found during authentication.
    * Per Pi docs: must complete this payment before starting a new one.
+   * Send to server to call /complete endpoint.
    */
   const handleIncompletePayment = useCallback((payment: PaymentDTO) => {
     console.warn('[PiAuth] Incomplete payment found:', payment);
     setIncompletePayment(payment);
-    // Auto-complete incomplete payments for testnet (mock server-side)
+
     if (payment.transaction?.txid) {
       console.log('[PiAuth] Auto-completing payment with txid:', payment.transaction.txid);
-      // In production: send to your backend to call /complete
-      // For testnet: we mock the completion
+      // For Testnet: mock server-side completion
+      // Production: send to backend → POST /payments/{id}/complete with Server API Key
       completePayment(payment.identifier, payment.transaction.txid);
     }
   }, []);
@@ -182,22 +218,26 @@ export function usePiAuth() {
 
       /* ── Real Pi SDK ── */
       try {
-        // Pi.init is already called in index.html — no need to call again
         const authResult = await window.Pi.authenticate(
           scopes,
           handleIncompletePayment
         );
 
         if (authResult?.user) {
-          const userWithToken: PiUser = {
-            uid: authResult.user.uid,
-            username: authResult.user.username,
+          // Step 2: Verify user identity via /me endpoint (per Pi docs)
+          const meData = await verifyUserWithMeEndpoint(authResult.accessToken);
+
+          const userData: PiUser = {
+            uid: meData?.uid ?? authResult.user.uid,
+            username: meData?.username ?? authResult.user.username,
             accessToken: authResult.accessToken,
+            wallet_address: meData?.wallet_address,
           };
-          setUser(userWithToken);
+
+          setUser(userData);
           setIsSandbox(false);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(userWithToken));
-          return userWithToken;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+          return userData;
         }
       } catch (err) {
         console.error('[PiAuth] Authentication failed:', err);
@@ -230,33 +270,27 @@ export function usePiAuth() {
 
 /* ------------------------------------------------------------------ */
 /*  Server-Side Payment Helpers (Mock for Testnet)                    */
+/*  Production: backend must call Platform API with Server API Key    */
+/*  https://github.com/pi-apps/pi-platform-docs/blob/master/platform_API.md */
 /* ------------------------------------------------------------------ */
 
-/**
- * Mock server-side payment approval.
- * In production: your backend calls POST /payments/{id}/approve with Server API Key.
- * For Testnet: we simulate the approval on the frontend.
- */
+/** Mock server-side approval.
+ *  Production: POST /payments/{payment_id}/approve with Server API Key */
 export async function approvePayment(paymentId: string): Promise<boolean> {
   console.log('[PiServer] Approving payment:', paymentId);
-  // Production: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
-  //   method: 'POST', headers: { 'Authorization': `Key ${PI_API_KEY}` }
-  // });
-  // Testnet: auto-approve
   return true;
 }
 
-/**
- * Mock server-side payment completion.
- * In production: your backend calls POST /payments/{id}/complete with { txid }.
- * For Testnet: we simulate the completion.
- */
+/** Mock server-side completion.
+ *  Production: POST /payments/{payment_id}/complete with { txid } + Server API Key */
 export async function completePayment(paymentId: string, txid: string): Promise<boolean> {
   console.log('[PiServer] Completing payment:', paymentId, 'txid:', txid);
-  // Production: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/complete`, {
-  //   method: 'POST', headers: { 'Authorization': `Key ${PI_API_KEY}` },
-  //   body: JSON.stringify({ txid })
-  // });
-  // Testnet: auto-complete
+  return true;
+}
+
+/** Mock cancel payment.
+ *  Production: POST /payments/{payment_id}/cancel with Server API Key */
+export async function cancelPayment(paymentId: string): Promise<boolean> {
+  console.log('[PiServer] Cancelling payment:', paymentId);
   return true;
 }

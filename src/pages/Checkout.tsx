@@ -39,8 +39,6 @@ import {
   createPiPayment,
   usdToPi,
   formatPiAmount,
-  calculateDeveloperFee,
-  getDeveloperFeePercent,
 } from '@/lib/piPayments';
 
 /* ─── Pi conversion rate for reference ─── */
@@ -69,10 +67,7 @@ const bookingData = {
 const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
 const piTaxes = usdToPi(bookingData.taxes);
 const piDiscount = usdToPi(bookingData.discount);
-const piTotalBeforeFee = usdToPi(bookingData.total);
-const piDeveloperFee = calculateDeveloperFee(piTotalBeforeFee);
-const piTotal = piTotalBeforeFee + piDeveloperFee;
-const DEVELOPER_FEE_PCT = getDeveloperFeePercent();
+const piTotal = usdToPi(bookingData.total);
 
 /* ─── form error type ─── */
 interface FormErrors {
@@ -261,26 +256,6 @@ function BookingSummarySidebar() {
               </div>
             </TooltipProvider>
           )}
-          <div className="flex justify-between">
-            <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
-              {t('checkout.developerFee').replace('{percent}', String(DEVELOPER_FEE_PCT))}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button className="cursor-help">
-                      <Info size={13} className="text-[#C5CBD4] hover:text-[#7A8494] transition-colors" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p className="font-body text-xs">{t('checkout.feeTooltip')}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </span>
-            <span className="font-body text-sm text-[#4A5468]">
-              {formatPiAmount(piDeveloperFee)}
-            </span>
-          </div>
           <div className="border-t border-[#E2E6EC] pt-2 mt-2">
             <div className="flex justify-between">
               <span className="font-body text-base font-semibold text-[#1A2B47]">
@@ -568,7 +543,7 @@ function StepPayment({
   onBack: () => void;
 }) {
   const { t } = useTranslation();
-  const { isAuthenticated, authenticate, user } = usePiAuth();
+  const { isAuthenticated, authenticate } = usePiAuth();
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [processing, setProcessing] = useState(false);
@@ -594,11 +569,10 @@ function StepPayment({
 
     try {
       await createPiPayment({
-        amount: piTotalBeforeFee,
+        amount: piTotal,
         memo: `StayFind: ${bookingData.hotelName} - ${bookingData.roomType}`,
         metadata: {
-          userUid: user?.uid ?? 'anonymous',
-          userUsername: user?.username ?? 'guest',
+          // Internal booking reference (no sensitive user data per Pi docs)
           hotelName: bookingData.hotelName,
           roomType: bookingData.roomType,
           checkIn: bookingData.checkIn,
@@ -694,14 +668,6 @@ function StepPayment({
                 </span>
               </div>
             )}
-            <div className="flex justify-between">
-              <span className="font-body text-sm text-white/60">
-                {t('checkout.developerFee').replace('{percent}', String(DEVELOPER_FEE_PCT))}
-              </span>
-              <span className="font-body text-sm text-white/80">
-                {formatPiAmount(piDeveloperFee)}
-              </span>
-            </div>
             <div className="border-t border-white/10 pt-2 mt-2">
               <div className="flex justify-between">
                 <span className="font-body text-sm font-medium text-white">

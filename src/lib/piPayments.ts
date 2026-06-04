@@ -5,16 +5,13 @@
  * https://github.com/pi-apps/pi-platform-docs
  *
  * Payment Flow (3 phases):
- * 1. Payment creation + Server-Side Approval
- * 2. User interaction + blockchain transaction
- * 3. Server-Side Completion
+ * Phase 1: Payment creation → Server-Side Approval (/approve)
+ * Phase 2: User interaction + blockchain transaction
+ * Phase 3: Server-Side Completion (/complete)
  */
 
 // Pi Network realistic market rate: 1 PI ≈ $0.15 USD
 const PI_USD_RATE = 0.15;
-
-// Developer fee percentage (required for Pi Network Mainnet)
-const DEVELOPER_FEE_PERCENT = 2;
 
 /** Convert a USD amount to Pi */
 export function usdToPi(usdAmount: number): number {
@@ -31,33 +28,30 @@ export function formatPiAmount(piAmount: number): string {
   return `${piAmount.toFixed(2)} π`;
 }
 
-/** Calculate 2% developer fee for a given Pi amount */
-export function calculateDeveloperFee(piAmount: number): number {
-  return Math.round((piAmount * DEVELOPER_FEE_PERCENT) / 100 * 100) / 100;
-}
-
-/** Get the developer fee percentage for display */
-export function getDeveloperFeePercent(): number {
-  return DEVELOPER_FEE_PERCENT;
+/** Convert Pi to USD for display reference */
+export function piToUsdNumber(piAmount: number): number {
+  return Math.round(piAmount * PI_USD_RATE * 100) / 100;
 }
 
 /* ------------------------------------------------------------------ */
 /*  Pi SDK Payment Types (from official docs)                           */
+/*                                                                    */
+/*  IMPORTANT: Per Pi Network docs, PaymentData ONLY contains:        */
+/*    - amount   (number)                                             */
+/*    - memo     (string)                                             */
+/*    - metadata (object)                                             */
+/*                                                                    */
+/*  Developer fee is configured in the Pi Developer Portal,           */
+/*  NOT passed through the SDK.                                       */
+/*  See: https://github.com/pi-apps/pi-platform-docs/blob/master/payments.md */
 /* ------------------------------------------------------------------ */
 
-/**
- * PaymentData — arguments passed to Pi.createPayment()
- * Per docs: only amount, memo, metadata are allowed.
- * uid is generated automatically by the SDK.
- * developerFee is handled server-side via Platform API.
- */
 export interface PiPaymentArgs {
   amount: number;
   memo: string;
   metadata: Record<string, unknown>;
 }
 
-/** Payment callbacks as defined in official Pi SDK docs */
 export interface PiPaymentCallbacks {
   onReadyForServerApproval: (paymentId: string) => void;
   onReadyForServerCompletion: (paymentId: string, txid: string) => void;
@@ -65,7 +59,6 @@ export interface PiPaymentCallbacks {
   onError: (error: Error, payment?: unknown) => void;
 }
 
-/** Options for creating a Pi payment in our app */
 export interface CreatePiPaymentOptions {
   amount: number;
   memo: string;
@@ -74,54 +67,58 @@ export interface CreatePiPaymentOptions {
   onTransactionId?: (txid: string) => void;
 }
 
-/** Mock server-side approval (Testnet only).
- *  Production: backend calls POST /payments/{id}/approve with Server API Key.
- */
-async function serverSideApprove(paymentId: string): Promise<void> {
-  console.log('[PiPayment] Server-Side Approval:', paymentId);
-  // Production implementation:
-  // const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
-  //   method: 'POST',
-  //   headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}` }
+/* ------------------------------------------------------------------ */
+/*  Mock Server-Side Payment Operations (Testnet only)                */
+/*                                                                    */
+/*  PRODUCTION: These MUST be implemented on your backend server      */
+/*  using your Server API Key.                                        */
+/*  Server API Key MUST NEVER be exposed in frontend code.            */
+/*                                                                    */
+/*  Endpoints (from platform_API.md):                                 */
+/*   POST /payments/{payment_id}/approve   — Server API Key           */
+/*   POST /payments/{payment_id}/complete  — Server API Key + {txid}  */
+/*   POST /payments/{payment_id}/cancel    — Server API Key           */
+/* ------------------------------------------------------------------ */
+
+export async function serverSideApprove(paymentId: string): Promise<void> {
+  console.log('[PiServer] Server-Side Approval:', paymentId);
+  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
+  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}` }
   // });
-  // if (!res.ok) throw new Error('Server-side approval failed');
 }
 
-/** Mock server-side completion (Testnet only).
- *  Production: backend calls POST /payments/{id}/complete with { txid }.
- */
-async function serverSideComplete(paymentId: string, txid: string): Promise<void> {
-  console.log('[PiPayment] Server-Side Completion:', paymentId, txid);
-  // Production implementation:
-  // const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/complete`, {
-  //   method: 'POST',
-  //   headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}`, 'Content-Type': 'application/json' },
+export async function serverSideComplete(paymentId: string, txid: string): Promise<void> {
+  console.log('[PiServer] Server-Side Completion:', paymentId, 'txid:', txid);
+  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/complete`, {
+  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}`, 'Content-Type': 'application/json' },
   //   body: JSON.stringify({ txid })
   // });
-  // if (!res.ok) throw new Error('Server-side completion failed');
+}
+
+export async function serverSideCancel(paymentId: string): Promise<void> {
+  console.log('[PiServer] Server-Side Cancel:', paymentId);
+  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/cancel`, {
+  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}` }
+  // });
 }
 
 /* ------------------------------------------------------------------ */
-/*  Create Payment — Full 3-phase flow per Pi docs                      */
+/*  Create Payment — Full 3-phase flow per Pi docs                    */
 /* ------------------------------------------------------------------ */
 
 /**
- * Create a Pi Network payment following the official 3-phase flow:
+ * Create a Pi Network payment following the official 3-phase flow.
  *
- * Phase 1: Payment creation + Server-Side Approval
- *   - Frontend calls Pi.createPayment()
- *   - onReadyForServerApproval: frontend sends paymentId to backend
- *   - Backend calls /approve API
+ * Per Pi docs, metadata should NOT contain sensitive user data.
+ * Only include data needed for your internal business logic
+ * (e.g., order IDs, booking references).
  *
- * Phase 2: User interaction + blockchain transaction
- *   - Pi Wallet shows payment dialog
- *   - User confirms and submits transaction
- *   - Everything handled by Pi Platform
- *
- * Phase 3: Server-Side Completion
- *   - onReadyForServerCompletion: frontend sends txid to backend
- *   - Backend calls /complete API
- *   - Payment flow closes
+ * Security note from Pi docs:
+ * "The user might be lying to your app! Users might be running a
+ *  hacked version of the SDK. If the API call for Server-Side
+ *  completion returns a non-200 error code, do not mark the payment
+ *  as complete on your side, and do not deliver whatever the user
+ *  was trying to buy."
  */
 export async function createPiPayment(
   options: CreatePiPaymentOptions
@@ -137,11 +134,9 @@ export async function createPiPayment(
   const paymentData: PiPaymentArgs = {
     amount,
     memo,
-    metadata: {
-      ...metadata,
-      developerFee: calculateDeveloperFee(amount),
-      developerFeePercent: DEVELOPER_FEE_PERCENT,
-    },
+    // Per Pi docs: metadata is for your own internal business logic only.
+    // Do NOT include sensitive user data here.
+    metadata,
   };
 
   return new Promise((resolve, reject) => {
@@ -151,7 +146,6 @@ export async function createPiPayment(
         console.log('[PiPayment] Phase 1 — Ready for server approval:', paymentId);
         try {
           await serverSideApprove(paymentId);
-          console.log('[PiPayment] Server-side approval done');
         } catch (err) {
           console.error('[PiPayment] Server-side approval failed:', err);
         }
@@ -163,9 +157,11 @@ export async function createPiPayment(
         console.log('[PiPayment] Phase 3 — Ready for server completion:', paymentId, txid);
         try {
           await serverSideComplete(paymentId, txid);
-          console.log('[PiPayment] Server-side completion done');
         } catch (err) {
           console.error('[PiPayment] Server-side completion failed:', err);
+          // Per Pi docs: DO NOT deliver product if completion fails
+          reject(new Error('Payment verification failed'));
+          return;
         }
         onTransactionId?.(txid);
         resolve();
@@ -185,7 +181,7 @@ export async function createPiPayment(
 }
 
 /* ------------------------------------------------------------------ */
-/*  Utility: check if Pi Browser ads are supported                     */
+/*  Utility: check native features                                     */
 /* ------------------------------------------------------------------ */
 
 export async function isAdNetworkSupported(): Promise<boolean> {
