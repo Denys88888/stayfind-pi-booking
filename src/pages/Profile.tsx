@@ -7,6 +7,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
   Calendar,
   Heart,
   Settings,
@@ -505,13 +522,24 @@ function MyBookingsTab() {
 function SavedPropertiesTab() {
   const [properties, setProperties] = useState(savedPropertiesData);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingRemoveId, setPendingRemoveId] = useState<string | null>(null);
 
   const handleRemove = (id: string) => {
-    setRemovingId(id);
-    setTimeout(() => {
-      setProperties((prev) => prev.filter((p) => p.id !== id));
-      setRemovingId(null);
-    }, 300);
+    setPendingRemoveId(id);
+    setDialogOpen(true);
+  };
+
+  const confirmRemove = () => {
+    if (pendingRemoveId) {
+      setRemovingId(pendingRemoveId);
+      setDialogOpen(false);
+      setTimeout(() => {
+        setProperties((prev) => prev.filter((p) => p.id !== pendingRemoveId));
+        setRemovingId(null);
+        setPendingRemoveId(null);
+      }, 300);
+    }
   };
 
   if (properties.length === 0) {
@@ -538,92 +566,122 @@ function SavedPropertiesTab() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <AnimatePresence>
-        {properties.map((prop, idx) => (
-          <motion.div
-            key={prop.id}
-            initial={{ y: 30, opacity: 0 }}
-            animate={
-              removingId === prop.id
-                ? { scale: 0.95, opacity: 0, x: 50 }
-                : { y: 0, opacity: 1 }
-            }
-            exit={{ scale: 0.95, opacity: 0, x: 50 }}
-            transition={{
-              delay: removingId === prop.id ? 0 : idx * 0.08,
-              duration: removingId === prop.id ? 0.3 : 0.5,
-              ease: easeSmooth,
-            }}
-            className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(15,27,46,0.06)] overflow-hidden group transition-shadow duration-350 hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)]"
-          >
-            {/* Image */}
-            <div className="relative overflow-hidden aspect-[4/3]">
-              <img
-                src={prop.image}
-                alt={prop.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <button
-                onClick={() => handleRemove(prop.id)}
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#D93838] hover:bg-[#FDEBEB] transition-colors shadow-sm"
-                aria-label="Remove from saved"
-              >
-                <X size={16} />
-              </button>
-              <div className="absolute bottom-3 left-3 bg-[#0F1B2E] text-white font-body text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
-                <Star size={12} className="fill-[#E8A838] text-[#E8A838]" />
-                {prop.rating}
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-5">
-              <h3 className="font-display text-base font-semibold text-[#1A2B47]">
-                {prop.name}
-              </h3>
-              <p className="flex items-center gap-1 mt-1 font-body text-sm text-[#7A8494]">
-                <MapPin size={14} />
-                {prop.location}
-              </p>
-              <p className="font-body text-xs text-[#C5CBD4] mt-1">
-                Saved on {prop.savedOn}
-              </p>
-              <div className="flex items-center justify-between mt-4">
-                <div>
-                  <span className="font-display text-lg font-semibold text-[#0F1B2E]">
-                    ${prop.price}
-                  </span>
-                  <span className="font-body text-sm text-[#7A8494]">
-                    /night
-                  </span>
-                </div>
-                <Button
-                  size="sm"
-                  className="bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl px-4 py-2 hover:scale-[1.02] active:scale-[0.98] transition-all"
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatePresence>
+          {properties.map((prop, idx) => (
+            <motion.div
+              key={prop.id}
+              initial={{ y: 30, opacity: 0 }}
+              animate={
+                removingId === prop.id
+                  ? { scale: 0.95, opacity: 0, x: 50 }
+                  : { y: 0, opacity: 1 }
+              }
+              exit={{ scale: 0.95, opacity: 0, x: 50 }}
+              transition={{
+                delay: removingId === prop.id ? 0 : idx * 0.08,
+                duration: removingId === prop.id ? 0.3 : 0.5,
+                ease: easeSmooth,
+              }}
+              className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(15,27,46,0.06)] overflow-hidden group transition-shadow duration-350 hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)]"
+            >
+              {/* Image */}
+              <div className="relative overflow-hidden aspect-[4/3]">
+                <img
+                  src={prop.image}
+                  alt={prop.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <button
+                  onClick={() => handleRemove(prop.id)}
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#D93838] hover:bg-[#FDEBEB] transition-colors shadow-sm"
+                  aria-label="Remove from saved"
                 >
-                  Book Now
-                </Button>
+                  <X size={16} />
+                </button>
+                <div className="absolute bottom-3 left-3 bg-[#0F1B2E] text-white font-body text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
+                  <Star size={12} className="fill-[#E8A838] text-[#E8A838]" />
+                  {prop.rating}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
+
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="font-display text-base font-semibold text-[#1A2B47]">
+                  {prop.name}
+                </h3>
+                <p className="flex items-center gap-1 mt-1 font-body text-sm text-[#7A8494]">
+                  <MapPin size={14} />
+                  {prop.location}
+                </p>
+                <p className="font-body text-xs text-[#C5CBD4] mt-1">
+                  Saved on {prop.savedOn}
+                </p>
+                <div className="flex items-center justify-between mt-4">
+                  <div>
+                    <span className="font-display text-lg font-semibold text-[#0F1B2E]">
+                      ${prop.price.toLocaleString()}
+                    </span>
+                    <span className="font-body text-sm text-[#7A8494]">
+                      /night
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl px-4 py-2 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Book Now
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Confirmation Dialog */}
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Saved Property</AlertDialogTitle>
+            <AlertDialogDescription>
+              Remove this property from saved?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemove}
+              className="bg-[#D93838] hover:bg-[#B82D2D] text-white"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
+
+const nationalities = [
+  'Australian', 'American', 'British', 'Canadian', 'Chinese', 'French',
+  'German', 'Indian', 'Irish', 'Italian', 'Japanese', 'Mexican',
+  'New Zealander', 'Singaporean', 'South Korean', 'Spanish', 'Other',
+];
 
 /* ─── Account Settings Tab ─── */
 function AccountSettingsTab() {
   const [editMode, setEditMode] = useState(false);
-  const [profile, setProfile] = useState({
+  const defaultProfile = {
     firstName: 'Sarah',
     lastName: 'Mitchell',
     email: 'sarah.mitchell@email.com',
     phone: '+61 412 345 678',
-    dob: '15 March 1990',
+    dob: '1990-03-15',
     nationality: 'Australian',
-  });
+  };
+  const [profile, setProfile] = useState({ ...defaultProfile });
   const [notifications, setNotifications] = useState<Record<string, boolean>>(
     () =>
       notificationSettings.reduce(
@@ -634,6 +692,25 @@ function AccountSettingsTab() {
 
   const handleToggle = (id: string) => {
     setNotifications((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleSave = () => {
+    setEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setProfile({ ...defaultProfile });
+    setEditMode(false);
+  };
+
+  const formatDobDisplay = (dob: string) => {
+    if (!dob) return '';
+    const d = new Date(dob);
+    return d.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   };
 
   return (
@@ -649,24 +726,38 @@ function AccountSettingsTab() {
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
             Personal Information
           </h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setEditMode(!editMode)}
-            className="font-body text-sm text-[#1A2B47] hover:text-[#E85D4A] hover:bg-[#F8F9FB] rounded-lg"
-          >
-            {editMode ? (
-              <>
+          {!editMode && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setEditMode(true)}
+              className="font-body text-sm text-[#1A2B47] hover:text-[#E85D4A] hover:bg-[#F8F9FB] rounded-lg"
+            >
+              <Pencil size={16} className="mr-1" />
+              Edit
+            </Button>
+          )}
+          {editMode && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCancel}
+                className="font-body text-sm text-[#4A5468] border-[#E2E6EC] hover:bg-[#F8F9FB] rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSave}
+                className="font-body text-sm text-white bg-[#E85D4A] hover:bg-[#D14A38] hover:text-white rounded-lg"
+              >
                 <Check size={16} className="mr-1" />
                 Save
-              </>
-            ) : (
-              <>
-                <Pencil size={16} className="mr-1" />
-                Edit
-              </>
-            )}
-          </Button>
+              </Button>
+            </div>
+          )}
         </div>
 
         {editMode ? (
@@ -720,6 +811,41 @@ function AccountSettingsTab() {
                 className="mt-1 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]"
               />
             </div>
+            <div>
+              <Label className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
+                Date of Birth
+              </Label>
+              <Input
+                type="date"
+                value={profile.dob}
+                onChange={(e) =>
+                  setProfile((p) => ({ ...p, dob: e.target.value }))
+                }
+                className="mt-1 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]"
+              />
+            </div>
+            <div>
+              <Label className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
+                Nationality
+              </Label>
+              <Select
+                value={profile.nationality}
+                onValueChange={(val) =>
+                  setProfile((p) => ({ ...p, nationality: val }))
+                }
+              >
+                <SelectTrigger className="mt-1 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {nationalities.map((n) => (
+                    <SelectItem key={n} value={n}>
+                      {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -728,7 +854,7 @@ function AccountSettingsTab() {
               { label: 'Last Name', value: profile.lastName },
               { label: 'Email', value: profile.email },
               { label: 'Phone', value: profile.phone },
-              { label: 'Date of Birth', value: profile.dob },
+              { label: 'Date of Birth', value: formatDobDisplay(profile.dob) },
               { label: 'Nationality', value: profile.nationality },
             ].map((field) => (
               <div key={field.label}>

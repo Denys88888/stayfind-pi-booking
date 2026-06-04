@@ -17,7 +17,7 @@ import CompactSearchBar from './search/CompactSearchBar';
 import FilterSidebar from './search/FilterSidebar';
 import HotelCard from './search/HotelCard';
 import MapView from './search/MapView';
-import { hotels, SORT_OPTIONS } from '@/data/hotelData';
+import { hotels, SORT_OPTIONS, GUEST_RATING_OPTIONS } from '@/data/hotelData';
 import type { Hotel, FilterState, SortOption } from '@/types/search';
 
 const INITIAL_FILTERS: FilterState = {
@@ -257,10 +257,11 @@ export default function Search() {
                 <div className="hidden md:flex items-center gap-1.5">
                   {quickFilterConfig.map((qf) => (
                     <button
+                      type="button"
                       key={qf.filter}
                       onClick={() => toggleQuickFilter(qf.filter)}
                       className={cn(
-                        'px-3.5 py-2 border rounded-full font-body text-sm font-medium transition-all duration-200 whitespace-nowrap',
+                        'px-3.5 py-2 border rounded-full font-body text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer',
                         isQuickActive(qf.filter)
                           ? 'bg-[#0F1B2E] border-[#0F1B2E] text-white'
                           : 'border-[#E2E6EC] text-[#243B5D] hover:border-[#C5CBD4]'
@@ -394,6 +395,33 @@ export default function Search() {
                       setFilters((f) => ({
                         ...f,
                         amenities: f.amenities.filter((x) => x !== a),
+                      }))
+                    }
+                  />
+                ))}
+                {filters.guestRatings.map((gr) => {
+                  const grLabel = GUEST_RATING_OPTIONS.find((o) => o.value === gr)?.label || gr;
+                  return (
+                    <ActivePill
+                      key={gr}
+                      label={grLabel}
+                      onRemove={() =>
+                        setFilters((f) => ({
+                          ...f,
+                          guestRatings: f.guestRatings.filter((x) => x !== gr),
+                        }))
+                      }
+                    />
+                  );
+                })}
+                {filters.propertyTypes.map((pt) => (
+                  <ActivePill
+                    key={pt}
+                    label={pt}
+                    onRemove={() =>
+                      setFilters((f) => ({
+                        ...f,
+                        propertyTypes: f.propertyTypes.filter((x) => x !== pt),
                       }))
                     }
                   />
@@ -558,13 +586,15 @@ export default function Search() {
       </div>
 
       {/* Mobile Filter Drawer */}
-      <FilterSidebar
-        filters={filters}
-        onFiltersChange={handleFiltersChange}
-        isOpen={filterOpen}
-        onClose={() => setFilterOpen(false)}
-        resultCount={filteredHotels.length}
-      />
+      <div className="lg:hidden">
+        <FilterSidebar
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          isOpen={filterOpen}
+          onClose={() => setFilterOpen(false)}
+          resultCount={filteredHotels.length}
+        />
+      </div>
     </Layout>
   );
 }

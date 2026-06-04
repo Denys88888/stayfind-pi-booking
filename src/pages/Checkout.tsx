@@ -33,7 +33,14 @@ import {
   Phone,
   CreditCard,
   ChevronRight,
+  Info,
 } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 /* ─── easing token ─── */
 const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];
@@ -241,16 +248,30 @@ function BookingSummarySidebar() {
               Taxes &amp; fees
             </span>
             <span className="font-body text-sm text-[#4A5468]">
-              ${bookingData.taxes}
+              ${bookingData.taxes.toLocaleString()}
             </span>
           </div>
           {bookingData.discount > 0 && (
-            <div className="flex justify-between">
-              <span className="font-body text-sm text-[#7A8494]">Discount</span>
-              <span className="font-body text-sm text-[#2D9F5E]">
-                - ${bookingData.discount}
-              </span>
-            </div>
+            <TooltipProvider>
+              <div className="flex justify-between">
+                <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
+                  Discount
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="cursor-help">
+                        <Info size={13} className="text-[#C5CBD4] hover:text-[#7A8494] transition-colors" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p className="font-body text-xs">Early bird discount — 10% off for booking 30+ days in advance</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
+                <span className="font-body text-sm text-[#2D9F5E]">
+                  - ${bookingData.discount.toLocaleString()}
+                </span>
+              </div>
+            </TooltipProvider>
           )}
           <div className="border-t border-[#E2E6EC] pt-2 mt-2">
             <div className="flex justify-between">

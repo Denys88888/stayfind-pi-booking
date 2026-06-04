@@ -310,6 +310,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
 /*  Section 2: Property Header                                        */
 /* ------------------------------------------------------------------ */
 function PropertyHeader({ hotel }: { hotel: HotelData }) {
+  const [favorited, setFavorited] = useState(false);
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -351,10 +352,31 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
           variants={fadeUp}
           custom={1}
         >
-          <div>
-            <h1 className="font-display text-2xl sm:text-3xl md:text-[36px] font-semibold text-[#0F1B2E] leading-tight">
-              {hotel.name}
-            </h1>
+          <div className="flex-1">
+            <div className="flex items-start gap-3">
+              <h1 className="font-display text-2xl sm:text-3xl md:text-[36px] font-semibold text-[#0F1B2E] leading-tight">
+                {hotel.name}
+              </h1>
+              {/* Favorite Button */}
+              <button
+                onClick={() => setFavorited((p) => !p)}
+                className="mt-1 md:mt-2 flex-shrink-0 w-9 h-9 rounded-full bg-[#F8F9FB] flex items-center justify-center hover:bg-[#FEF2F0] transition-colors"
+                aria-label="Toggle favorite"
+              >
+                <motion.div
+                  animate={favorited ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Heart
+                    size={18}
+                    className={cn(
+                      'transition-colors duration-300',
+                      favorited ? 'text-[#E85D4A] fill-[#E85D4A]' : 'text-[#7A8494]'
+                    )}
+                  />
+                </motion.div>
+              </button>
+            </div>
             <div className="flex items-center gap-2 mt-1.5 flex-wrap">
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: hotel.stars }).map((_, i) => (
@@ -750,7 +772,7 @@ function RoomsSection({
                     <div className="lg:w-[220px] flex-shrink-0 border-t lg:border-t-0 lg:border-l border-[#F0F2F5] pt-4 lg:pt-0 lg:pl-6 flex flex-col justify-between">
                       <div>
                         <p className="font-display text-2xl sm:text-3xl font-semibold text-[#E85D4A]">
-                          ${room.pricePerNight}
+                          ${room.pricePerNight.toLocaleString()}
                         </p>
                         <p className="font-body text-xs text-[#7A8494] mt-0.5">per night</p>
                         <p className="font-body text-sm text-[#4A5468] mt-2">
@@ -855,6 +877,84 @@ function AmenitiesSection({ hotel }: { hotel: HotelData }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Review Card (with expandable text)                                */
+/* ------------------------------------------------------------------ */
+function ReviewCard({
+  review,
+  index,
+}: {
+  review: HotelData['reviews'][number];
+  index: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const maxChars = 180;
+  const isLong = review.text.length > maxChars;
+  const displayText = expanded || !isLong ? review.text : review.text.slice(0, maxChars) + '...';
+
+  return (
+    <motion.div
+      layout
+      className="bg-white rounded-2xl p-5 shadow-[0_1px_3px_rgba(15,27,46,0.04)] hover:shadow-[0_4px_16px_rgba(15,27,46,0.08)] transition-shadow duration-300"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: easeSmooth }}
+    >
+      {/* Top Row */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <img
+            src={review.avatar}
+            alt={review.name}
+            className="w-10 h-10 rounded-full object-cover"
+          />
+          <div>
+            <p className="font-body text-sm font-semibold text-[#1A2B47]">
+              {review.name}
+            </p>
+            <p className="font-body text-xs text-[#7A8494]">{review.date}</p>
+          </div>
+        </div>
+        <div className="bg-[#0F1B2E] text-white font-body text-sm font-bold px-2.5 py-1 rounded-lg">
+          {review.score}
+        </div>
+      </div>
+
+      <h4 className="font-display text-base font-semibold text-[#1A2B47] mb-1">
+        &ldquo;{review.title}&rdquo;
+      </h4>
+      <p className="font-body text-sm text-[#4A5468] leading-relaxed mb-3">
+        {displayText}
+      </p>
+      {isLong && (
+        <button
+          onClick={() => setExpanded((p) => !p)}
+          className="text-[#E85D4A] font-body text-xs font-medium mb-3 hover:underline transition-colors"
+        >
+          {expanded ? 'Show less' : 'Read more'}
+        </button>
+      )}
+
+      <div className="flex flex-wrap gap-2 mb-3">
+        {review.tags.map((t) => (
+          <span
+            key={t}
+            className="bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2 py-0.5 rounded-md"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <button className="flex items-center gap-1.5 text-[#7A8494] hover:text-[#E85D4A] transition-colors">
+        <ThumbsUp size={14} />
+        <span className="font-body text-xs">Helpful ({review.helpful})</span>
+      </button>
+    </motion.div>
   );
 }
 
@@ -990,58 +1090,7 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AnimatePresence mode="popLayout">
             {filteredReviews.map((review, i) => (
-              <motion.div
-                key={review.id}
-                layout
-                className="bg-white rounded-2xl p-5 shadow-[0_1px_3px_rgba(15,27,46,0.04)] hover:shadow-[0_4px_16px_rgba(15,27,46,0.08)] transition-shadow duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: easeSmooth }}
-              >
-                {/* Top Row */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={review.avatar}
-                      alt={review.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-body text-sm font-semibold text-[#1A2B47]">
-                        {review.name}
-                      </p>
-                      <p className="font-body text-xs text-[#7A8494]">{review.date}</p>
-                    </div>
-                  </div>
-                  <div className="bg-[#0F1B2E] text-white font-body text-sm font-bold px-2.5 py-1 rounded-lg">
-                    {review.score}
-                  </div>
-                </div>
-
-                <h4 className="font-display text-base font-semibold text-[#1A2B47] mb-1">
-                  "{review.title}"
-                </h4>
-                <p className="font-body text-sm text-[#4A5468] leading-relaxed mb-3 line-clamp-4">
-                  {review.text}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {review.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2 py-0.5 rounded-md"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <button className="flex items-center gap-1.5 text-[#7A8494] hover:text-[#E85D4A] transition-colors">
-                  <ThumbsUp size={14} />
-                  <span className="font-body text-xs">Helpful ({review.helpful})</span>
-                </button>
-              </motion.div>
+              <ReviewCard key={review.id} review={review} index={i} />
             ))}
           </AnimatePresence>
         </div>
@@ -1226,7 +1275,7 @@ function SimilarProperties({ hotel }: { hotel: HotelData }) {
                     </span>
                   </div>
                   <p className="font-display text-lg font-semibold text-[#E85D4A]">
-                    ${prop.price}
+                    ${prop.price.toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -1334,7 +1383,7 @@ function MobileBookingBar({
       <div className="flex items-center justify-between">
         <div>
           <p className="font-display text-lg font-semibold text-[#E85D4A]">
-            ${selectedRoom.pricePerNight}
+            ${selectedRoom.pricePerNight.toLocaleString()}
             <span className="font-body text-xs text-[#7A8494] font-normal">/night</span>
           </p>
           <p className="font-body text-xs text-[#2D9F5E]">{selectedRoom.name} selected</p>
