@@ -41,6 +41,8 @@ import {
   createPiPayment,
   usdToPi,
   formatPiAmount,
+  calculateDeveloperFee,
+  getDeveloperFeePercent,
 } from '@/lib/piPayments';
 
 /* ─── easing token ─── */
@@ -71,7 +73,10 @@ const bookingData = {
 const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
 const piTaxes = usdToPi(bookingData.taxes);
 const piDiscount = usdToPi(bookingData.discount);
-const piTotal = usdToPi(bookingData.total);
+const piTotalBeforeFee = usdToPi(bookingData.total);
+const piDeveloperFee = calculateDeveloperFee(piTotalBeforeFee);
+const piTotal = piTotalBeforeFee + piDeveloperFee;
+const DEVELOPER_FEE_PCT = getDeveloperFeePercent();
 
 /* ─── form error type ─── */
 interface FormErrors {
@@ -288,6 +293,26 @@ function BookingSummarySidebar() {
               </div>
             </TooltipProvider>
           )}
+          <div className="flex justify-between">
+            <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
+              Developer Fee ({DEVELOPER_FEE_PCT}%)
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="cursor-help">
+                      <Info size={13} className="text-[#C5CBD4] hover:text-[#7A8494] transition-colors" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p className="font-body text-xs">Required fee for Pi Network Mainnet listing</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </span>
+            <span className="font-body text-sm text-[#4A5468]">
+              {formatPiAmount(piDeveloperFee)}
+            </span>
+          </div>
           <div className="border-t border-[#E2E6EC] pt-2 mt-2">
             <div className="flex justify-between">
               <span className="font-body text-base font-semibold text-[#1A2B47]">
@@ -298,7 +323,7 @@ function BookingSummarySidebar() {
               </span>
             </div>
             <p className="font-body text-xs text-[#7A8494] text-right mt-0.5">
-              ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+              ≈ ${(piTotal * PI_RATE).toFixed(2)} USD · 1 π ≈ ${PI_RATE}
             </p>
           </div>
         </div>
@@ -599,7 +624,7 @@ function StepPayment({
 
     try {
       await createPiPayment({
-        amount: piTotal,
+        amount: piTotalBeforeFee,
         memo: `StayFind: ${bookingData.hotelName} - ${bookingData.roomType}`,
         metadata: {
           hotelName: bookingData.hotelName,
@@ -697,6 +722,14 @@ function StepPayment({
                 </span>
               </div>
             )}
+            <div className="flex justify-between">
+              <span className="font-body text-sm text-white/60">
+                Developer Fee ({DEVELOPER_FEE_PCT}%)
+              </span>
+              <span className="font-body text-sm text-white/80">
+                {formatPiAmount(piDeveloperFee)}
+              </span>
+            </div>
             <div className="border-t border-white/10 pt-2 mt-2">
               <div className="flex justify-between">
                 <span className="font-body text-sm font-medium text-white">
@@ -711,7 +744,7 @@ function StepPayment({
 
           {/* Conversion Note */}
           <p className="font-body text-xs text-white/40 mt-3">
-            ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+            ≈ ${(piTotal * PI_RATE).toFixed(2)} USD · 1 π ≈ ${PI_RATE}
           </p>
 
           {/* Security Badge */}
@@ -1000,7 +1033,7 @@ function StepConfirmation({ txId }: { txId: string }) {
               {formatPiAmount(piTotal)}
             </span>
             <p className="font-body text-xs text-[#7A8494]">
-              ≈ ${bookingData.total.toLocaleString()} USD · 1 π ≈ ${PI_RATE}
+              ≈ ${(piTotal * PI_RATE).toFixed(2)} USD · 1 π ≈ ${PI_RATE}
             </p>
           </div>
         </div>
