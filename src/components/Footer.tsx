@@ -34,6 +34,15 @@ function YoutubeIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function PiLogo({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="currentColor" />
+      <text x="16" y="21" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">π</text>
+    </svg>
+  );
+}
+
 export default function Footer() {
   const columns = [
     {
@@ -50,7 +59,12 @@ export default function Footer() {
     },
     {
       title: 'Legal',
-      links: ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Accessibility'],
+      links: [
+        { label: 'Terms of Service', to: '/terms' },
+        { label: 'Privacy Policy', to: '/privacy' },
+        { label: 'Cookie Policy', to: '#' },
+        { label: 'Accessibility', to: '#' },
+      ],
     },
   ];
 
@@ -71,23 +85,53 @@ export default function Footer() {
                 {col.title}
               </h4>
               <ul className="flex flex-col gap-3">
-                {col.links.map((link) => (
-                  <li key={link}>
-                    <Link
-                      to="#"
-                      className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((link) => {
+                  if (typeof link === 'string') {
+                    return (
+                      <li key={link}>
+                        <Link
+                          to="#"
+                          className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
+                        >
+                          {link}
+                        </Link>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={link.label}>
+                      <Link
+                        to={link.to}
+                        className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
 
+        {/* Pi Network Link */}
+        <div className="mt-10 pt-8 border-t border-[#243B5D] flex flex-col sm:flex-row items-center gap-4">
+          <a
+            href="https://minepi.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1A2B47] text-[#C5CBD4] hover:text-white hover:bg-[#E85D4A] transition-all duration-200 font-body text-sm"
+          >
+            <PiLogo size={16} className="text-current" />
+            Powered by Pi Network
+          </a>
+          <p className="font-body text-xs text-[#7A8494]">
+            Secure payments on the Pi blockchain
+          </p>
+        </div>
+
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-[#243B5D] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-10 pt-8 border-t border-[#243B5D] flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-0">
             <span className="font-display text-xl font-normal text-white">Stay</span>
