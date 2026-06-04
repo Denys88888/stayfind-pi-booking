@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import {
   Search, MapPin, Calendar, Users, Heart, Star, ChevronLeft, ChevronRight,
-  Check, Sparkles, Shield, Clock, Lock, CreditCard, ArrowRight, Wifi, Car,
-  Coffee, Utensils, ChevronDown
+  Check, Sparkles, Shield, Clock, Lock, CreditCard, ArrowRight, ArrowUp,
+  Wifi, Car, Coffee, Utensils, ChevronDown
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -331,7 +331,7 @@ function DestinationsSection() {
               animate={inView ? 'visible' : 'hidden'}
               onClick={() => navigate(`/search?destination=${dest.city}`)}
               className={cn(
-                'relative rounded-3xl overflow-hidden cursor-pointer group',
+                'relative rounded-3xl overflow-hidden cursor-pointer group hover:scale-[1.03] hover:shadow-2xl transition-all duration-300',
                 dest.featured ? 'sm:col-span-2 sm:row-span-2' : ''
               )}
             >
@@ -396,7 +396,7 @@ function PropertyTypesSection() {
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
               onClick={() => navigate(`/search?type=${type.name.toLowerCase()}`)}
-              className="min-w-[220px] sm:min-w-[240px] flex-shrink-0 cursor-pointer group snap-start"
+              className="w-[200px] sm:w-[240px] flex-shrink-0 cursor-pointer group snap-start"
             >
               <div className="aspect-[4/3] rounded-2xl overflow-hidden">
                 <img
@@ -608,7 +608,7 @@ function PropertiesSection() {
                 </div>
                 <div className="flex items-center gap-3 mt-3">
                   {[Wifi, Car, Coffee, Utensils].map((Icon, j) => (
-                    <Icon key={j} size={16} className="text-[#C5CBD4]" />
+                    <Icon key={j} size={16} className="text-[#7A8494]" />
                   ))}
                 </div>
               </div>
@@ -797,9 +797,9 @@ function InspirationSection() {
               Tips, guides, and stories to fuel your wanderlust
             </p>
           </div>
-          <a href="#" className="flex items-center gap-1 font-body text-sm text-[#E85D4A] hover:text-[#D14A38] transition-colors">
+          <Link to="/search" className="flex items-center gap-1 font-body text-sm text-[#E85D4A] hover:text-[#D14A38] transition-colors">
             View All Articles <ArrowRight size={16} />
-          </a>
+          </Link>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1004,6 +1004,29 @@ function NewsletterSection() {
   );
 }
 
+/* ───────── Scroll to Top Button ───────── */
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisible = () => setVisible(window.scrollY > 500);
+    window.addEventListener('scroll', toggleVisible);
+    return () => window.removeEventListener('scroll', toggleVisible);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className="fixed bottom-20 right-6 z-50 w-12 h-12 rounded-full bg-[#E85D4A] text-white flex items-center justify-center shadow-lg hover:bg-[#D14A38] hover:scale-110 transition-all duration-300"
+      aria-label="Scroll to top"
+    >
+      <ArrowUp size={20} />
+    </button>
+  );
+}
+
 /* ───────── Home Page ───────── */
 export default function Home() {
   return (
@@ -1018,6 +1041,7 @@ export default function Home() {
       <InspirationSection />
       <AppPromoSection />
       <NewsletterSection />
+      <ScrollToTop />
     </Layout>
   );
 }
