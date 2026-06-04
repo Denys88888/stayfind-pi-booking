@@ -9,6 +9,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { AlertCircle } from 'lucide-react';
+import { useTranslation } from '@/i18n';
 import type { PaymentDTO } from '@/hooks/usePiAuth';
 
 interface IncompletePaymentDialogProps {
@@ -26,6 +27,7 @@ export default function IncompletePaymentDialog({
   onComplete,
   onDismiss,
 }: IncompletePaymentDialogProps) {
+  const { t } = useTranslation();
   if (!payment) return null;
 
   return (
@@ -37,11 +39,11 @@ export default function IncompletePaymentDialog({
               <AlertCircle size={16} className="text-[#E85D4A]" />
             </div>
             <AlertDialogTitle className="font-display text-lg font-semibold text-[#1A2B47]">
-              Incomplete Payment Found
+              {t('common.error')}
             </AlertDialogTitle>
           </div>
           <AlertDialogDescription className="font-body text-sm text-[#7A8494] mt-2">
-            You have an unfinished Pi payment. Complete it to finalize your booking.
+            {t('checkout.processing')}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -49,7 +51,7 @@ export default function IncompletePaymentDialog({
         <div className="mt-2 rounded-xl bg-[#F8F9FB] p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Amount
+              {t('checkout.total')}
             </span>
             <span className="font-body text-sm font-semibold text-[#1A2B47] flex items-center gap-1">
               <span className="text-[#E85D4A] font-bold text-xs">π</span>
@@ -59,7 +61,7 @@ export default function IncompletePaymentDialog({
           {payment.memo && (
             <div className="flex items-center justify-between">
               <span className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-                Memo
+                {t('checkout.specialRequests')}
               </span>
               <span className="font-body text-sm text-[#4A5468] text-right max-w-[200px] truncate">
                 {payment.memo}
@@ -69,7 +71,7 @@ export default function IncompletePaymentDialog({
           {payment.identifier && (
             <div className="flex items-center justify-between">
               <span className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-                Payment ID
+                {t('checkout.piTransaction')}
               </span>
               <span className="font-body text-xs text-[#4A5468] font-mono truncate max-w-[160px]">
                 {payment.identifier}
@@ -79,10 +81,10 @@ export default function IncompletePaymentDialog({
           {payment.status && (
             <div className="flex items-center justify-between">
               <span className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-                Status
+                {t('profile.status')}
               </span>
               <span className="font-body text-xs font-medium px-2 py-0.5 rounded-full bg-[#E8A838]/15 text-[#B07D1A]">
-                {payment.status.developer_approved ? 'Approved' : 'Pending'}
+                {payment.status.developer_approved ? t('checkout.paid') : t('checkout.processing')}
               </span>
             </div>
           )}
@@ -93,13 +95,13 @@ export default function IncompletePaymentDialog({
             onClick={onDismiss}
             className="rounded-xl border-[#E2E6EC] font-body text-sm text-[#4A5468] hover:bg-[#F8F9FB] hover:text-[#E85D4A]"
           >
-            Dismiss
+            {t('common.cancel')}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => onComplete(payment)}
             className="rounded-xl bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold"
           >
-            Complete Payment
+            {t('checkout.payBtn').replace('{amount}', String(payment.amount))}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

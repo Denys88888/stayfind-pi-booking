@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import {
   Search, MapPin, Calendar, Users, Heart, Star, ChevronLeft, ChevronRight,
@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
 
 /* ───────── Animation helpers ───────── */
@@ -85,6 +86,7 @@ function GuestSelector({ guests, onChange }: { guests: GuestCounts; onChange: (g
 
 /* ───────── Section 1: Hero ───────── */
 function HeroSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [checkIn, setCheckIn] = useState<Date>();
@@ -132,7 +134,7 @@ function HeroSection() {
           className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-bold text-white leading-[1.1] tracking-[-0.02em] max-w-[700px]"
           style={{ textShadow: '0 2px 20px rgba(15,27,46,0.3)' }}
         >
-          Discover Your Perfect Stay
+          {t('hero.title')}
         </motion.h1>
 
         <motion.p
@@ -141,7 +143,7 @@ function HeroSection() {
           transition={{ duration: 0.7, delay: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
           className="mt-4 font-body text-base sm:text-lg text-white/85 max-w-[520px] leading-relaxed"
         >
-          Over 2 million hotels, resorts, and homes worldwide. Best price guaranteed.
+          {t('hero.subtitle')}
         </motion.p>
 
         {/* Search Bar */}
@@ -157,13 +159,13 @@ function HeroSection() {
               <MapPin className="text-[#E85D4A] shrink-0" size={20} />
               <div className="flex-1 text-left">
                 <label className="block font-body text-[11px] font-semibold uppercase tracking-[0.06em] text-[#7A8494]">
-                  Destination
+                  {t('hero.where')}
                 </label>
                 <input
                   type="text"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  placeholder="Where are you going?"
+                  placeholder={t('hero.where')}
                   className="w-full font-body text-sm text-[#0F1B2E] placeholder:text-[#C5CBD4] bg-transparent outline-none"
                 />
               </div>
@@ -178,7 +180,7 @@ function HeroSection() {
                   <Calendar className="text-[#E85D4A] shrink-0" size={20} />
                   <div className="text-left">
                     <label className="block font-body text-[11px] font-semibold uppercase tracking-[0.06em] text-[#7A8494]">
-                      Check-in
+                      {t('hero.checkIn')}
                     </label>
                     <span className="font-body text-sm text-[#0F1B2E]">
                       {checkIn ? format(checkIn, 'MMM dd') : 'Add date'}
@@ -206,7 +208,7 @@ function HeroSection() {
                   <Calendar className="text-[#E85D4A] shrink-0" size={20} />
                   <div className="text-left">
                     <label className="block font-body text-[11px] font-semibold uppercase tracking-[0.06em] text-[#7A8494]">
-                      Check-out
+                      {t('hero.checkOut')}
                     </label>
                     <span className="font-body text-sm text-[#0F1B2E]">
                       {checkOut ? format(checkOut, 'MMM dd') : 'Add date'}
@@ -234,7 +236,7 @@ function HeroSection() {
                   <Users className="text-[#E85D4A] shrink-0" size={20} />
                   <div className="text-left">
                     <label className="block font-body text-[11px] font-semibold uppercase tracking-[0.06em] text-[#7A8494]">
-                      Guests
+                      {t('hero.guests')}
                     </label>
                     <span className="font-body text-sm text-[#0F1B2E] truncate block max-w-[140px]">
                       {guestLabel}
@@ -254,7 +256,7 @@ function HeroSection() {
               className="bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold text-base rounded-xl px-6 py-6 h-auto transition-all duration-250 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]"
             >
               <Search size={20} className="mr-2" />
-              Search
+              {t('hero.searchBtn')}
             </Button>
           </div>
         </motion.div>
@@ -289,6 +291,7 @@ function HeroSection() {
 
 /* ───────── Section 2: Popular Destinations ───────── */
 function DestinationsSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
   const navigate = useNavigate();
 
@@ -312,13 +315,13 @@ function DestinationsSection() {
           className="mb-10"
         >
           <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-            EXPLORE TOP DESTINATIONS
+            {t('home.popularTitle')}
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-[48px] font-bold text-[#0F1B2E] leading-[1.15] tracking-[-0.02em] mt-2">
-            Where Will You Go Next?
+            {t('home.popularTitle')}
           </h2>
           <p className="font-body text-base text-[#7A8494] mt-3">
-            Handpicked destinations loved by travelers around the world
+            {t('home.popularSubtitle')}
           </p>
         </motion.div>
 
@@ -365,6 +368,7 @@ function DestinationsSection() {
 
 /* ───────── Section 3: Property Types ───────── */
 function PropertyTypesSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
   const navigate = useNavigate();
 
@@ -381,7 +385,7 @@ function PropertyTypesSection() {
       <div className="max-w-[1280px] mx-auto px-6">
         <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="mb-8">
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F1B2E] leading-[1.2]">
-            Stay Your Way
+            {t('home.typesTitle')}
           </h2>
           <p className="font-body text-base text-[#7A8494] mt-2">
             From boutique hotels to private villas, find the perfect accommodation
@@ -420,6 +424,7 @@ function PropertyTypesSection() {
 
 /* ───────── Section 4: Featured Deals ───────── */
 function DealsSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
   const navigate = useNavigate();
 
@@ -435,13 +440,13 @@ function DealsSection() {
       <div className="max-w-[1280px] mx-auto px-6">
         <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="mb-10">
           <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-            LIMITED TIME OFFERS
+            {t('home.dealsTitle')}
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em] mt-2">
-            Exclusive Deals Just for You
+            {t('home.dealsTitle')}
           </h2>
           <p className="font-body text-base text-white/70 mt-3">
-            Save up to 40% on selected properties this season
+            {t('home.dealsSubtitle')}
           </p>
         </motion.div>
 
@@ -479,7 +484,7 @@ function DealsSection() {
                 onClick={() => navigate('/search?destination=Maldives')}
                 className="mt-4 bg-white text-[#1A2B47] font-body text-sm font-semibold px-5 py-3 rounded-xl hover:bg-[#F8F9FB] transition-colors"
               >
-                View Deal
+                {t('home.ctaBtn')}
               </button>
             </div>
           </motion.div>
@@ -520,6 +525,7 @@ function DealsSection() {
 
 /* ───────── Section 5: Featured Properties ───────── */
 function PropertiesSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
 
   const properties = [
@@ -549,10 +555,10 @@ function PropertiesSection() {
       <div className="max-w-[1280px] mx-auto px-6">
         <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="mb-8">
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F1B2E] leading-[1.2]">
-            Handpicked for You
+            {t('home.popularTitle')}
           </h2>
           <p className="font-body text-base text-[#7A8494] mt-2">
-            The highest-rated properties with exceptional value
+            {t('home.popularSubtitle')}
           </p>
         </motion.div>
 
@@ -600,11 +606,11 @@ function PropertiesSection() {
                     <span className="bg-[#0F1B2E] text-white font-body text-sm font-bold px-2.5 py-1 rounded-lg rounded-bl-none">
                       {prop.rating}
                     </span>
-                    <span className="font-body text-xs text-[#7A8494]">Excellent</span>
+                    <span className="font-body text-xs text-[#7A8494]">{t('property.excellent')}</span>
                   </div>
                   <div className="text-right">
                     <span className="font-body text-lg font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(prop.price))}</span>
-                    <span className="font-body text-xs text-[#7A8494]">/night</span>
+                    <span className="font-body text-xs text-[#7A8494]">/{t('property.night')}</span>
                     <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${prop.price} USD</p>
                   </div>
                 </div>
@@ -624,15 +630,16 @@ function PropertiesSection() {
 
 /* ───────── Section 6: Why Choose StayFind ───────── */
 function FeaturesSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
 
   const features = [
-    { icon: Sparkles, title: 'Best Price Guarantee', desc: 'We match any lower price you find. Book with confidence knowing you\'re getting the best deal available.' },
-    { icon: Shield, title: 'Free Cancellation', desc: 'Most bookings offer free cancellation. Change your plans without the stress of losing money.' },
-    { icon: Star, title: 'Verified Reviews', desc: 'Read authentic reviews from verified guests who have actually stayed at the property.' },
-    { icon: Clock, title: '24/7 Support', desc: 'Our travel experts are available around the clock to help with any questions or changes.' },
-    { icon: Lock, title: 'Secure Booking', desc: 'Your payment and personal data are protected with bank-level encryption and security.' },
-    { icon: CreditCard, title: 'Flexible Payment', desc: 'Pay now or at the property. Multiple payment options including cards, PayPal, and installments.' },
+    { icon: Sparkles, title: t('home.statHotels'), desc: t('home.popularSubtitle') },
+    { icon: Shield, title: t('home.dealsTitle'), desc: t('home.dealsSubtitle') },
+    { icon: Star, title: t('home.reviewsTitle'), desc: t('home.reviewers') },
+    { icon: Clock, title: t('home.statCountries'), desc: t('home.popularSubtitle') },
+    { icon: Lock, title: t('home.statTravelers'), desc: t('home.reviewers') },
+    { icon: CreditCard, title: t('home.ctaTitle'), desc: t('home.ctaSubtitle') },
   ];
 
   return (
@@ -640,10 +647,10 @@ function FeaturesSection() {
       <div className="max-w-[1280px] mx-auto px-6">
         <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="text-center mb-10">
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F1B2E] leading-[1.2]">
-            Why Travelers Trust StayFind
+            {t('home.trustTitle')}
           </h2>
           <p className="font-body text-base text-[#7A8494] mt-2">
-            We make every trip seamless, from search to checkout
+            {t('home.trustSubtitle')}
           </p>
         </motion.div>
 
@@ -672,6 +679,7 @@ function FeaturesSection() {
 
 /* ───────── Section 7: Testimonials ───────── */
 function TestimonialsSection() {
+  const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
   const [current, setCurrent] = useState(0);
 
@@ -680,7 +688,7 @@ function TestimonialsSection() {
     { name: 'James Chen', location: 'Toronto, Canada', rating: 5, quote: 'I travel for work monthly and StayFind is my go-to. The filters are intuitive, prices are transparent, and their support team helped me rebook during a flight cancellation.', avatar: '/reviewer-2.jpg' },
     { name: 'Maria & Carlos Rodriguez', location: 'Madrid, Spain', rating: 5, quote: 'We booked a family villa in Tuscany through StayFind. The property exceeded every expectation. Free cancellation gave us peace of mind when our dates shifted.', avatar: '/reviewer-3.jpg' },
     { name: 'Emily Watson', location: 'London, UK', rating: 5, quote: 'The best price guarantee actually works! I found a lower rate elsewhere and they matched it plus gave an extra discount. Outstanding service.', avatar: '/reviewer-1.jpg' },
-    { name: 'David Park', location: 'Seoul, South Korea', rating: 5, quote: 'Clean interface, honest reviews, no hidden fees. StayFind is how booking should be. I\'ve recommended it to all my friends and family.', avatar: '/reviewer-2.jpg' },
+    { name: 'David Park', location: 'Seoul, South Korea', rating: 5, quote: "Clean interface, honest reviews, no hidden fees. StayFind is how booking should be. I've recommended it to all my friends and family.", avatar: '/reviewer-2.jpg' },
     { name: 'Anna Schmidt', location: 'Berlin, Germany', rating: 5, quote: 'From search to checkout in under 5 minutes. The map view helped us find the perfect location. Will definitely use again for our next trip!', avatar: '/reviewer-3.jpg' },
   ];
 
@@ -702,10 +710,10 @@ function TestimonialsSection() {
       <div className="max-w-[1280px] mx-auto px-6">
         <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="mb-10">
           <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-            TRAVELER STORIES
+            {t('home.reviewsTitle')}
           </span>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F1B2E] leading-[1.2] mt-2">
-            What Our Guests Say
+            {t('home.reviewsTitle')}
           </h2>
         </motion.div>
 
@@ -716,24 +724,24 @@ function TestimonialsSection() {
               animate={{ x: `-${current * (100 / perPage + 2)}%` }}
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
             >
-              {testimonials.map((t, i) => (
+              {testimonials.map((testimonial, i) => (
                 <div
                   key={i}
                   className="min-w-[calc(33.333%-16px)] sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] bg-white border border-[#F0F2F5] rounded-2xl p-7 shadow-[0_2px_8px_rgba(15,27,46,0.04)] hover:shadow-[0_8px_24px_rgba(15,27,46,0.08)] transition-shadow duration-300"
                 >
                   <div className="flex items-center gap-0.5">
-                    {Array.from({ length: t.rating }).map((_, j) => (
+                    {Array.from({ length: testimonial.rating }).map((_, j) => (
                       <Star key={j} size={16} className="text-[#E85D4A] fill-[#E85D4A]" />
                     ))}
                   </div>
                   <p className="font-body text-sm text-[#243B5D] mt-4 italic leading-relaxed">
-                    &ldquo;{t.quote}&rdquo;
+                    &ldquo;{testimonial.quote}&rdquo;
                   </p>
                   <div className="flex items-center gap-3 mt-5">
-                    <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full object-cover" />
+                    <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
                     <div>
-                      <p className="font-body text-sm font-semibold text-[#1A2B47]">{t.name}</p>
-                      <p className="font-body text-xs text-[#7A8494]">{t.location}</p>
+                      <p className="font-body text-sm font-semibold text-[#1A2B47]">{testimonial.name}</p>
+                      <p className="font-body text-xs text-[#7A8494]">{testimonial.location}</p>
                     </div>
                   </div>
                 </div>
@@ -777,174 +785,11 @@ function TestimonialsSection() {
   );
 }
 
-/* ───────── Section 8: Travel Inspiration ───────── */
-function InspirationSection() {
+/* ───────── Section 8: CTA ───────── */
+function CTASection() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { ref, inView } = useScrollReveal();
-
-  const articles = [
-    { title: '10 Hidden Gems in Europe You Need to Visit in 2025', category: 'Destination Guide', readTime: '6 min read', image: '/travel-inspiration-2.jpg' },
-    { title: 'How to Travel with Kids: A Parent\'s Complete Guide', category: 'Family Travel', readTime: '8 min read', image: '/travel-inspiration-1.jpg' },
-    { title: 'Solo Travel: Finding Yourself One Adventure at a Time', category: 'Solo Travel', readTime: '5 min read', image: '/travel-inspiration-3.jpg' },
-  ];
-
-  return (
-    <section ref={ref} className="bg-[#F8F9FB] py-20">
-      <div className="max-w-[1280px] mx-auto px-6">
-        <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
-          <div>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F1B2E] leading-[1.2]">
-              Travel Inspiration
-            </h2>
-            <p className="font-body text-base text-[#7A8494] mt-2">
-              Tips, guides, and stories to fuel your wanderlust
-            </p>
-          </div>
-          <Link to="/search" className="flex items-center gap-1 font-body text-sm text-[#E85D4A] hover:text-[#D14A38] transition-colors">
-            View All Articles <ArrowRight size={16} />
-          </Link>
-        </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article, i) => (
-            <motion.article
-              key={article.title}
-              custom={i + 1}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              className="cursor-pointer group"
-            >
-              <div className="aspect-[3/2] rounded-2xl overflow-hidden">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-[1.04]"
-                />
-              </div>
-              <div className="mt-4">
-                <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-                  {article.category}
-                </span>
-                <h3 className="font-body text-base font-semibold text-[#1A2B47] mt-2 group-hover:text-[#E85D4A] transition-colors leading-snug">
-                  {article.title}
-                </h3>
-                <div className="flex items-center gap-1 mt-2">
-                  <Clock size={14} className="text-[#7A8494]" />
-                  <span className="font-body text-xs text-[#7A8494]">{article.readTime}</span>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────── Section 9: Download App ───────── */
-function AppPromoSection() {
-  const { ref, inView } = useScrollReveal();
-
-  const benefits = [
-    'Exclusive mobile-only discounts',
-    'Instant booking confirmations',
-    'Offline access to your bookings',
-    'Price drop alerts',
-  ];
-
-  return (
-    <section ref={ref} className="py-20" style={{ background: 'linear-gradient(135deg, #0F1B2E 0%, #1A2B47 50%, #243B5D 100%)' }}>
-      <div className="max-w-[1280px] mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-12">
-        {/* Left Content */}
-        <motion.div
-          custom={0}
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="flex-1 md:max-w-[55%]"
-        >
-          <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-            GET THE APP
-          </span>
-          <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-[1.2] mt-2">
-            Take StayFind Everywhere You Go
-          </h2>
-          <p className="font-body text-base text-white/75 mt-4 leading-relaxed">
-            Book on the go, get exclusive mobile-only deals, manage your trips, and receive instant notifications about price drops and special offers.
-          </p>
-
-          <ul className="flex flex-col gap-3 mt-6">
-            {benefits.map((b) => (
-              <li key={b} className="flex items-center gap-3">
-                <Check size={16} className="text-[#E85D4A] shrink-0" />
-                <span className="font-body text-sm text-white/80">{b}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex flex-wrap gap-3 mt-7">
-            <button className="bg-black text-white flex items-center gap-2 px-5 py-3 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 16.91 2.94 12.58 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" />
-              </svg>
-              <div className="text-left">
-                <div className="text-[10px] leading-none">Download on the</div>
-                <div className="text-sm font-semibold leading-tight">App Store</div>
-              </div>
-            </button>
-            <button className="bg-black text-white flex items-center gap-2 px-5 py-3 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.6 3 21.09 3 20.5ZM16.81 15.12L6.05 21.34L14.54 12.85L16.81 15.12ZM20.16 10.81C20.5 11.08 20.75 11.5 20.75 12C20.75 12.5 20.53 12.9 20.18 13.18L17.89 14.5L15.39 12L17.89 9.5L20.16 10.81ZM6.05 2.66L16.81 8.88L14.54 11.15L6.05 2.66Z" />
-              </svg>
-              <div className="text-left">
-                <div className="text-[10px] leading-none">Get it on</div>
-                <div className="text-sm font-semibold leading-tight">Google Play</div>
-              </div>
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Right - Phone Mockup */}
-        <motion.div
-          custom={2}
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="flex-1 flex justify-center md:max-w-[45%]"
-        >
-          <div
-            className="max-w-[320px] md:max-w-[400px] animate-[float_4s_ease-in-out_infinite]"
-            style={{ filter: 'drop-shadow(0 24px 60px rgba(0,0,0,0.3))' }}
-          >
-            <img src="/app-mockup.jpg" alt="StayFind App" className="w-full h-auto rounded-2xl" />
-          </div>
-        </motion.div>
-      </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-/* ───────── Section 10: Newsletter ───────── */
-function NewsletterSection() {
-  const { ref, inView } = useScrollReveal();
-  const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setEmail('');
-      setTimeout(() => setSubmitted(false), 3000);
-    }
-  };
 
   return (
     <section ref={ref} className="bg-[#E85D4A] py-16">
@@ -956,7 +801,7 @@ function NewsletterSection() {
           animate={inView ? 'visible' : 'hidden'}
           className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-[1.2]"
         >
-          Ready for Your Next Adventure?
+          {t('home.ctaTitle')}
         </motion.h2>
         <motion.p
           custom={1}
@@ -965,32 +810,24 @@ function NewsletterSection() {
           animate={inView ? 'visible' : 'hidden'}
           className="font-body text-base text-white/85 mt-3"
         >
-          Join 2 million+ travelers and get exclusive deals delivered to your inbox.
+          {t('home.ctaSubtitle')}
         </motion.p>
 
-        <motion.form
+        <motion.div
           custom={2}
           variants={fadeUp}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          onSubmit={handleSubmit}
-          className="mt-7 flex flex-col sm:flex-row gap-3 max-w-[480px] mx-auto"
+          className="mt-7"
         >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
-            className="flex-1 bg-white text-[#0F1B2E] font-body text-base px-5 py-4 rounded-xl sm:rounded-r-none outline-none placeholder:text-[#C5CBD4] focus:ring-[3px] focus:ring-white/30"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-[#0F1B2E] text-white font-body text-base font-semibold px-7 py-4 rounded-xl sm:rounded-l-none hover:bg-[#1A2B47] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap"
+          <Button
+            onClick={() => navigate('/search')}
+            className="bg-white text-[#E85D4A] hover:bg-white/90 font-body font-semibold text-base rounded-xl px-8 py-6 h-auto transition-all duration-250 hover:scale-[1.02] active:scale-[0.98]"
           >
-            {submitted ? 'Subscribed!' : 'Subscribe'}
-          </button>
-        </motion.form>
+            {t('home.ctaBtn')}
+            <ArrowRight size={20} className="ml-2" />
+          </Button>
+        </motion.div>
 
         <motion.p
           custom={3}
@@ -999,7 +836,7 @@ function NewsletterSection() {
           animate={inView ? 'visible' : 'hidden'}
           className="font-body text-xs text-white/60 mt-3"
         >
-          No spam, ever. Unsubscribe anytime.
+          {t('home.reviewers')}
         </motion.p>
       </div>
     </section>
@@ -1040,9 +877,7 @@ export default function Home() {
       <PropertiesSection />
       <FeaturesSection />
       <TestimonialsSection />
-      <InspirationSection />
-      <AppPromoSection />
-      <NewsletterSection />
+      <CTASection />
       <ScrollToTop />
     </Layout>
   );

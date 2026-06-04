@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,12 +21,9 @@ import {
   Lock,
   Copy,
   Download,
-  Calendar,
   AlertCircle,
   MapPin,
   Star,
-  Users,
-  Bed,
   Wallet,
   ChevronRight,
   Info,
@@ -44,8 +42,6 @@ import {
   calculateDeveloperFee,
   getDeveloperFeePercent,
 } from '@/lib/piPayments';
-
-/* ─── easing token ─── */
 
 /* ─── Pi conversion rate for reference ─── */
 const PI_RATE = 0.15;
@@ -114,7 +110,8 @@ function PiLogoPay({ className }: { className?: string }) {
 
 /* ─── Progress Bar Component ─── */
 function ProgressBar({ currentStep }: { currentStep: number }) {
-  const steps = ['Your Details', 'Pi Payment', 'Confirmation'];
+  const { t } = useTranslation();
+  const steps = [t('checkout.step1'), t('checkout.step2'), t('checkout.step3')];
 
   return (
     <div className="w-full max-w-[500px] mx-auto">
@@ -170,38 +167,9 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
   );
 }
 
-/* ─── Property Summary Strip ─── */
-function PropertySummaryStrip() {
-  return (
-    <div      className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-5 p-4 bg-[#F8F9FB] rounded-xl"
-    >
-      <img
-        src={bookingData.image}
-        alt={bookingData.hotelName}
-        className="w-16 h-16 rounded-lg object-cover shrink-0"
-      />
-      <div className="flex-1 min-w-0">
-        <h3 className="font-body text-sm font-semibold text-[#1A2B47]">
-          {bookingData.hotelName}
-        </h3>
-        <p className="font-body text-sm text-[#7A8494]">
-          {bookingData.roomType}
-        </p>
-        <p className="font-body text-sm text-[#7A8494]">
-          {bookingData.checkIn} – {bookingData.checkOut} · {bookingData.nights}{' '}
-          nights
-        </p>
-      </div>
-      <div className="font-body text-sm text-[#7A8494] shrink-0">
-        <Users size={14} className="inline mr-1" />
-        {bookingData.guests}
-      </div>
-    </div>
-  );
-}
-
 /* ─── Booking Summary Sidebar ─── */
 function BookingSummarySidebar() {
+  const { t } = useTranslation();
   return (
     <div      className="bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
     >
@@ -216,18 +184,18 @@ function BookingSummarySidebar() {
       <div className="flex items-center gap-1 mt-1">
         <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
         <span className="font-body text-sm text-[#7A8494]">
-          {bookingData.rating} Wonderful · {bookingData.reviews.toLocaleString()}{' '}
-          reviews
+          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString()}{' '}
+          {t('property.reviews')}
         </span>
       </div>
 
       <div className="mt-5 space-y-2">
         {[
-          { label: 'Check-in', value: bookingData.checkIn },
-          { label: 'Check-out', value: bookingData.checkOut },
-          { label: 'Nights', value: `${bookingData.nights} nights` },
-          { label: 'Guests', value: bookingData.guests },
-          { label: 'Room', value: bookingData.roomType },
+          { label: t('profile.checkIn'), value: bookingData.checkIn },
+          { label: t('profile.checkOut'), value: bookingData.checkOut },
+          { label: t('property.nights'), value: `${bookingData.nights} ${t('property.nights')}` },
+          { label: t('hero.guests'), value: bookingData.guests },
+          { label: t('property.rooms'), value: bookingData.roomType },
         ].map((row) => (
           <div
             key={row.label}
@@ -243,12 +211,12 @@ function BookingSummarySidebar() {
 
       <div className="mt-5 pt-4 border-t border-[#E2E6EC]">
         <h4 className="font-display text-base font-semibold text-[#1A2B47] mb-3">
-          Price Summary
+          {t('checkout.priceSummary')}
         </h4>
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="font-body text-sm text-[#7A8494]">
-              ${bookingData.pricePerNight} × {bookingData.nights} nights
+              ${bookingData.pricePerNight} × {bookingData.nights} {t('property.nights')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
               ${(bookingData.pricePerNight * bookingData.nights).toLocaleString()}
@@ -259,7 +227,7 @@ function BookingSummarySidebar() {
           </div>
           <div className="flex justify-between">
             <span className="font-body text-sm text-[#7A8494]">
-              Taxes &amp; fees
+              {t('checkout.taxesFees')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
               ${bookingData.taxes.toLocaleString()}
@@ -272,7 +240,7 @@ function BookingSummarySidebar() {
             <TooltipProvider>
               <div className="flex justify-between">
                 <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
-                  Discount
+                  {t('checkout.discount')}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button className="cursor-help">
@@ -280,7 +248,7 @@ function BookingSummarySidebar() {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                      <p className="font-body text-xs">Early bird discount — 10% off for bookings 30+ days in advance</p>
+                      <p className="font-body text-xs">{t('home.dealsSubtitle')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </span>
@@ -295,7 +263,7 @@ function BookingSummarySidebar() {
           )}
           <div className="flex justify-between">
             <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
-              Developer Fee ({DEVELOPER_FEE_PCT}%)
+              {t('checkout.developerFee').replace('{percent}', String(DEVELOPER_FEE_PCT))}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -304,7 +272,7 @@ function BookingSummarySidebar() {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p className="font-body text-xs">Required fee for Pi Network Mainnet listing</p>
+                    <p className="font-body text-xs">{t('checkout.feeTooltip')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -316,7 +284,7 @@ function BookingSummarySidebar() {
           <div className="border-t border-[#E2E6EC] pt-2 mt-2">
             <div className="flex justify-between">
               <span className="font-body text-base font-semibold text-[#1A2B47]">
-                Total
+                {t('checkout.total')}
               </span>
               <span className="font-display text-xl font-semibold text-[#0F1B2E]">
                 {formatPiAmount(piTotal)}
@@ -332,14 +300,14 @@ function BookingSummarySidebar() {
       <div className="mt-4 flex items-start gap-2 bg-[#FEF2F0] rounded-lg p-3">
         <Shield size={16} className="text-[#E85D4A] shrink-0 mt-0.5" />
         <span className="font-body text-sm text-[#D14A38]">
-          Free cancellation until {bookingData.cancellationDate}
+          {t('checkout.freeCancel').replace('{date}', bookingData.cancellationDate)}
         </span>
       </div>
 
       <div className="mt-4 flex items-center gap-2 text-[#C5CBD4]">
         <Lock size={14} />
         <span className="font-body text-xs text-[#7A8494]">
-          Secured by Pi Blockchain
+          {t('checkout.piSecured')}
         </span>
       </div>
     </div>
@@ -352,6 +320,7 @@ function StepDetails({
 }: {
   onContinue: (data: Record<string, string>) => void;
 }) {
+  const { t } = useTranslation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -363,17 +332,17 @@ function StepDetails({
 
   const validate = useCallback(() => {
     const newErrors: FormErrors = {};
-    if (!firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!lastName.trim()) newErrors.lastName = 'Last name is required';
+    if (!firstName.trim()) newErrors.firstName = `${t('checkout.firstName')} ${t('common.required')}`;
+    if (!lastName.trim()) newErrors.lastName = `${t('checkout.lastName')} ${t('common.required')}`;
     if (!email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = `${t('checkout.email')} ${t('common.required')}`;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = 'Please enter a valid email';
     }
-    if (!phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!phone.trim()) newErrors.phone = `${t('checkout.phone')} ${t('common.required')}`;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [firstName, lastName, email, phone]);
+  }, [firstName, lastName, email, phone, t]);
 
   const handleContinue = () => {
     if (validate()) {
@@ -389,7 +358,7 @@ function StepDetails({
         {/* Lead Guest */}
         <div>
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
-            Lead Guest
+            {t('checkout.leadGuest')}
           </h3>
           <p className="font-body text-sm text-[#7A8494] mt-1">
             The person checking in must match this name
@@ -401,11 +370,11 @@ function StepDetails({
                 htmlFor="firstName"
                 className="font-body text-sm text-[#4A5468]"
               >
-                First Name <span className="text-[#D93838]">*</span>
+                {t('checkout.firstName')} <span className="text-[#D93838]">*</span>
               </Label>
               <Input
                 id="firstName"
-                placeholder="First name"
+                placeholder={t('checkout.firstName')}
                 value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -429,11 +398,11 @@ function StepDetails({
                 htmlFor="lastName"
                 className="font-body text-sm text-[#4A5468]"
               >
-                Last Name <span className="text-[#D93838]">*</span>
+                {t('checkout.lastName')} <span className="text-[#D93838]">*</span>
               </Label>
               <Input
                 id="lastName"
-                placeholder="Last name"
+                placeholder={t('checkout.lastName')}
                 value={lastName}
                 onChange={(e) => {
                   setLastName(e.target.value);
@@ -456,7 +425,7 @@ function StepDetails({
 
           <div className="mt-4">
             <Label htmlFor="email" className="font-body text-sm text-[#4A5468]">
-              Email <span className="text-[#D93838]">*</span>
+              {t('checkout.email')} <span className="text-[#D93838]">*</span>
             </Label>
             <Input
               id="email"
@@ -483,12 +452,12 @@ function StepDetails({
 
           <div className="mt-4">
             <Label htmlFor="phone" className="font-body text-sm text-[#4A5468]">
-              Phone <span className="text-[#D93838]">*</span>
+              {t('checkout.phone')} <span className="text-[#D93838]">*</span>
             </Label>
             <Input
               id="phone"
               type="tel"
-              placeholder="Phone number"
+              placeholder={t('checkout.phone')}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -512,13 +481,13 @@ function StepDetails({
         {/* Special Requests */}
         <div className="mt-8">
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
-            Special Requests
+            {t('checkout.specialRequests')}
           </h3>
           <p className="font-body text-sm text-[#7A8494] mt-1">
-            We&apos;ll share your requests with the property
+            {t('checkout.requestsHint')}
           </p>
           <Textarea
-            placeholder="Any special requests? (e.g., early check-in, specific room location, dietary requirements...)"
+            placeholder={t('checkout.requestsHint')}
             rows={4}
             value={requests}
             onChange={(e) => setRequests(e.target.value)}
@@ -529,17 +498,17 @@ function StepDetails({
         {/* Arrival Time */}
         <div className="mt-8">
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
-            Estimated Arrival Time
+            {t('checkout.arrivalTime')}
           </h3>
           <p className="font-body text-sm text-[#7A8494] mt-1">
-            Check-in starts at 3:00 PM
+            {t('checkout.checkInStarts')}
           </p>
           <Select value={arrival} onValueChange={setArrival}>
             <SelectTrigger className="mt-3 rounded-xl border-[#E2E6EC] focus:border-[#E85D4A] focus:ring-[3px] focus:ring-[rgba(232,93,74,0.12)]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="I don't know">I don&apos;t know</SelectItem>
+              <SelectItem value="I don't know">{t('checkout.checkInStarts')}</SelectItem>
               <SelectItem value="12:00 PM – 2:00 PM">
                 12:00 PM – 2:00 PM
               </SelectItem>
@@ -566,7 +535,7 @@ function StepDetails({
             className="rounded border-[#E2E6EC] data-[state=checked]:bg-[#E85D4A] data-[state=checked]:border-[#E85D4A]"
           />
           <Label htmlFor="save" className="font-body text-sm text-[#4A5468] cursor-pointer">
-            Save my details for faster checkout next time
+            {t('checkout.saveDetails')}
           </Label>
         </div>
 
@@ -575,7 +544,7 @@ function StepDetails({
           onClick={handleContinue}
           className="w-full mt-6 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold rounded-xl py-6 text-base transition-all duration-250 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]"
         >
-          Continue to Pi Payment
+          {t('checkout.continue')}
           <ChevronRight size={18} className="ml-1" />
         </Button>
       </div>
@@ -598,7 +567,8 @@ function StepPayment({
   onPay: (txId: string) => void;
   onBack: () => void;
 }) {
-  const { isAuthenticated, authenticate } = usePiAuth();
+  const { t } = useTranslation();
+  const { isAuthenticated, authenticate, user } = usePiAuth();
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [processing, setProcessing] = useState(false);
@@ -606,10 +576,10 @@ function StepPayment({
 
   const validate = useCallback(() => {
     const newErrors: FormErrors = {};
-    if (!terms) newErrors.terms = 'You must agree to the terms';
+    if (!terms) newErrors.terms = `${t('checkout.termsAgree')} ${t('common.required')}`;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [terms]);
+  }, [terms, t]);
 
   const handlePay = async () => {
     if (!validate()) return;
@@ -627,6 +597,8 @@ function StepPayment({
         amount: piTotalBeforeFee,
         memo: `StayFind: ${bookingData.hotelName} - ${bookingData.roomType}`,
         metadata: {
+          userUid: user?.uid ?? 'anonymous',
+          userUsername: user?.username ?? 'guest',
           hotelName: bookingData.hotelName,
           roomType: bookingData.roomType,
           checkIn: bookingData.checkIn,
@@ -643,7 +615,7 @@ function StepPayment({
     } catch (err: unknown) {
       setProcessing(false);
       const message =
-        err instanceof Error ? err.message : 'Payment failed. Please try again.';
+        err instanceof Error ? err.message : t('common.error');
       setPaymentError(message);
     }
   };
@@ -656,7 +628,7 @@ function StepPayment({
         {/* Payment Method */}
         <div>
           <h3 className="font-display text-lg font-semibold text-[#1A2B47]">
-            How Would You Like to Pay?
+            {t('checkout.payTitle')}
           </h3>
           <div className="mt-4 flex items-center gap-3 p-4 rounded-xl border-2 border-[#E85D4A] bg-[rgba(232,93,74,0.02)]">
             <div className="w-5 h-5 rounded-full border-2 border-[#E85D4A] flex items-center justify-center shrink-0">
@@ -665,10 +637,10 @@ function StepPayment({
             <PiLogoPay />
             <div>
               <p className="font-body text-sm font-medium text-[#1A2B47]">
-                Pi Cryptocurrency
+                {t('checkout.piCrypto')}
               </p>
               <p className="font-body text-xs text-[#7A8494]">
-                Fast, secure blockchain payments
+                {t('checkout.piFast')}
               </p>
             </div>
           </div>
@@ -683,7 +655,7 @@ function StepPayment({
             </div>
             <div>
               <p className="font-body text-sm font-medium text-white/80">
-                Pay with Pi
+                {t('checkout.payWithPi')}
               </p>
               <p className="font-display text-2xl font-semibold text-white">
                 {formatPiAmount(piTotal)}
@@ -698,7 +670,7 @@ function StepPayment({
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="font-body text-sm text-white/60">
-                ${bookingData.pricePerNight} × {bookingData.nights} nights
+                ${bookingData.pricePerNight} × {bookingData.nights} {t('property.nights')}
               </span>
               <span className="font-body text-sm text-white/80">
                 {formatPiAmount(piSubtotal)}
@@ -706,7 +678,7 @@ function StepPayment({
             </div>
             <div className="flex justify-between">
               <span className="font-body text-sm text-white/60">
-                Taxes &amp; fees
+                {t('checkout.taxesFees')}
               </span>
               <span className="font-body text-sm text-white/80">
                 {formatPiAmount(piTaxes)}
@@ -715,7 +687,7 @@ function StepPayment({
             {bookingData.discount > 0 && (
               <div className="flex justify-between">
                 <span className="font-body text-sm text-white/60">
-                  Discount
+                  {t('checkout.discount')}
                 </span>
                 <span className="font-body text-sm text-[#4ADE80]">
                   -{formatPiAmount(piDiscount)}
@@ -724,7 +696,7 @@ function StepPayment({
             )}
             <div className="flex justify-between">
               <span className="font-body text-sm text-white/60">
-                Developer Fee ({DEVELOPER_FEE_PCT}%)
+                {t('checkout.developerFee').replace('{percent}', String(DEVELOPER_FEE_PCT))}
               </span>
               <span className="font-body text-sm text-white/80">
                 {formatPiAmount(piDeveloperFee)}
@@ -733,7 +705,7 @@ function StepPayment({
             <div className="border-t border-white/10 pt-2 mt-2">
               <div className="flex justify-between">
                 <span className="font-body text-sm font-medium text-white">
-                  Total
+                  {t('checkout.total')}
                 </span>
                 <span className="font-body text-base font-semibold text-white">
                   {formatPiAmount(piTotal)}
@@ -751,7 +723,7 @@ function StepPayment({
           <div className="flex items-center gap-1.5 mt-4">
             <Check size={12} className="text-[#4ADE80]" />
             <span className="font-body text-xs text-white/50">
-              Secured by Pi Blockchain
+              {t('checkout.piSecured')}
             </span>
           </div>
         </div>
@@ -776,17 +748,18 @@ function StepPayment({
               htmlFor="terms"
               className="font-body text-sm text-[#4A5468] cursor-pointer leading-relaxed"
             >
-              I agree to the{' '}
+              {t('checkout.termsAgree')}{' '}
               <span className="underline text-[#E85D4A] cursor-pointer">
-                Booking Conditions
+                {t('checkout.bookingCond')}
               </span>
               ,{' '}
               <span className="underline text-[#E85D4A] cursor-pointer">
-                Privacy Policy
+                {t('checkout.privacyPolicy')}
               </span>
-              , and{' '}
+              ,{' '}
+              {t('common.and')}{' '}
               <span className="underline text-[#E85D4A] cursor-pointer">
-                Terms of Service
+                {t('checkout.termsService')}
               </span>
             </Label>
           </div>
@@ -840,17 +813,17 @@ function StepPayment({
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              Processing...
+              {t('checkout.processing')}
             </span>
           ) : isAuthenticated ? (
             <>
               <PiLogoPay />
-              Pay {formatPiAmount(piTotal)} with Pi
+              {t('checkout.payBtn').replace('{amount}', formatPiAmount(piTotal))}
             </>
           ) : (
             <>
               <PiLogoPay />
-              Sign In with Pi to Pay
+              {t('checkout.signInPay')}
             </>
           )}
         </Button>
@@ -860,7 +833,7 @@ function StepPayment({
           onClick={onBack}
           className="w-full mt-3 font-body text-sm text-[#7A8494] hover:text-[#E85D4A] transition-colors py-2"
         >
-          Back to Details
+          {t('checkout.back')}
         </button>
 
         {/* Security Badges */}
@@ -893,6 +866,7 @@ function StepPayment({
 /* ─── Step 3: Confirmation ─── */
 function StepConfirmation({ txId }: { txId: string }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const bookingRef = 'SF-2025-78432';
 
@@ -917,12 +891,12 @@ function StepConfirmation({ txId }: { txId: string }) {
       {/* Headline */}
       <h2        className="font-display text-3xl sm:text-4xl font-semibold text-[#0F1B2E] mt-6"
       >
-        Booking Confirmed!
+        {t('checkout.bookingConfirmed')}
       </h2>
 
       <p        className="font-body text-base text-[#7A8494] mt-2"
       >
-        A confirmation email has been sent to sarah.mitchell@email.com
+        {t('checkout.confirmEmail')} sarah.mitchell@email.com
       </p>
 
       {/* Booking Reference */}
@@ -930,7 +904,7 @@ function StepConfirmation({ txId }: { txId: string }) {
       >
         <div className="text-left">
           <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-            Booking Reference
+            {t('checkout.bookingRef')}
           </p>
           <p className="font-body text-lg font-semibold text-[#0F1B2E] font-mono">
             {bookingRef}
@@ -943,12 +917,12 @@ function StepConfirmation({ txId }: { txId: string }) {
           {copied ? (
             <>
               <Check size={16} className="text-[#2D9F5E]" />
-              Copied!
+              {t('checkout.copied')}
             </>
           ) : (
             <>
               <Copy size={16} />
-              Copy
+              {t('checkout.copy')}
             </>
           )}
         </button>
@@ -959,14 +933,14 @@ function StepConfirmation({ txId }: { txId: string }) {
       >
         <div className="text-left">
           <p className="font-body text-xs text-white/50 uppercase tracking-wider">
-            Pi Transaction
+            {t('checkout.piTransaction')}
           </p>
           <p className="font-body text-sm font-semibold text-white font-mono truncate max-w-[200px] sm:max-w-[400px]">
             {txId}
           </p>
         </div>
         <div className="text-right shrink-0 ml-3">
-          <p className="font-body text-xs text-white/50">Paid</p>
+          <p className="font-body text-xs text-white/50">{t('checkout.paid')}</p>
           <p className="font-body text-base font-semibold text-white">
             {formatPiAmount(piTotal)}
           </p>
@@ -992,7 +966,7 @@ function StepConfirmation({ txId }: { txId: string }) {
         <div className="grid grid-cols-2 gap-4 mt-5">
           <div>
             <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Check-in
+              {t('profile.checkIn')}
             </p>
             <p className="font-body text-sm text-[#4A5468] mt-0.5">
               {bookingData.checkIn} · After 3:00 PM
@@ -1000,87 +974,56 @@ function StepConfirmation({ txId }: { txId: string }) {
           </div>
           <div>
             <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Check-out
+              {t('profile.checkOut')}
             </p>
             <p className="font-body text-sm text-[#4A5468] mt-0.5">
-              {bookingData.checkOut} · Before 12:00 PM
+              {bookingData.checkOut} · Before 11:00 AM
             </p>
           </div>
           <div>
             <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Room
+              {t('property.nights')}
             </p>
-            <p className="font-body text-sm text-[#4A5468] mt-0.5 flex items-center gap-1">
-              <Bed size={14} />
-              {bookingData.roomType}
+            <p className="font-body text-sm text-[#4A5468] mt-0.5">
+              {bookingData.nights} {t('property.nights')}
             </p>
           </div>
           <div>
             <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-              Guests
+              {t('hero.guests')}
             </p>
-            <p className="font-body text-sm text-[#4A5468] mt-0.5 flex items-center gap-1">
-              <Users size={14} />
+            <p className="font-body text-sm text-[#4A5468] mt-0.5">
               {bookingData.guests}
             </p>
           </div>
         </div>
 
-        <div className="border-t border-[#F0F2F5] mt-5 pt-4 flex justify-between items-center">
-          <span className="font-body text-sm text-[#7A8494]">Total paid</span>
-          <div className="text-right">
-            <span className="font-display text-xl font-semibold text-[#0F1B2E]">
+        <div className="mt-5 pt-4 border-t border-[#E2E6EC]">
+          <div className="flex justify-between">
+            <span className="font-body text-sm text-[#7A8494]">{t('checkout.totalPaid')}</span>
+            <span className="font-body text-lg font-semibold text-[#0F1B2E]">
               {formatPiAmount(piTotal)}
             </span>
-            <p className="font-body text-xs text-[#7A8494]">
-              ≈ ${(piTotal * PI_RATE).toFixed(2)} USD · 1 π ≈ ${PI_RATE}
-            </p>
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div        className="mt-6 flex flex-col sm:flex-row gap-3 justify-center"
-      >
+      <div className="mt-6 flex flex-col sm:flex-row gap-3">
+        <Button
+          onClick={() => navigate('/')}
+          className="flex-1 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold rounded-xl py-6 text-base transition-all"
+        >
+          {t('checkout.backHome')}
+        </Button>
         <Button
           variant="outline"
-          className="rounded-xl border-[#E2E6EC] font-body font-semibold text-[#1A2B47] hover:bg-[#F8F9FB] py-5 px-6"
+          onClick={() => {}}
+          className="flex-1 border-[#E2E6EC] text-[#1A2B47] font-body font-semibold rounded-xl py-6 text-base hover:bg-[#F8F9FB] transition-all"
         >
           <Download size={18} className="mr-2" />
-          Download Confirmation
+          {t('checkout.downloadReceipt')}
         </Button>
-        <Button
-          variant="outline"
-          className="rounded-xl border-[#E2E6EC] font-body font-semibold text-[#1A2B47] hover:bg-[#F8F9FB] py-5 px-6"
-        >
-          <Calendar size={18} className="mr-2" />
-          Add to Calendar
-        </Button>
-        <Button
-          onClick={() => navigate('/profile')}
-          className="rounded-xl bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold py-5 px-6 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98] transition-all"
-        >
-          View My Bookings
-        </Button>
-      </div>
-
-      {/* Help */}
-      <div        className="mt-8"
-      >
-        <p className="font-body text-sm text-[#7A8494]">
-          Need help with your booking?
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
-          <span className="font-body text-sm text-[#E85D4A] cursor-pointer hover:underline">
-            Contact Support
-          </span>
-          <span className="font-body text-sm text-[#E85D4A] cursor-pointer hover:underline">
-            Modify Booking
-          </span>
-          <span className="font-body text-sm text-[#E85D4A] cursor-pointer hover:underline">
-            Cancel Booking
-          </span>
-        </div>
       </div>
     </div>
   );
@@ -1089,54 +1032,31 @@ function StepConfirmation({ txId }: { txId: string }) {
 /* ─── Main Checkout Page ─── */
 export default function Checkout() {
   const [step, setStep] = useState(1);
-  const [, setDetailsData] = useState<Record<string, string> | null>(null);
   const [txId, setTxId] = useState('');
-
-  const handleContinue = (data: Record<string, string>) => {
-    setDetailsData(data);
-    setStep(2);
-  };
-
-  const handlePay = (paymentTxId: string) => {
-    setTxId(paymentTxId);
-    setStep(3);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <Layout>
-      <div className="pt-[88px] pb-20 min-h-[100dvh] bg-white">
-        {/* Header with Progress */}
-        {step < 3 && (
-          <div className="border-b border-[#E2E6EC] py-4">
-            <div className="max-w-[960px] mx-auto px-4 sm:px-6">
-              <ProgressBar currentStep={step} />
-              <PropertySummaryStrip />
-            </div>
+      <div className="min-h-[100dvh] bg-[#F8F9FB] pt-[88px] pb-20">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+          {/* Progress Bar */}
+          <div className="mb-10">
+            <ProgressBar currentStep={step} />
           </div>
-        )}
 
-        {/* Step Content */}
-        <div className="max-w-[960px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
-                      {step === 1 && (
-              <div
-                key="step1"              >
-                <StepDetails onContinue={handleContinue} />
-              </div>
-            )}
-            {step === 2 && (
-              <div
-                key="step2"              >
-                <StepPayment onPay={handlePay} onBack={() => setStep(1)} />
-              </div>
-            )}
-            {step === 3 && (
-              <div
-                key="step3"              >
-                <StepConfirmation txId={txId} />
-              </div>
-            )}
-                  </div>
+          {/* Steps */}
+          {step === 1 && (
+            <StepDetails onContinue={() => setStep(2)} />
+          )}
+          {step === 2 && (
+            <StepPayment
+              onPay={(id) => { setTxId(id); setStep(3); }}
+              onBack={() => setStep(1)}
+            />
+          )}
+          {step === 3 && (
+            <StepConfirmation txId={txId} />
+          )}
+        </div>
       </div>
     </Layout>
   );

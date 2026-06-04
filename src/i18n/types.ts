@@ -1,0 +1,216 @@
+export type LangCode = 'en' | 'ru' | 'uk' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'pl' | 'tr' | 'ar' | 'zh';
+
+export type TextDir = 'ltr' | 'rtl';
+
+export interface LanguageInfo {
+  code: LangCode;
+  name: string;
+  nativeName: string;
+  flag: string;
+}
+
+export interface TranslationSet {
+  lang: string;
+  dir: TextDir;
+  navbar: {
+    search: string;
+    destinations: string;
+    deals: string;
+    signIn: string;
+    signOut: string;
+    profile: string;
+    bookings: string;
+    language: string;
+  };
+  hero: {
+    title: string;
+    subtitle: string;
+    where: string;
+    checkIn: string;
+    checkOut: string;
+    guests: string;
+    searchBtn: string;
+    popular: string;
+  };
+  home: {
+    popularTitle: string;
+    popularSubtitle: string;
+    typesTitle: string;
+    dealsTitle: string;
+    dealsSubtitle: string;
+    reviewsTitle: string;
+    reviewers: string;
+    trustTitle: string;
+    trustSubtitle: string;
+    statHotels: string;
+    statCountries: string;
+    statTravelers: string;
+    ctaTitle: string;
+    ctaSubtitle: string;
+    ctaBtn: string;
+  };
+  search: {
+    title: string;
+    filters: string;
+    priceRange: string;
+    propertyType: string;
+    amenities: string;
+    rating: string;
+    sortBy: string;
+    results: string;
+    perNight: string;
+    map: string;
+    list: string;
+  };
+  property: {
+    amenities: string;
+    about: string;
+    rooms: string;
+    reviews: string;
+    location: string;
+    freeWifi: string;
+    breakfast: string;
+    pool: string;
+    parking: string;
+    spa: string;
+    gym: string;
+    restaurant: string;
+    bar: string;
+    ac: string;
+    petFriendly: string;
+    bookNow: string;
+    selectRoom: string;
+    night: string;
+    nights: string;
+    guests: string;
+    showAll: string;
+    showLess: string;
+    veryGood: string;
+    excellent: string;
+    wonderful: string;
+  };
+  checkout: {
+    step1: string;
+    step2: string;
+    step3: string;
+    leadGuest: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    specialRequests: string;
+    requestsHint: string;
+    arrivalTime: string;
+    checkInStarts: string;
+    saveDetails: string;
+    continue: string;
+    payWithPi: string;
+    piCrypto: string;
+    piFast: string;
+    payTitle: string;
+    termsAgree: string;
+    bookingCond: string;
+    privacyPolicy: string;
+    termsService: string;
+    payBtn: string;
+    signInPay: string;
+    processing: string;
+    back: string;
+    priceSummary: string;
+    taxesFees: string;
+    discount: string;
+    developerFee: string;
+    feeTooltip: string;
+    total: string;
+    freeCancel: string;
+    piSecured: string;
+    bookingConfirmed: string;
+    confirmEmail: string;
+    bookingRef: string;
+    copy: string;
+    copied: string;
+    piTransaction: string;
+    paid: string;
+    totalPaid: string;
+    backHome: string;
+    downloadReceipt: string;
+  };
+  profile: {
+    welcome: string;
+    member: string;
+    guest: string;
+    notSignedIn: string;
+    bookings: string;
+    favorites: string;
+    account: string;
+    upcoming: string;
+    completed: string;
+    cancelled: string;
+    status: string;
+    checkIn: string;
+    checkOut: string;
+    nights: string;
+    room: string;
+    cancelBooking: string;
+    viewDetails: string;
+    noBookings: string;
+    personalInfo: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    dob: string;
+    nationality: string;
+    saveChanges: string;
+    notifications: string;
+    preferences: string;
+    currency: string;
+    language: string;
+    security: string;
+    deleteAccount: string;
+    rewards: string;
+    points: string;
+    goldMember: string;
+    signOut: string;
+  };
+  common: {
+    required: string;
+    optional: string;
+    cancel: string;
+    submit: string;
+    save: string;
+    edit: string;
+    delete: string;
+    close: string;
+    loading: string;
+    error: string;
+    tryAgain: string;
+    and: string;
+  };
+  footer: {
+    aboutUs: string;
+    howItWorks: string;
+    careers: string;
+    press: string;
+    support: string;
+    helpCenter: string;
+    safety: string;
+    cancellation: string;
+    legal: string;
+    terms: string;
+    privacy: string;
+    cookies: string;
+    copyright: string;
+  };
+}
+
+export type TranslationKey =
+  | `navbar.${keyof TranslationSet['navbar']}`
+  | `hero.${keyof TranslationSet['hero']}`
+  | `home.${keyof TranslationSet['home']}`
+  | `search.${keyof TranslationSet['search']}`
+  | `property.${keyof TranslationSet['property']}`
+  | `checkout.${keyof TranslationSet['checkout']}`
+  | `profile.${keyof TranslationSet['profile']}`
+  | `common.${keyof TranslationSet['common']}`
+  | `footer.${keyof TranslationSet['footer']}`;

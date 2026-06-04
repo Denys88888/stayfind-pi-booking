@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from '@/i18n';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
   return (
@@ -44,26 +45,31 @@ function PiLogo({ size = 18, className }: { size?: number; className?: string })
 }
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   const columns = [
     {
-      title: 'Company',
-      links: ['About Us', 'Careers', 'Press', 'Blog', 'Sustainability'],
-    },
-    {
-      title: 'Support',
-      links: ['Help Center', 'Safety Information', 'Cancellation Options', 'Coronavirus FAQ'],
-    },
-    {
-      title: 'Discover',
-      links: ['Destinations', 'Property Types', 'Travel Guides', 'Seasonal Deals', 'Partner Program'],
-    },
-    {
-      title: 'Legal',
+      title: t('footer.aboutUs'),
       links: [
-        { label: 'Terms of Service', to: '/terms' },
-        { label: 'Privacy Policy', to: '/privacy' },
-        { label: 'Cookie Policy', to: '#' },
-        { label: 'Accessibility', to: '#' },
+        { label: t('footer.aboutUs'), to: '#' },
+        { label: t('footer.careers'), to: '#' },
+        { label: t('footer.press'), to: '#' },
+      ],
+    },
+    {
+      title: t('footer.support'),
+      links: [
+        { label: t('footer.helpCenter'), to: '#' },
+        { label: t('footer.safety'), to: '#' },
+        { label: t('footer.cancellation'), to: '#' },
+      ],
+    },
+    {
+      title: t('footer.legal'),
+      links: [
+        { label: t('footer.terms'), to: '/terms' },
+        { label: t('footer.privacy'), to: '/privacy' },
+        { label: t('footer.cookies'), to: '#' },
       ],
     },
   ];
@@ -85,33 +91,42 @@ export default function Footer() {
                 {col.title}
               </h4>
               <ul className="flex flex-col gap-3">
-                {col.links.map((link) => {
-                  if (typeof link === 'string') {
-                    return (
-                      <li key={link}>
-                        <Link
-                          to="#"
-                          className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
-                        >
-                          {link}
-                        </Link>
-                      </li>
-                    );
-                  }
-                  return (
-                    <li key={link.label}>
-                      <Link
-                        to={link.to}
-                        className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  );
-                })}
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.to}
+                      className="font-body text-sm text-[#C5CBD4] hover:text-[#E85D4A] transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
+
+          {/* Brand Column */}
+          <div>
+            <Link to="/" className="flex items-center gap-0 mb-5">
+              <span className="font-display text-xl font-normal text-white">Stay</span>
+              <span className="font-display text-xl font-bold text-white">Find</span>
+            </Link>
+            <p className="font-body text-sm text-[#C5CBD4] mb-5">
+              {t('home.popularSubtitle')}
+            </p>
+            <div className="flex items-center gap-4">
+              {socialLinks.map((social) => (
+                <Link
+                  key={social.label}
+                  to="#"
+                  className="w-10 h-10 rounded-full bg-[#1A2B47] flex items-center justify-center text-[#C5CBD4] hover:bg-[#E85D4A] hover:text-white transition-all duration-200"
+                  aria-label={social.label}
+                >
+                  <social.icon size={18} />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Pi Network Link */}
@@ -139,15 +154,15 @@ export default function Footer() {
           </Link>
 
           <p className="font-body text-xs text-[#7A8494]">
-            &copy; 2025 StayFind. All rights reserved.
+            {t('footer.copyright')}
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {socialLinks.map((social) => (
               <Link
                 key={social.label}
                 to="#"
-                className="w-10 h-10 rounded-full bg-[#1A2B47] flex items-center justify-center text-[#C5CBD4] hover:bg-[#E85D4A] hover:text-white transition-all duration-200"
+                className="text-[#C5CBD4] hover:text-[#E85D4A] transition-colors"
                 aria-label={social.label}
               >
                 <social.icon size={18} />

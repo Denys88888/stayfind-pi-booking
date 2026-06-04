@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, User, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePiAuth } from '@/hooks/usePiAuth';
+import { useTranslation } from '@/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 /* ─── Pi Logo SVG ─── */
 function PiLogo({ className }: { className?: string }) {
@@ -19,6 +21,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { user, isAuthenticated, isSandbox, authenticate, signOut } = usePiAuth();
+  const { t } = useTranslation();
 
   const isHome = location.pathname === '/';
 
@@ -35,9 +38,9 @@ export default function Navbar() {
   }, [location.pathname]);
 
   const navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'Search', path: '/search' },
-    { label: 'Profile', path: '/profile' },
+    { label: t('navbar.search'), path: '/search' },
+    { label: t('navbar.destinations'), path: '/search' },
+    { label: t('navbar.deals'), path: '/search' },
   ];
 
   const isOverHero = isHome && !scrolled && !isSandbox;
@@ -88,7 +91,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
-                key={link.path}
+                key={link.path + link.label}
                 to={link.path}
                 className={cn(
                   'font-body text-sm font-medium uppercase tracking-[0.04em] transition-colors duration-200',
@@ -103,10 +106,12 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageSwitcher variant={isOverHero ? 'navbar' : 'compact'} className={isOverHero ? 'text-white' : 'text-[#243B5D]'} />
             {isAuthenticated && user ? (
               <>
-                <div
+                <Link
+                  to="/profile"
                   className={cn(
                     'flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm font-medium',
                     isOverHero
@@ -121,7 +126,7 @@ export default function Navbar() {
                       Sandbox
                     </span>
                   )}
-                </div>
+                </Link>
                 <button
                   onClick={signOut}
                   className={cn(
@@ -131,7 +136,7 @@ export default function Navbar() {
                       : 'text-[#7A8494] hover:bg-[#F8F9FB] hover:text-[#E85D4A]'
                   )}
                 >
-                  Sign Out
+                  {t('navbar.signOut')}
                 </button>
               </>
             ) : (
@@ -145,20 +150,9 @@ export default function Navbar() {
                 )}
               >
                 <PiLogo className={isOverHero ? 'text-white' : 'text-[#E85D4A]'} />
-                Sign In with Pi
+                {t('navbar.signIn')}
               </button>
             )}
-            <Link
-              to="/search"
-              className={cn(
-                'px-5 py-2.5 rounded-xl font-body text-sm font-semibold transition-all duration-200',
-                isOverHero
-                  ? 'bg-white text-[#0F1B2E] hover:scale-[1.02] hover:shadow-lg'
-                  : 'bg-[#E85D4A] text-white hover:bg-[#D14A38] hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)]'
-              )}
-            >
-              List Property
-            </Link>
           </div>
 
           {/* Mobile hamburger */}
@@ -181,7 +175,7 @@ export default function Navbar() {
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
                 <Link
-                  key={link.path}
+                  key={link.path + link.label}
                   to={link.path}
                   className="font-body text-base font-medium text-[#1A2B47] hover:text-[#E85D4A] py-2"
                 >
@@ -189,9 +183,16 @@ export default function Navbar() {
                 </Link>
               ))}
               <hr className="border-[#E2E6EC]" />
+              {/* Mobile Language Switcher */}
+              <div className="py-2">
+                <LanguageSwitcher variant="compact" />
+              </div>
               {isAuthenticated && user ? (
                 <>
-                  <div className="flex items-center gap-2 font-body text-base font-medium text-[#1A2B47] py-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 font-body text-base font-medium text-[#1A2B47] py-2"
+                  >
                     <User size={18} />
                     <span>@{user.username}</span>
                     {isSandbox && (
@@ -199,12 +200,12 @@ export default function Navbar() {
                         Sandbox
                       </span>
                     )}
-                  </div>
+                  </Link>
                   <button
                     onClick={signOut}
                     className="font-body text-base font-medium text-[#7A8494] py-2 text-left hover:text-[#E85D4A] transition-colors"
                   >
-                    Sign Out
+                    {t('navbar.signOut')}
                   </button>
                 </>
               ) : (
@@ -213,15 +214,9 @@ export default function Navbar() {
                   className="flex items-center gap-2 font-body text-base font-medium text-[#243B5D] py-2 hover:text-[#E85D4A] transition-colors"
                 >
                   <PiLogo className="text-[#E85D4A]" />
-                  Sign In with Pi
+                  {t('navbar.signIn')}
                 </button>
               )}
-              <Link
-                to="/search"
-                className="bg-[#E85D4A] text-white font-body text-base font-semibold py-3 px-5 rounded-xl text-center hover:bg-[#D14A38]"
-              >
-                List Property
-              </Link>
             </div>
           </div>
         )}

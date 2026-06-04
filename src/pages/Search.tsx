@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usdToPi, formatPiAmount } from '@/lib/piPayments';
+import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
 import CompactSearchBar from './search/CompactSearchBar';
 import FilterSidebar from './search/FilterSidebar';
@@ -34,6 +35,7 @@ const ITEMS_PER_PAGE = 6;
 
 export default function Search() {
   useSearchParams();
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [sortBy, setSortBy] = useState<SortOption>('top-picks');
@@ -178,10 +180,10 @@ export default function Search() {
 
   /* ── Quick filter chips ── */
   const quickFilterConfig = [
-    { label: 'Pool', filter: 'Pool' as const },
-    { label: 'Spa', filter: 'Spa' as const },
-    { label: 'Free cancellation', filter: 'freeCancel' as const },
-    { label: 'Breakfast', filter: 'breakfast' as const },
+    { label: t('property.pool'), filter: 'Pool' as const },
+    { label: t('property.spa'), filter: 'Spa' as const },
+    { label: t('property.freeWifi'), filter: 'freeCancel' as const },
+    { label: t('property.breakfast'), filter: 'breakfast' as const },
   ];
 
   const isQuickActive = (filter: string) => {
@@ -244,7 +246,7 @@ export default function Search() {
                   )}
                 >
                   <SlidersHorizontal size={16} />
-                  <span className="hidden sm:inline">Filters</span>
+                  <span className="hidden sm:inline">{t('search.filters')}</span>
                   {activeFilterCount > 0 && (
                     <span className="ml-0.5 w-5 h-5 bg-[#E85D4A] text-white text-[11px] font-bold rounded-full flex items-center justify-center">
                       {activeFilterCount}
@@ -275,7 +277,7 @@ export default function Search() {
               {/* Right: Results count + Sort + View toggle */}
               <div className="flex items-center gap-3 shrink-0">
                 <span className="hidden lg:inline font-body text-sm text-[#7A8494]">
-                  {filteredHotels.length} properties
+                  {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
                 </span>
 
                 {/* Sort Dropdown */}
@@ -287,7 +289,7 @@ export default function Search() {
                     <span className="hidden sm:inline">
                       {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
                     </span>
-                    <span className="sm:hidden">Sort</span>
+                    <span className="sm:hidden">{t('search.sortBy')}</span>
                     <ChevronDown
                       size={14}
                       className={cn(
@@ -427,7 +429,7 @@ export default function Search() {
                 ))}
                 {filters.freeCancellation && (
                   <ActivePill
-                    label="Free cancellation"
+                    label={t('property.freeWifi')}
                     onRemove={() =>
                       setFilters((f) => ({ ...f, freeCancellation: false }))
                     }
@@ -435,7 +437,7 @@ export default function Search() {
                 )}
                 {filters.breakfastIncluded && (
                   <ActivePill
-                    label="Breakfast included"
+                    label={t('property.breakfast')}
                     onRemove={() =>
                       setFilters((f) => ({ ...f, breakfastIncluded: false }))
                     }
@@ -445,7 +447,7 @@ export default function Search() {
                   onClick={() => setFilters(INITIAL_FILTERS)}
                   className="font-body text-xs text-[#E85D4A] hover:underline ml-1"
                 >
-                  Clear all
+                  {t('common.cancel')}
                 </button>
               </div>
             </div>
@@ -484,16 +486,16 @@ export default function Search() {
                         <SearchIcon size={32} className="text-[#C5CBD4]" />
                       </div>
                       <h3 className="font-display text-xl font-semibold text-[#1A2B47] mb-2">
-                        No properties match your filters
+                        {t('common.error')}
                       </h3>
                       <p className="font-body text-sm text-[#7A8494] max-w-md mb-6">
-                        Try adjusting your filters or search criteria to see more results.
+                        {t('home.popularSubtitle')}
                       </p>
                       <button
                         onClick={() => setFilters(INITIAL_FILTERS)}
                         className="px-6 py-3 border border-[#E2E6EC] rounded-xl font-body text-sm font-semibold text-[#1A2B47] hover:border-[#1A2B47] hover:bg-[#F8F9FB] transition-all"
                       >
-                        Clear All Filters
+                        {t('common.tryAgain')}
                       </button>
                     </motion.div>
                   ) : (
@@ -522,7 +524,7 @@ export default function Search() {
                 {filteredHotels.length > 0 && (
                   <div className="mt-8 flex flex-col items-center gap-3">
                     <p className="font-body text-sm text-[#7A8494]">
-                      Showing {paginatedHotels.length} of {filteredHotels.length} properties
+                      Showing {paginatedHotels.length} of {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
                     </p>
                     {hasMore ? (
                       <button
@@ -533,10 +535,10 @@ export default function Search() {
                         {loadingMore ? (
                           <>
                             <Loader2 size={16} className="animate-spin" />
-                            Loading...
+                            {t('common.loading')}
                           </>
                         ) : (
-                          'Load More Properties'
+                          t('search.title')
                         )}
                       </button>
                     ) : (
@@ -566,7 +568,7 @@ export default function Search() {
               {/* Side list */}
               <div className="w-full lg:w-[380px] shrink-0 overflow-y-auto rounded-2xl bg-[#F8F9FB] border border-[#E2E6EC] p-3 space-y-2">
                 <p className="font-body text-sm font-medium text-[#1A2B47] px-2 pt-1">
-                  {filteredHotels.length} properties
+                  {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
                 </p>
                 {filteredHotels.map((hotel, i) => (
                   <HotelCard

@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import Layout from '@/components/Layout';
 import { getHotelById } from '@/data/propertyData';
 import { formatPiAmount, usdToPi } from '@/lib/piPayments';
 import type { HotelData, RoomType } from '@/data/propertyData';
+import { useTranslation } from '@/i18n';
+import Layout from '@/components/Layout';
 
 import {
   ChevronLeft,
@@ -72,6 +73,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
   const [favorited, setFavorited] = useState(false);
   const [mobileIdx, setMobileIdx] = useState(0);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const openGallery = (idx: number) => {
     setCurrentImg(idx);
@@ -168,7 +170,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
           className="absolute bottom-4 right-4 bg-white text-[#1A2B47] font-body text-sm font-medium px-[18px] py-2.5 rounded-[10px] shadow-[0_2px_12px_rgba(15,27,46,0.15)] hover:shadow-[0_4px_20px_rgba(15,27,46,0.2)] hover:scale-[1.02] transition-all duration-200 flex items-center gap-2 z-10"
         >
           <ImageIcon size={16} />
-          View All Photos
+          {t('property.showAll')}
         </button>
       </div>
 
@@ -226,7 +228,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
           className="absolute bottom-4 right-4 bg-white/90 text-[#1A2B47] font-body text-xs font-medium px-3 py-2 rounded-lg flex items-center gap-1.5 z-10"
         >
           <ImageIcon size={14} />
-          View All
+          {t('property.showAll')}
         </button>
       </div>
 
@@ -312,6 +314,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
 /* ------------------------------------------------------------------ */
 function PropertyHeader({ hotel }: { hotel: HotelData }) {
   const [favorited, setFavorited] = useState(false);
+  const { t } = useTranslation();
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -403,7 +406,7 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
               </span>
             </div>
             <span className="text-sm text-[#7A8494] font-body md:mt-1">
-              {hotel.reviewCount.toLocaleString()} reviews
+              {hotel.reviewCount.toLocaleString()} {t('property.reviews')}
             </span>
           </div>
         </motion.div>
@@ -422,7 +425,7 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
             onClick={() => scrollToSection('location')}
             className="text-xs sm:text-sm text-[#E85D4A] font-body font-medium hover:underline transition-colors"
           >
-            Show on map
+            {t('property.showAll')}
           </button>
         </motion.div>
 
@@ -451,12 +454,13 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
 /* ------------------------------------------------------------------ */
 function TabNavigation({ activeTab }: { activeTab: string }) {
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useTranslation();
   const tabs = [
-    { label: 'Overview', id: 'overview' },
-    { label: 'Rooms & Rates', id: 'rooms' },
-    { label: 'Amenities', id: 'amenities' },
-    { label: 'Reviews', id: 'reviews', badge: '1,240' },
-    { label: 'Location', id: 'location' },
+    { label: t('property.about'), id: 'overview' },
+    { label: t('property.rooms'), id: 'rooms' },
+    { label: t('property.amenities'), id: 'amenities' },
+    { label: t('property.reviews'), id: 'reviews', badge: '1,240' },
+    { label: t('property.location'), id: 'location' },
   ];
 
   useEffect(() => {
@@ -520,6 +524,7 @@ function TabNavigation({ activeTab }: { activeTab: string }) {
 /* ------------------------------------------------------------------ */
 function OverviewSection({ hotel }: { hotel: HotelData }) {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
   const fullText = hotel.description;
   const truncated = fullText.slice(0, 280);
 
@@ -536,7 +541,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: easeSmooth }}
             >
-              About This Property
+              {t('property.about')}
             </motion.h2>
             <motion.div
               className="relative"
@@ -552,7 +557,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
                 onClick={() => setExpanded((p) => !p)}
                 className="text-[#E85D4A] font-body text-sm font-medium mt-2 hover:underline transition-colors"
               >
-                {expanded ? 'Show less' : 'Read more'}
+                {expanded ? t('property.showLess') : t('property.showAll')}
               </button>
             </motion.div>
 
@@ -569,12 +574,11 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { icon: 'Clock', label: 'Check-in', value: hotel.checkIn },
-                  { icon: 'Clock', label: 'Check-out', value: hotel.checkOut },
-                  { icon: 'Shield', label: 'Cancellation', value: hotel.cancellation },
-                  { icon: 'Users', label: 'Children', value: hotel.children },
-                  { icon: 'X', label: 'Pets', value: hotel.pets },
-                  { icon: 'X', label: 'Smoking', value: hotel.smoking },
+                  { icon: 'Clock', label: t('hero.checkIn'), value: hotel.checkIn },
+                  { icon: 'Clock', label: t('hero.checkOut'), value: hotel.checkOut },
+                  { icon: 'Shield', label: t('checkout.bookingCond'), value: hotel.cancellation },
+                  { icon: 'Users', label: t('hero.guests'), value: hotel.children },
+                  { icon: 'X', label: t('property.petFriendly'), value: hotel.pets },
                 ].map((rule, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <DynIcon name={rule.icon} size={18} className="text-[#E85D4A] mt-0.5 flex-shrink-0" />
@@ -590,7 +594,6 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
 
           {/* Right Column - 35% */}
           <div className="lg:w-[35%] flex flex-col gap-4">
-            {/* Quick Info Cards */}
             {/* Card 1: Popular Facilities */}
             <motion.div
               className="bg-[#F8F9FB] rounded-2xl p-5"
@@ -600,7 +603,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               transition={{ duration: 0.5, ease: easeSmooth }}
             >
               <h4 className="font-display text-base font-semibold text-[#0F1B2E] mb-3">
-                Most Popular Facilities
+                {t('property.amenities')}
               </h4>
               <div className="flex flex-col gap-2.5">
                 {hotel.popularFacilities.map((f, i) => (
@@ -621,7 +624,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               transition={{ duration: 0.5, delay: 0.1, ease: easeSmooth }}
             >
               <h4 className="font-display text-base font-semibold text-[#0F1B2E] mb-3">
-                Property Highlights
+                {t('property.about')}
               </h4>
               <div className="flex flex-col gap-2.5">
                 {hotel.propertyHighlights.map((h, i) => (
@@ -642,7 +645,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               transition={{ duration: 0.5, delay: 0.2, ease: easeSmooth }}
             >
               <h4 className="font-display text-base font-semibold text-[#0F1B2E] mb-3">
-                Nearby Attractions
+                {t('property.location')}
               </h4>
               <div className="flex flex-col gap-2.5">
                 {hotel.nearbyAttractionsQuick.map((a, i) => (
@@ -673,6 +676,7 @@ function RoomsSection({
   selectedRoom: RoomType | null;
   onSelectRoom: (room: RoomType | null) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <section id="rooms" className="bg-[#F8F9FB] py-8 sm:py-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
@@ -683,10 +687,10 @@ function RoomsSection({
           transition={{ duration: 0.5, ease: easeSmooth }}
         >
           <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-1">
-            Available Rooms
+            {t('property.rooms')}
           </h2>
           <p className="font-body text-sm sm:text-base text-[#7A8494] mb-6">
-            Select your preferred room for Dec 15 – Dec 22, 2025
+            {t('hero.checkIn')} — {t('hero.checkOut')}, 2025
           </p>
         </motion.div>
 
@@ -775,15 +779,15 @@ function RoomsSection({
                         <p className="font-display text-2xl sm:text-3xl font-semibold text-[#E85D4A]">
                           {formatPiAmount(room.priceInPi)}
                         </p>
-                        <p className="font-body text-xs text-[#7A8494] mt-0.5">per night</p>
+                        <p className="font-body text-xs text-[#7A8494] mt-0.5">{t('search.perNight')}</p>
                         <p className="font-body text-[11px] text-[#C5CBD4] mt-0.5">
                           ≈ ${room.pricePerNight.toLocaleString()} USD
                         </p>
                         <p className="font-body text-sm text-[#4A5468] mt-2">
-                          {formatPiAmount(room.totalPriceInPi)} for 7 nights
+                          {formatPiAmount(room.totalPriceInPi)} for 7 {t('property.nights')}
                         </p>
                         <p className="font-body text-xs text-[#C5CBD4] mt-0.5">
-                          + {formatPiAmount(usdToPi(room.taxes))} taxes and fees
+                          + {formatPiAmount(usdToPi(room.taxes))} {t('checkout.taxesFees')}
                         </p>
                       </div>
 
@@ -805,7 +809,7 @@ function RoomsSection({
                               : 'bg-[#E85D4A] text-white hover:bg-[#D14A38] hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]'
                           )}
                         >
-                          {selectedRoom?.id === room.id ? 'Selected' : 'Reserve'}
+                          {selectedRoom?.id === room.id ? t('property.selectRoom') : t('property.bookNow')}
                         </button>
                       </div>
                     </div>
@@ -824,6 +828,7 @@ function RoomsSection({
 /*  Section 6: Amenities                                              */
 /* ------------------------------------------------------------------ */
 function AmenitiesSection({ hotel }: { hotel: HotelData }) {
+  const { t } = useTranslation();
   return (
     <section id="amenities" className="bg-white py-8 sm:py-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
@@ -835,10 +840,10 @@ function AmenitiesSection({ hotel }: { hotel: HotelData }) {
           transition={{ duration: 0.5, ease: easeSmooth }}
         >
           <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-1">
-            What This Place Offers
+            {t('property.amenities')}
           </h2>
           <p className="font-body text-sm sm:text-base text-[#7A8494]">
-            Everything you need for a comfortable stay
+            {t('property.about')}
           </p>
         </motion.div>
 
@@ -895,6 +900,7 @@ function ReviewCard({
   index: number;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
   const maxChars = 180;
   const isLong = review.text.length > maxChars;
   const displayText = expanded || !isLong ? review.text : review.text.slice(0, maxChars) + '...';
@@ -939,17 +945,17 @@ function ReviewCard({
           onClick={() => setExpanded((p) => !p)}
           className="text-[#E85D4A] font-body text-xs font-medium mb-3 hover:underline transition-colors"
         >
-          {expanded ? 'Show less' : 'Read more'}
+          {expanded ? t('property.showLess') : t('property.showAll')}
         </button>
       )}
 
       <div className="flex flex-wrap gap-2 mb-3">
-        {review.tags.map((t) => (
+        {review.tags.map((tag) => (
           <span
-            key={t}
+            key={tag}
             className="bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2 py-0.5 rounded-md"
           >
-            {t}
+            {tag}
           </span>
         ))}
       </div>
@@ -967,20 +973,21 @@ function ReviewCard({
 /* ------------------------------------------------------------------ */
 function ReviewsSection({ hotel }: { hotel: HotelData }) {
   const [filter, setFilter] = useState('All');
+  const { t } = useTranslation();
   const filters = ['All', 'Couples', 'Families', 'Solo', 'Business'];
 
   const filteredReviews =
     filter === 'All'
       ? hotel.reviews
       : hotel.reviews.filter((r) =>
-          r.tags.some((t) =>
+          r.tags.some((tag) =>
             filter === 'Couples'
-              ? t === 'Couple'
+              ? tag === 'Couple'
               : filter === 'Families'
-              ? t === 'Family'
+              ? tag === 'Family'
               : filter === 'Solo'
-              ? t === 'Solo'
-              : t === 'Business'
+              ? tag === 'Solo'
+              : tag === 'Business'
           )
         );
 
@@ -1004,91 +1011,95 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
     <section id="reviews" className="bg-[#F8F9FB] py-8 sm:py-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
         <motion.div
-          className="mb-6"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeSmooth }}
         >
-          <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-3">
-            Guest Reviews
-          </h2>
-          <div className="flex items-center gap-4 flex-wrap">
-            <span className="font-display text-3xl sm:text-4xl font-semibold text-[#0F1B2E]">
-              {hotel.rating}
-            </span>
-            <div>
-              <p className="font-display text-base font-semibold text-[#1A2B47]">
-                {hotel.ratingLabel}
-              </p>
-              <p className="font-body text-sm text-[#7A8494]">
-                {hotel.reviewCount.toLocaleString()} verified reviews
-              </p>
-            </div>
+          <div>
+            <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E]">
+              {t('property.reviews')}
+            </h2>
+            <p className="font-body text-sm text-[#7A8494] mt-1">
+              {hotel.reviews.length} {t('property.reviews')}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {filters.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={cn(
+                  'px-3 py-1.5 rounded-full font-body text-xs font-medium transition-colors duration-200',
+                  filter === f
+                    ? 'bg-[#0F1B2E] text-white'
+                    : 'bg-white text-[#4A5468] border border-[#E2E6EC] hover:border-[#C5CBD4]'
+                )}
+              >
+                {f}
+              </button>
+            ))}
           </div>
         </motion.div>
 
-        {/* Rating Breakdown */}
+        {/* Rating Overview */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: easeSmooth }}
         >
-          {/* Left: Bars */}
-          <div className="flex flex-col gap-3">
-            {breakdown.map((item, i) => (
-              <div key={item.label} className="flex items-center gap-3">
-                <span className="font-body text-sm text-[#7A8494] w-28 flex-shrink-0">
-                  {item.label}
-                </span>
-                <div className="flex-1 h-1 bg-[#E2E6EC] rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-[#E85D4A] rounded-full"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${item.score * 10}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.08, ease: easeSmooth }}
-                  />
-                </div>
-                <span className="font-body text-sm text-[#1A2B47] font-medium w-10 text-right">
-                  {item.score}
-                </span>
-              </div>
-            ))}
+          {/* Overall Score */}
+          <div className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-20 h-20 bg-[#0F1B2E] rounded-[16px_16px_16px_0] flex flex-col items-center justify-center">
+              <span className="text-white font-body text-3xl font-bold">{hotel.rating}</span>
+              <span className="text-white/80 font-body text-xs">{hotel.ratingLabel}</span>
+            </div>
+            <p className="font-body text-sm text-[#7A8494] mt-3">
+              {hotel.reviewCount.toLocaleString()} {t('property.reviews')}
+            </p>
           </div>
 
-          {/* Right: Top Score Badges */}
-          <div className="flex flex-wrap content-start gap-3">
-            {topCategories.map((cat) => (
-              <div
-                key={cat.label}
-                className="bg-[#2D9F5E]/10 text-[#2D9F5E] font-body text-sm font-medium px-4 py-2 rounded-xl"
-              >
-                {cat.label}: {cat.score}
-              </div>
-            ))}
+          {/* Top Categories */}
+          <div className="bg-white rounded-2xl p-6">
+            <h4 className="font-display text-sm font-semibold text-[#0F1B2E] mb-4">
+              Top Categories
+            </h4>
+            <div className="flex flex-col gap-3">
+              {topCategories.map((cat) => (
+                <div key={cat.label} className="flex items-center gap-3">
+                  <span className="font-body text-sm text-[#4A5468] w-24">{cat.label}</span>
+                  <div className="flex-1 h-2 bg-[#F0F2F5] rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#2D9F5E] rounded-full transition-all duration-500"
+                      style={{ width: `${(cat.score / 10) * 100}%` }}
+                    />
+                  </div>
+                  <span className="font-body text-sm font-semibold text-[#1A2B47] w-8 text-right">
+                    {cat.score}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Rating Breakdown */}
+          <div className="bg-white rounded-2xl p-6">
+            <h4 className="font-display text-sm font-semibold text-[#0F1B2E] mb-4">
+              Rating Breakdown
+            </h4>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+              {breakdown.map((item) => (
+                <div key={item.label} className="flex items-center justify-between">
+                  <span className="font-body text-xs text-[#7A8494]">{item.label}</span>
+                  <span className="font-body text-sm font-semibold text-[#1A2B47]">{item.score}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
-
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={cn(
-                'font-body text-sm font-medium px-4 py-2 rounded-full border transition-all duration-200',
-                filter === f
-                  ? 'bg-[#0F1B2E] text-white border-[#0F1B2E]'
-                  : 'bg-white text-[#243B5D] border-[#E2E6EC] hover:border-[#C5CBD4]'
-              )}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
 
         {/* Review Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1107,183 +1118,119 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
 /*  Section 8: Location                                               */
 /* ------------------------------------------------------------------ */
 function LocationSection({ hotel }: { hotel: HotelData }) {
+  const { t } = useTranslation();
   return (
     <section id="location" className="bg-white py-8 sm:py-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
         <motion.div
-          className="mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: easeSmooth }}
         >
-          <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-2">
-            Where You&apos;ll Be
+          <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-1">
+            {t('property.location')}
           </h2>
-          <div className="flex items-center gap-2 flex-wrap">
-            <MapPin size={16} className="text-[#E85D4A]" />
-            <span className="font-body text-sm sm:text-base text-[#7A8494]">
-              {hotel.address}, {hotel.city}, {hotel.country}
-            </span>
-          </div>
+          <p className="font-body text-sm text-[#7A8494] mb-4">
+            {hotel.address}, {hotel.city}, {hotel.country}
+          </p>
         </motion.div>
 
-        {/* Map */}
         <motion.div
-          className="relative h-[300px] sm:h-[400px] rounded-2xl overflow-hidden mb-6"
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          className="aspect-[16/7] rounded-2xl overflow-hidden bg-[#F0F2F5]"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: easeSmooth }}
+          transition={{ duration: 0.5, delay: 0.1, ease: easeSmooth }}
         >
           <iframe
-            title={`Map of ${hotel.name}`}
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-              hotel.mapCoordinates.lng - 0.02
-            }%2C${hotel.mapCoordinates.lat - 0.02}%2C${
-              hotel.mapCoordinates.lng + 0.02
-            }%2C${hotel.mapCoordinates.lat + 0.02}&layer=mapnik&marker=${
-              hotel.mapCoordinates.lat
-            }%2C${hotel.mapCoordinates.lng}`}
-            className="w-full h-full border-0"
+            src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20000!2d${hotel.mapCoordinates.lng}!3d${hotel.mapCoordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDUyJzE4LjAiTiAxMjHCsDQ4JzA3LjAiRQ!5e0!3m2!1sen!2sus!4v1`}
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: 'grayscale(0.2)' }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title={`${hotel.name} location`}
           />
-          {/* Hotel Marker Overlay */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none">
-            <div className="relative">
-              <div className="w-12 h-12 bg-[#E85D4A] rounded-full flex items-center justify-center shadow-lg">
-                <MapPin size={22} className="text-white" />
-              </div>
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#E85D4A] rotate-45" />
-            </div>
-          </div>
         </motion.div>
 
         {/* Nearby Attractions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {hotel.nearbyAttractions.map((attr, i) => (
-            <motion.div
-              key={attr.name}
-              className="flex items-center gap-3 p-4 bg-[#F8F9FB] rounded-xl"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06, ease: easeSmooth }}
-            >
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
+        <motion.div
+          className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2, ease: easeSmooth }}
+        >
+          {hotel.nearbyAttractions.map((a, i) => (
+            <div key={i} className="flex items-start gap-3 p-4 bg-[#F8F9FB] rounded-xl">
+              <div className="w-10 h-10 rounded-lg bg-[#FEF2F0] flex items-center justify-center shrink-0">
                 <MapPin size={18} className="text-[#E85D4A]" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-body text-sm font-medium text-[#1A2B47] truncate">
-                  {attr.name}
-                </p>
-                <p className="font-body text-xs text-[#7A8494]">
-                  {attr.type} · {attr.distance} · {attr.walkTime}
-                </p>
+              <div>
+                <p className="font-body text-sm font-semibold text-[#1A2B47]">{a.name}</p>
+                <p className="font-body text-xs text-[#7A8494]">{a.type} · {a.distance}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Similar Properties Carousel                                       */
+/*  Section 9: Similar Properties                                     */
 /* ------------------------------------------------------------------ */
 function SimilarProperties({ hotel }: { hotel: HotelData }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (dir: 'left' | 'right') => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: dir === 'left' ? -320 : 320,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const similar = hotel.similarProperties || [];
 
   return (
-    <section className="bg-[#F8F9FB] py-8 sm:py-10 border-t border-[#E2E6EC]">
+    <section className="bg-[#F8F9FB] py-8 sm:py-10">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between mb-6">
-          <motion.h2
-            className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E]"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: easeSmooth }}
-          >
-            Similar Properties
-          </motion.h2>
-          <div className="flex gap-2">
-            <button
-              onClick={() => scroll('left')}
-              className="w-10 h-10 rounded-full bg-white border border-[#E2E6EC] flex items-center justify-center hover:border-[#C5CBD4] transition-colors"
-            >
-              <ChevronLeft size={18} className="text-[#1A2B47]" />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className="w-10 h-10 rounded-full bg-white border border-[#E2E6EC] flex items-center justify-center hover:border-[#C5CBD4] transition-colors"
-            >
-              <ChevronRight size={18} className="text-[#1A2B47]" />
-            </button>
-          </div>
-        </div>
-
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-1 px-1"
-          style={{ scrollSnapType: 'x mandatory' }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: easeSmooth }}
         >
-          {hotel.similarProperties.map((prop, i) => (
+          <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-6">
+            {t('home.popularTitle')}
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {similar.map((prop, i) => (
             <motion.div
               key={prop.id}
-              className="min-w-[280px] max-w-[300px] flex-1 bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,27,46,0.06)] hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)] hover:-translate-y-1 transition-all duration-350 cursor-pointer flex-shrink-0"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: easeSmooth }}
-              style={{ scrollSnapAlign: 'start' }}
+              onClick={() => navigate(`/property/${prop.id}`)}
+              className="bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,27,46,0.06)] hover:shadow-[0_8px_24px_rgba(15,27,46,0.08)] hover:-translate-y-1 transition-all duration-300 cursor-pointer"
             >
-              <div className="relative overflow-hidden">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={prop.image}
                   alt={prop.name}
-                  className="w-full aspect-[4/3] object-cover"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute top-3 left-3 flex gap-1.5">
-                  {prop.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="bg-[#FEF2F0] text-[#D14A38] font-body text-[10px] font-medium px-2 py-0.5 rounded-md"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
               </div>
               <div className="p-4">
-                <h3 className="font-display text-base font-semibold text-[#1A2B47] mb-1">
-                  {prop.name}
-                </h3>
-                <p className="font-body text-xs text-[#7A8494] mb-2">{prop.location}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-[#0F1B2E] text-white font-body text-xs font-bold px-1.5 py-0.5 rounded-md">
-                      {prop.rating}
-                    </div>
-                    <span className="font-body text-xs text-[#7A8494]">
-                      ({prop.reviewCount.toLocaleString()})
-                    </span>
+                <h3 className="font-body text-sm font-semibold text-[#1A2B47]">{prop.name}</h3>
+                <p className="font-body text-xs text-[#7A8494] mt-1">{prop.location}</p>
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center gap-1">
+                    <Star size={12} className="text-[#E8A838] fill-[#E8A838]" />
+                    <span className="font-body text-xs text-[#4A5468]">{prop.rating}</span>
                   </div>
-                  <div className="text-right">
-                    <p className="font-display text-lg font-semibold text-[#E85D4A]">
-                      {formatPiAmount(usdToPi(prop.price))}
-                    </p>
-                    <p className="font-body text-[10px] text-[#C5CBD4]">≈ ${prop.price.toLocaleString()} USD</p>
-                  </div>
+                  <span className="font-body text-sm font-semibold text-[#E85D4A]">
+                    {formatPiAmount(usdToPi(prop.price))}<span className="text-xs font-normal text-[#7A8494]">/{t('search.perNight')}</span>
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -1295,196 +1242,55 @@ function SimilarProperties({ hotel }: { hotel: HotelData }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Sticky Booking Sidebar (Desktop)                                  */
-/* ------------------------------------------------------------------ */
-function BookingSidebar({
-  hotel,
-  selectedRoom,
-}: {
-  hotel: HotelData;
-  selectedRoom: RoomType | null;
-}) {
-  const navigate = useNavigate();
-
-  if (!selectedRoom) return null;
-
-  return (
-    <motion.div
-      className="hidden lg:block sticky top-[140px] z-20"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, ease: easeSmooth }}
-    >
-      <div className="bg-white rounded-2xl border border-[#E2E6EC] shadow-[0_4px_20px_rgba(15,27,46,0.08)] p-5">
-        <h3 className="font-display text-base font-semibold text-[#0F1B2E] mb-4">
-          Booking Summary
-        </h3>
-
-        <div className="flex gap-3 mb-4">
-          <img
-            src={selectedRoom.image}
-            alt={selectedRoom.name}
-            className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
-          />
-          <div>
-            <p className="font-body text-sm font-semibold text-[#1A2B47]">
-              {selectedRoom.name}
-            </p>
-            <p className="font-body text-xs text-[#7A8494]">{hotel.name}</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 mb-4 pb-4 border-b border-[#F0F2F5]">
-          <div className="flex justify-between font-body text-sm">
-            <span className="text-[#7A8494]">7 nights</span>
-            <span className="text-[#1A2B47]">{formatPiAmount(selectedRoom.totalPriceInPi)}</span>
-          </div>
-          <div className="flex justify-between font-body text-sm">
-            <span className="text-[#7A8494]">Taxes & fees</span>
-            <span className="text-[#1A2B47]">{formatPiAmount(usdToPi(selectedRoom.taxes))}</span>
-          </div>
-        </div>
-
-        <div className="flex justify-between mb-5">
-          <span className="font-body text-base font-semibold text-[#0F1B2E]">Total</span>
-          <div className="text-right">
-            <span className="font-display text-xl font-semibold text-[#E85D4A]">
-              {formatPiAmount(selectedRoom.totalPriceInPi + usdToPi(selectedRoom.taxes))}
-            </span>
-            <p className="font-body text-[11px] text-[#C5CBD4]">
-              ≈ ${(selectedRoom.totalPrice + selectedRoom.taxes).toLocaleString()} USD
-            </p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => navigate('/checkout')}
-          className="w-full py-3.5 bg-[#E85D4A] text-white font-body text-base font-semibold rounded-xl hover:bg-[#D14A38] hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98] transition-all duration-250"
-        >
-          Reserve Now
-        </button>
-
-        <p className="flex items-center justify-center gap-1 mt-3 text-xs text-[#2D9F5E] font-body">
-          <Check size={14} />
-          {selectedRoom.cancellation}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Mobile Sticky Booking Bar                                         */
-/* ------------------------------------------------------------------ */
-function MobileBookingBar({
-  selectedRoom,
-  onScrollToRooms,
-}: {
-  selectedRoom: RoomType | null;
-  onScrollToRooms: () => void;
-}) {
-  if (!selectedRoom) return null;
-
-  return (
-    <motion.div
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E2E6EC] shadow-[0_-4px_20px_rgba(15,27,46,0.08)] px-4 py-3"
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3, ease: easeSmooth }}
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="font-display text-lg font-semibold text-[#E85D4A]">
-            {formatPiAmount(selectedRoom.priceInPi)}
-            <span className="font-body text-xs text-[#7A8494] font-normal">/night</span>
-          </p>
-          <p className="font-body text-[10px] text-[#C5CBD4]">≈ ${selectedRoom.pricePerNight.toLocaleString()} USD</p>
-          <p className="font-body text-xs text-[#2D9F5E]">{selectedRoom.name} selected</p>
-        </div>
-        <button
-          onClick={onScrollToRooms}
-          className="px-6 py-3 bg-[#E85D4A] text-white font-body text-sm font-semibold rounded-xl hover:bg-[#D14A38] active:scale-[0.98] transition-all"
-        >
-          Change Room
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Main Page Component                                               */
+/*  Property Detail Page                                              */
 /* ------------------------------------------------------------------ */
 export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>();
-  const hotel = getHotelById(id || '1');
-  const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
 
-  /* Active tab tracking via IntersectionObserver */
+  const hotel = getHotelById(id ?? '');
+
   useEffect(() => {
-    const sections = ['overview', 'rooms', 'amenities', 'reviews', 'location'];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveTab(entry.target.id);
+    if (!hotel) {
+      navigate('/search');
+      return;
+    }
+
+    const handleScroll = () => {
+      const sections = ['overview', 'rooms', 'amenities', 'reviews', 'location'];
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            setActiveTab(section);
+            break;
           }
-        });
-      },
-      { rootMargin: '-140px 0px -60% 0px', threshold: 0 }
-    );
+        }
+      }
+    };
 
-    sections.forEach((s) => {
-      const el = document.getElementById(s);
-      if (el) observer.observe(el);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hotel, navigate]);
 
-    return () => observer.disconnect();
-  }, [id]);
-
-  const scrollToRooms = () => {
-    const el = document.getElementById('rooms');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  if (!hotel) return null;
 
   return (
     <Layout>
-      <PhotoGallery hotel={hotel} />
-      <PropertyHeader hotel={hotel} />
-      <TabNavigation activeTab={activeTab} />
-
-      <div className="relative">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-          <div className="flex gap-8">
-            {/* Main Content */}
-            <div className="flex-1 min-w-0">
-              <OverviewSection hotel={hotel} />
-              <RoomsSection
-                hotel={hotel}
-                selectedRoom={selectedRoom}
-                onSelectRoom={setSelectedRoom}
-              />
-              <AmenitiesSection hotel={hotel} />
-              <ReviewsSection hotel={hotel} />
-              <LocationSection hotel={hotel} />
-            </div>
-
-            {/* Desktop Sidebar */}
-            <div className="hidden lg:block w-[300px] flex-shrink-0">
-              <BookingSidebar hotel={hotel} selectedRoom={selectedRoom} />
-            </div>
-          </div>
-        </div>
+      <div className="min-h-[100dvh]">
+        <PhotoGallery hotel={hotel} />
+        <PropertyHeader hotel={hotel} />
+        <TabNavigation activeTab={activeTab} />
+        <OverviewSection hotel={hotel} />
+        <RoomsSection hotel={hotel} selectedRoom={selectedRoom} onSelectRoom={setSelectedRoom} />
+        <AmenitiesSection hotel={hotel} />
+        <ReviewsSection hotel={hotel} />
+        <LocationSection hotel={hotel} />
+        <SimilarProperties hotel={hotel} />
       </div>
-
-      <SimilarProperties hotel={hotel} />
-
-      {/* Mobile Bottom Bar */}
-      <MobileBookingBar selectedRoom={selectedRoom} onScrollToRooms={scrollToRooms} />
-
-      {/* Mobile bottom padding when bar is shown */}
-      {selectedRoom && <div className="lg:hidden h-20" />}
     </Layout>
   );
 }
