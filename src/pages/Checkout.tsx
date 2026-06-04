@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -28,9 +28,6 @@ import {
   Star,
   Users,
   Bed,
-  Clock,
-  Mail,
-  Phone,
   CreditCard,
   ChevronRight,
   Info,
@@ -1095,7 +1092,7 @@ function StepConfirmation() {
 /* ─── Main Checkout Page ─── */
 export default function Checkout() {
   const [step, setStep] = useState(1);
-  const [detailsData, setDetailsData] = useState<Record<string, string> | null>(
+  const [, setDetailsData] = useState<Record<string, string> | null>(
     null
   );
 

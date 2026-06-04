@@ -36,7 +36,6 @@ import {
   CreditCard,
   Bell,
   Trash2,
-  ChevronRight,
   AlertTriangle,
   LogOut,
   X,
