@@ -79,8 +79,14 @@ export default function Admin() {
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function login() {
-    localStorage.setItem(STORAGE_KEY, input);
-    setKey(input);
+    const k = input.trim() || key;
+    if (!k) return;
+    localStorage.setItem(STORAGE_KEY, k);
+    if (k !== key) {
+      setKey(k); // change triggers useEffect → load()
+    } else {
+      load(); // key unchanged — retry manually
+    }
   }
 
   useEffect(() => {
