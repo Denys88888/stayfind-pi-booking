@@ -6,6 +6,7 @@ import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Admin from './pages/Admin';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/terms" element={<TermsOfService />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 }
