@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import IncompletePaymentDialog from './IncompletePaymentDialog';
-import DebugConsole from './DebugConsole';
 import { usePiAuth } from '@/hooks/usePiAuth';
 
 interface LayoutProps {
@@ -37,7 +36,6 @@ export default function Layout({ children, showFooter = true }: LayoutProps) {
         onComplete={handleComplete}
         onDismiss={handleDismiss}
       />
-      <DebugConsole />
     </div>
   );
 }
