@@ -1291,6 +1291,46 @@ export default function PropertyDetail() {
         <LocationSection hotel={hotel} />
         <SimilarProperties hotel={hotel} />
       </div>
+
+      {/* Sticky Checkout Bar */}
+      <AnimatePresence>
+        {selectedRoom && (
+          <motion.div
+            className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E2E6EC] shadow-[0_-4px_20px_rgba(15,27,46,0.1)] flex items-center justify-between px-6 py-4"
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <div>
+              <p className="font-body text-sm font-semibold text-[#1A2B47]">{selectedRoom.name}</p>
+              <p className="font-display text-lg font-semibold text-[#E85D4A]">{formatPiAmount(selectedRoom.totalPriceInPi)}</p>
+            </div>
+            <button
+              onClick={() =>
+                navigate('/checkout', {
+                  state: {
+                    hotelId: hotel.id,
+                    hotelName: hotel.name,
+                    roomType: selectedRoom.name,
+                    image: hotel.images[0],
+                    location: hotel.city + ', ' + hotel.country,
+                    pricePerNight: selectedRoom.pricePerNight,
+                    totalUsd: selectedRoom.totalPrice,
+                    totalPi: selectedRoom.totalPriceInPi,
+                    taxes: selectedRoom.taxes,
+                    nights: 7,
+                    guests: '2 Adults',
+                  },
+                })
+              }
+              className="bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]"
+            >
+              Proceed to Checkout
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

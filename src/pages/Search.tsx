@@ -34,7 +34,8 @@ const INITIAL_FILTERS: FilterState = {
 const ITEMS_PER_PAGE = 6;
 
 export default function Search() {
-  useSearchParams();
+  const [searchParams] = useSearchParams();
+  const destination = searchParams.get('destination') || '';
   const { t } = useTranslation();
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
@@ -71,6 +72,16 @@ export default function Search() {
   /* ── Client-side filtering ── */
   const filteredHotels = useMemo(() => {
     let result = [...hotels];
+
+    // Destination search
+    if (destination.trim()) {
+      const q = destination.toLowerCase();
+      result = result.filter((h) =>
+        h.name.toLowerCase().includes(q) ||
+        h.location.toLowerCase().includes(q) ||
+        h.address.toLowerCase().includes(q)
+      );
+    }
 
     // Price range
     result = result.filter(
@@ -143,7 +154,7 @@ export default function Search() {
     }
 
     return result;
-  }, [filters, sortBy]);
+  }, [filters, sortBy, destination]);
 
   const paginatedHotels = useMemo(
     () => filteredHotels.slice(0, page * ITEMS_PER_PAGE),
@@ -473,6 +484,11 @@ export default function Search() {
 
               {/* Results */}
               <div className="flex-1 min-w-0">
+                {destination.trim() && (
+                  <p className="font-body text-sm text-[#7A8494] mb-4">
+                    Search results for &ldquo;<span className="font-semibold text-[#1A2B47]">{destination}</span>&rdquo;
+                  </p>
+                )}
                 <AnimatePresence mode="wait">
                   {filteredHotels.length === 0 ? (
                     <motion.div

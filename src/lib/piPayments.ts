@@ -80,19 +80,22 @@ export interface CreatePiPaymentOptions {
 /*   POST /payments/{payment_id}/cancel    — Server API Key           */
 /* ------------------------------------------------------------------ */
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://stayfind-api.onrender.com';
+
 export async function serverSideApprove(paymentId: string): Promise<void> {
   console.log('[PiServer] Server-Side Approval:', paymentId);
-  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
-  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}` }
-  // });
+  const res = await fetch(`${API_URL}/api/payments/approve/${paymentId}`, { method: 'POST' });
+  if (!res.ok) throw new Error(`Approve failed: ${res.status}`);
 }
 
 export async function serverSideComplete(paymentId: string, txid: string): Promise<void> {
   console.log('[PiServer] Server-Side Completion:', paymentId, 'txid:', txid);
-  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/complete`, {
-  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}`, 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ txid })
-  // });
+  const res = await fetch(`${API_URL}/api/payments/complete/${paymentId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ txid }),
+  });
+  if (!res.ok) throw new Error(`Complete failed: ${res.status}`);
 }
 
 export async function serverSideCancel(paymentId: string): Promise<void> {

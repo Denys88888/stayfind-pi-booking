@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -38,7 +38,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -46,6 +45,7 @@ import {
   formatPiAmount,
   usdToPi,
 } from '@/lib/piPayments';
+import { getBookings, type Booking as StoredBooking } from '@/lib/bookingStorage';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -101,54 +101,7 @@ function StatCard({
   );
 }
 
-/* ─── Mock booking data ─── */
-const bookings = [
-  {
-    id: 'SF-2025-001',
-    hotelName: 'The Grand Palace Hotel',
-    location: 'Paris, France',
-    checkIn: 'Mar 15, 2025',
-    checkOut: 'Mar 20, 2025',
-    nights: 5,
-    guests: 2,
-    roomType: 'Deluxe King Room',
-    price: 1425,
-    piPrice: usdToPi(1425),
-    status: 'upcoming' as const,
-    image: '/hotel-1.jpg',
-    rating: 9.4,
-  },
-  {
-    id: 'SF-2025-002',
-    hotelName: 'Zen Garden Retreat',
-    location: 'Bali, Indonesia',
-    checkIn: 'Feb 1, 2025',
-    checkOut: 'Feb 8, 2025',
-    nights: 7,
-    guests: 2,
-    roomType: 'Garden Villa',
-    price: 980,
-    piPrice: usdToPi(980),
-    status: 'completed' as const,
-    image: '/hotel-3.jpg',
-    rating: 9.6,
-  },
-  {
-    id: 'SF-2024-003',
-    hotelName: 'Metropolitan Suites',
-    location: 'New York, USA',
-    checkIn: 'Dec 20, 2024',
-    checkOut: 'Dec 25, 2024',
-    nights: 5,
-    guests: 1,
-    roomType: 'Executive Suite',
-    price: 2100,
-    piPrice: usdToPi(2100),
-    status: 'cancelled' as const,
-    image: '/hotel-4.jpg',
-    rating: 8.9,
-  },
-];
+/* bookings are loaded from localStorage via bookingStorage */
 
 const favorites = [
   {
@@ -214,23 +167,22 @@ function StatusBadge({ status }: { status: string }) {
 function BookingsTab() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [cancelDialog, setCancelDialog] = useState<string | null>(null);
   const [activeSub, setActiveSub] = useState('all');
+  const [bookings, setBookings] = useState<StoredBooking[]>(getBookings);
+
+  useEffect(() => {
+    setBookings(getBookings());
+  }, []);
 
   const filtered =
     activeSub === 'all'
       ? bookings
       : bookings.filter((b) => b.status === activeSub);
 
-  const cancelBooking = (id: string) => {
-    console.log('Cancelling booking', id);
-    setCancelDialog(null);
-  };
-
   return (
     <AnimatedSection>
       <div className="flex gap-2 mb-6">
-        {['all', 'upcoming', 'completed', 'cancelled'].map((tab) => (
+        {['all', 'confirmed', 'pending'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveSub(tab)}
@@ -241,7 +193,7 @@ function BookingsTab() {
                 : 'bg-white text-[#4A5468] hover:bg-[#F0F2F5]'
             )}
           >
-            {tab === 'all' ? t('profile.bookings') : t(`profile.${tab}` as 'profile.upcoming' | 'profile.completed' | 'profile.cancelled')}
+            {tab === 'all' ? t('profile.bookings') : tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
@@ -250,7 +202,7 @@ function BookingsTab() {
         <div className="text-center py-12">
           <CalendarDays size={48} className="mx-auto text-[#C5CBD4] mb-4" />
           <h3 className="font-display text-lg font-semibold text-[#0F1B2E] mb-2">
-            {t('profile.noBookings')}
+            No bookings yet. Start exploring hotels!
           </h3>
           <p className="font-body text-sm text-[#7A8494] mb-6">
             {t('home.ctaSubtitle')}
@@ -259,7 +211,7 @@ function BookingsTab() {
             onClick={() => navigate('/search')}
             className="bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl"
           >
-            {t('home.ctaBtn')}
+            Search Hotels
           </Button>
         </div>
       ) : (
@@ -294,7 +246,7 @@ function BookingsTab() {
                     <div className="text-right">
                       <p className="font-body text-xs text-[#7A8494]">{t('checkout.priceSummary')}</p>
                       <p className="font-display text-lg font-semibold text-[#E85D4A]">
-                        {formatPiAmount(booking.piPrice)}
+                        {formatPiAmount(booking.totalPi)}
                       </p>
                     </div>
                   </div>
@@ -320,26 +272,13 @@ function BookingsTab() {
 
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#F0F2F5]">
                     <div className="flex items-center gap-2 text-sm text-[#4A5468]">
-                      <Star size={16} className="text-[#E8A838] fill-[#E8A838]" />
-                      <span className="font-body">{booking.rating}</span>
-                      <span className="text-[#C5CBD4]">·</span>
-                      <span className="font-body text-[#7A8494]">{booking.guests} {t('hero.guests')}</span>
+                      <span className="font-body text-[#7A8494]">{booking.guests}</span>
                     </div>
                     <div className="flex gap-2">
-                      {booking.status === 'upcoming' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setCancelDialog(booking.id)}
-                          className="text-rose-600 border-rose-200 hover:bg-rose-50 font-body text-xs rounded-lg"
-                        >
-                          {t('profile.cancelBooking')}
-                        </Button>
-                      )}
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/property/${booking.id.split('-')[2]}`)}
+                        onClick={() => navigate(`/property/${booking.hotelId}`)}
                         className="font-body text-xs rounded-lg"
                       >
                         {t('profile.viewDetails')}
@@ -353,36 +292,6 @@ function BookingsTab() {
         </div>
       )}
 
-      {/* Cancel Dialog */}
-      <Dialog open={!!cancelDialog} onOpenChange={() => setCancelDialog(null)}>
-        <DialogContent className="sm:max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="font-display text-lg text-[#0F1B2E] flex items-center gap-2">
-              <AlertTriangle size={20} className="text-rose-500" />
-              {t('profile.cancelBooking')}
-            </DialogTitle>
-            <DialogDescription className="font-body text-[#7A8494]">
-              {t('checkout.freeCancel').replace('{date}', 'Mar 13, 2025')}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex gap-3 sm:gap-0 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => setCancelDialog(null)}
-              className="font-body rounded-xl"
-            >
-              {t('common.close')}
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => cancelDialog && cancelBooking(cancelDialog)}
-              className="font-body bg-rose-600 hover:bg-rose-700 rounded-xl"
-            >
-              {t('profile.cancelBooking')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </AnimatedSection>
   );
 }
@@ -755,6 +664,11 @@ export default function Profile() {
   const { t } = useTranslation();
   const { user, isAuthenticated, isSandbox } = usePiAuth();
   const navigate = useNavigate();
+  const [profileBookings, setProfileBookings] = useState<StoredBooking[]>(getBookings);
+
+  useEffect(() => {
+    setProfileBookings(getBookings());
+  }, []);
 
   /* ─── Unauthenticated state ─── */
   if (!isAuthenticated || !user) {
@@ -820,7 +734,7 @@ export default function Profile() {
                 <div className="flex items-center justify-center sm:justify-start gap-4 mt-3">
                   <StatCard
                     label="Bookings"
-                    value={String(bookings.length)}
+                    value={String(profileBookings.length)}
                     icon={CalendarDays}
                     color="blue"
                   />

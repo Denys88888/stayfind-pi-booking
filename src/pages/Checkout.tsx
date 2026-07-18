@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
@@ -41,14 +41,30 @@ import {
   usdToPi,
   formatPiAmount,
 } from '@/lib/piPayments';
+import { saveBooking, generateBookingId } from '@/lib/bookingStorage';
 import { isPiSdkAvailable } from '@/hooks/usePiAuth';
 import PiBrowserRequired from '@/components/PiBrowserRequired';
 
 /* ─── Pi conversion rate for reference ─── */
 const PI_RATE = 0.15;
 
-/* ─── mock booking data ─── */
-const bookingData = {
+/* ─── booking state type ─── */
+interface BookingState {
+  hotelId?: string | number;
+  hotelName?: string;
+  roomType?: string;
+  image?: string;
+  location?: string;
+  pricePerNight?: number;
+  totalUsd?: number;
+  totalPi?: number;
+  taxes?: number;
+  nights?: number;
+  guests?: string;
+}
+
+/* ─── fallback booking data ─── */
+const FALLBACK_BOOKING = {
   hotelName: 'The Grand Palace Hotel',
   roomType: 'Deluxe King Room',
   image: '/hotel-1.jpg',
@@ -65,12 +81,6 @@ const bookingData = {
   cancellationDate: 'Dec 13',
   address: '123 Luxury Avenue, Paris, France',
 };
-
-/* ─── Pi prices ─── */
-const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
-const piTaxes = usdToPi(bookingData.taxes);
-const piDiscount = usdToPi(bookingData.discount);
-const piTotal = usdToPi(bookingData.total);
 
 /* ─── form error type ─── */
 interface FormErrors {
@@ -166,7 +176,13 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
 }
 
 /* ─── Booking Summary Sidebar ─── */
-function BookingSummarySidebar() {
+function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, piTotal }: {
+  bookingData: typeof FALLBACK_BOOKING;
+  piSubtotal: number;
+  piTaxes: number;
+  piDiscount: number;
+  piTotal: number;
+}) {
   const { t } = useTranslation();
   return (
     <div      className="bg-white rounded-2xl p-6 shadow-[0_1px_3px_rgba(15,27,46,0.06)]"
@@ -295,8 +311,18 @@ function BookingSummarySidebar() {
 /* ─── Step 1: Your Details ─── */
 function StepDetails({
   onContinue,
+  bookingData,
+  piSubtotal,
+  piTaxes,
+  piDiscount,
+  piTotal,
 }: {
   onContinue: (data: Record<string, string>) => void;
+  bookingData: typeof FALLBACK_BOOKING;
+  piSubtotal: number;
+  piTaxes: number;
+  piDiscount: number;
+  piTotal: number;
 }) {
   const { t } = useTranslation();
   const [firstName, setFirstName] = useState('');
@@ -530,7 +556,7 @@ function StepDetails({
       {/* Sidebar */}
       <div className="lg:col-span-2">
         <div className="lg:sticky lg:top-[100px]">
-          <BookingSummarySidebar />
+          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
         </div>
       </div>
     </div>
@@ -541,9 +567,19 @@ function StepDetails({
 function StepPayment({
   onPay,
   onBack,
+  bookingData,
+  piSubtotal,
+  piTaxes,
+  piDiscount,
+  piTotal,
 }: {
   onPay: (txId: string) => void;
   onBack: () => void;
+  bookingData: typeof FALLBACK_BOOKING;
+  piSubtotal: number;
+  piTaxes: number;
+  piDiscount: number;
+  piTotal: number;
 }) {
   const { t } = useTranslation();
   const { isAuthenticated, authenticate } = usePiAuth();
@@ -610,7 +646,7 @@ function StepPayment({
         </div>
         <div className="lg:col-span-2">
           <div className="lg:sticky lg:top-[100px]">
-            <BookingSummarySidebar />
+            <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
           </div>
         </div>
       </div>
@@ -855,7 +891,7 @@ function StepPayment({
       {/* Sidebar */}
       <div className="lg:col-span-2">
         <div className="lg:sticky lg:top-[100px]">
-          <BookingSummarySidebar />
+          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
         </div>
       </div>
     </div>
@@ -863,11 +899,11 @@ function StepPayment({
 }
 
 /* ─── Step 3: Confirmation ─── */
-function StepConfirmation({ txId }: { txId: string }) {
+function StepConfirmation({ txId, bookingData, piTotal }: { txId: string; bookingData: typeof FALLBACK_BOOKING; piTotal: number }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const bookingRef = 'SF-2025-78432';
+  const bookingRef = txId.slice(0, 12).toUpperCase() || 'SF-2025-78432';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(bookingRef).catch(() => {});
@@ -1032,6 +1068,56 @@ function StepConfirmation({ txId }: { txId: string }) {
 export default function Checkout() {
   const [step, setStep] = useState(1);
   const [txId, setTxId] = useState('');
+  const location = useLocation();
+  const state = (location.state || {}) as BookingState;
+
+  /* Build bookingData from state or fallback */
+  const bookingData = {
+    hotelName: state.hotelName || FALLBACK_BOOKING.hotelName,
+    roomType: state.roomType || FALLBACK_BOOKING.roomType,
+    image: state.image || FALLBACK_BOOKING.image,
+    rating: FALLBACK_BOOKING.rating,
+    reviews: FALLBACK_BOOKING.reviews,
+    checkIn: FALLBACK_BOOKING.checkIn,
+    checkOut: FALLBACK_BOOKING.checkOut,
+    nights: state.nights ?? FALLBACK_BOOKING.nights,
+    guests: state.guests || FALLBACK_BOOKING.guests,
+    pricePerNight: state.pricePerNight ?? FALLBACK_BOOKING.pricePerNight,
+    taxes: state.taxes ?? FALLBACK_BOOKING.taxes,
+    discount: FALLBACK_BOOKING.discount,
+    total: state.totalUsd ?? FALLBACK_BOOKING.total,
+    cancellationDate: FALLBACK_BOOKING.cancellationDate,
+    address: state.location || FALLBACK_BOOKING.address,
+  };
+
+  const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
+  const piTaxes = usdToPi(bookingData.taxes);
+  const piDiscount = usdToPi(bookingData.discount);
+  const piTotal = state.totalPi ?? usdToPi(bookingData.total);
+
+  const handlePay = (id: string) => {
+    saveBooking({
+      id: generateBookingId(),
+      hotelId: String(state.hotelId || '1'),
+      hotelName: bookingData.hotelName,
+      roomType: bookingData.roomType,
+      image: bookingData.image,
+      location: bookingData.address,
+      checkIn: bookingData.checkIn,
+      checkOut: bookingData.checkOut,
+      nights: bookingData.nights,
+      guests: bookingData.guests,
+      totalUsd: bookingData.total,
+      totalPi: piTotal,
+      txid: id,
+      bookedAt: new Date().toISOString(),
+      status: 'confirmed',
+    });
+    setTxId(id);
+    setStep(3);
+  };
+
+  const sidebarProps = { bookingData, piSubtotal, piTaxes, piDiscount, piTotal };
 
   return (
     <Layout>
@@ -1044,16 +1130,17 @@ export default function Checkout() {
 
           {/* Steps */}
           {step === 1 && (
-            <StepDetails onContinue={() => setStep(2)} />
+            <StepDetails onContinue={() => setStep(2)} {...sidebarProps} />
           )}
           {step === 2 && (
             <StepPayment
-              onPay={(id) => { setTxId(id); setStep(3); }}
+              onPay={handlePay}
               onBack={() => setStep(1)}
+              {...sidebarProps}
             />
           )}
           {step === 3 && (
-            <StepConfirmation txId={txId} />
+            <StepConfirmation txId={txId} bookingData={bookingData} piTotal={piTotal} />
           )}
         </div>
       </div>
