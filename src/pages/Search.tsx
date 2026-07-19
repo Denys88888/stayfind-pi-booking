@@ -18,7 +18,7 @@ import CompactSearchBar from './search/CompactSearchBar';
 import FilterSidebar from './search/FilterSidebar';
 import HotelCard from './search/HotelCard';
 import MapView from './search/MapView';
-import { hotels, SORT_OPTIONS, GUEST_RATING_OPTIONS } from '@/data/hotelData';
+import { hotels } from '@/data/hotelData';
 import type { FilterState, SortOption } from '@/types/search';
 
 const INITIAL_FILTERS: FilterState = {
@@ -37,6 +37,21 @@ export default function Search() {
   const [searchParams] = useSearchParams();
   const destination = searchParams.get('destination') || '';
   const { t } = useTranslation();
+
+  const SORT_OPTIONS_I18N = [
+    { value: 'top-picks', label: t('search.sortTopPicks') },
+    { value: 'price-low', label: t('search.sortPriceLow') },
+    { value: 'price-high', label: t('search.sortPriceHigh') },
+    { value: 'best-reviewed', label: t('search.sortBestReviewed') },
+    { value: 'closest', label: t('search.sortClosest') },
+  ];
+
+  const GUEST_RATING_OPTIONS_I18N = [
+    { label: t('search.ratingWonderful'), value: '9+' },
+    { label: t('search.ratingVeryGood'), value: '8+' },
+    { label: t('search.ratingGood'), value: '7+' },
+    { label: t('search.ratingPleasant'), value: '6+' },
+  ];
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [sortBy, setSortBy] = useState<SortOption>('top-picks');
@@ -298,7 +313,7 @@ export default function Search() {
                     className="flex items-center gap-1.5 px-3 py-2 border border-[#E2E6EC] rounded-xl font-body text-sm text-[#1A2B47] hover:border-[#C5CBD4] transition-colors bg-white"
                   >
                     <span className="hidden sm:inline">
-                      {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
+                      {SORT_OPTIONS_I18N.find((o) => o.value === sortBy)?.label}
                     </span>
                     <span className="sm:hidden">{t('search.sortBy')}</span>
                     <ChevronDown
@@ -318,7 +333,7 @@ export default function Search() {
                         transition={{ duration: 0.15 }}
                         className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-[#E2E6EC] py-1.5 z-40"
                       >
-                        {SORT_OPTIONS.map((option) => (
+                        {SORT_OPTIONS_I18N.map((option) => (
                           <button
                             key={option.value}
                             onClick={() => {
@@ -412,7 +427,7 @@ export default function Search() {
                   />
                 ))}
                 {filters.guestRatings.map((gr) => {
-                  const grLabel = GUEST_RATING_OPTIONS.find((o) => o.value === gr)?.label || gr;
+                  const grLabel = GUEST_RATING_OPTIONS_I18N.find((o) => o.value === gr)?.label || gr;
                   return (
                     <ActivePill
                       key={gr}

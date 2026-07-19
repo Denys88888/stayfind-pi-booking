@@ -5,7 +5,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/i18n';
 import type { FilterState } from '@/types/search';
-import { PROPERTY_TYPES, AMENITIES_LIST, GUEST_RATING_OPTIONS } from '@/data/hotelData';
 
 interface FilterSidebarProps {
   filters: FilterState;
@@ -23,6 +22,41 @@ export default function FilterSidebar({
   resultCount,
 }: FilterSidebarProps) {
   const { t } = useTranslation();
+
+  const GUEST_RATING_OPTIONS = [
+    { label: t('search.ratingWonderful'), value: '9+' },
+    { label: t('search.ratingVeryGood'), value: '8+' },
+    { label: t('search.ratingGood'), value: '7+' },
+    { label: t('search.ratingPleasant'), value: '6+' },
+  ];
+
+  // value = English key used for hotel data matching; label = translated display
+  const PROPERTY_TYPES_I18N = [
+    { value: 'Hotel', label: t('search.propHotel') },
+    { value: 'Apartment', label: t('search.propApartment') },
+    { value: 'Resort', label: t('search.propResort') },
+    { value: 'Villa', label: t('search.propVilla') },
+    { value: 'Hostel', label: t('search.propHostel') },
+    { value: 'B&B', label: t('search.propBnB') },
+    { value: 'Cabin', label: t('search.propCabin') },
+    { value: 'Cottage', label: t('search.propCottage') },
+  ];
+
+  const AMENITIES_I18N = [
+    { value: 'WiFi', label: t('search.amenWifi') },
+    { value: 'Pool', label: t('search.amenPool') },
+    { value: 'Spa', label: t('search.amenSpa') },
+    { value: 'Parking', label: t('search.amenParking') },
+    { value: 'Restaurant', label: t('search.amenRestaurant') },
+    { value: 'Gym', label: t('search.amenGym') },
+    { value: 'Bar', label: t('search.amenBar') },
+    { value: 'AC', label: t('search.amenAC') },
+    { value: 'Breakfast', label: t('search.amenBreakfast') },
+    { value: 'Beachfront', label: t('search.amenBeachfront') },
+    { value: 'Kitchen', label: t('search.amenKitchen') },
+    { value: 'Pet Friendly', label: t('search.amenPetFriendly') },
+  ];
+
   const [openSections, setOpenSections] = useState<string[]>([
     'price',
     'star',
@@ -195,26 +229,26 @@ export default function FilterSidebar({
             onToggle={() => toggleSection('type')}
           >
             <div className="grid grid-cols-2 gap-2">
-              {PROPERTY_TYPES.map((type) => (
+              {PROPERTY_TYPES_I18N.map(({ value, label }) => (
                 <label
-                  key={type}
+                  key={value}
                   className={cn(
                     'flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-all',
-                    filters.propertyTypes.includes(type)
+                    filters.propertyTypes.includes(value)
                       ? 'border-[#E85D4A] bg-[#FEF2F0]'
                       : 'border-[#E2E6EC] hover:border-[#C5CBD4]'
                   )}
                 >
                   <Checkbox
-                    checked={filters.propertyTypes.includes(type)}
+                    checked={filters.propertyTypes.includes(value)}
                     onCheckedChange={() =>
                       updateFilters({
-                        propertyTypes: toggleArrayItem(filters.propertyTypes, type),
+                        propertyTypes: toggleArrayItem(filters.propertyTypes, value),
                       })
                     }
                     className="shrink-0"
                   />
-                  <span className="font-body text-xs text-[#4A5468] truncate">{type}</span>
+                  <span className="font-body text-xs text-[#4A5468] truncate">{label}</span>
                 </label>
               ))}
             </div>
@@ -227,21 +261,21 @@ export default function FilterSidebar({
             onToggle={() => toggleSection('amenities')}
           >
             <div className="grid grid-cols-2 gap-2">
-              {AMENITIES_LIST.map((amenity) => (
+              {AMENITIES_I18N.map(({ value, label }) => (
                 <label
-                  key={amenity}
+                  key={value}
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F8F9FB] cursor-pointer transition-colors"
                 >
                   <Checkbox
-                    checked={filters.amenities.includes(amenity)}
+                    checked={filters.amenities.includes(value)}
                     onCheckedChange={() =>
                       updateFilters({
-                        amenities: toggleArrayItem(filters.amenities, amenity),
+                        amenities: toggleArrayItem(filters.amenities, value),
                       })
                     }
                     className="shrink-0"
                   />
-                  <span className="font-body text-xs text-[#4A5468]">{amenity}</span>
+                  <span className="font-body text-xs text-[#4A5468]">{label}</span>
                 </label>
               ))}
             </div>
