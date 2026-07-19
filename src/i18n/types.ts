@@ -71,6 +71,11 @@ export interface TranslationSet {
     roomsLeft: string;
     viewDeal: string;
     showOnMap: string;
+    starRating: string;
+    guestRating: string;
+    bookingPolicy: string;
+    star: string;
+    stars: string;
   };
   property: {
     amenities: string;

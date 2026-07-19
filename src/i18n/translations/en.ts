@@ -62,6 +62,11 @@ const en: TranslationSet = {
     roomsLeft: 'Only {count} rooms left!',
     viewDeal: 'View Deal',
     showOnMap: 'Show on map',
+    starRating: 'Star Rating',
+    guestRating: 'Guest Rating',
+    bookingPolicy: 'Booking Policy',
+    star: 'Star',
+    stars: 'Stars',
   },
   property: {
     amenities: 'Amenities',

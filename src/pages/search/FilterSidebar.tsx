@@ -92,7 +92,7 @@ export default function FilterSidebar({
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
           {/* Price Range */}
           <FilterSection
-            label="Price Range"
+            label={t('search.priceRange')}
             isOpen={openSections.includes('price')}
             onToggle={() => toggleSection('price')}
           >
@@ -127,7 +127,7 @@ export default function FilterSidebar({
 
           {/* Star Rating */}
           <FilterSection
-            label="Star Rating"
+            label={t('search.starRating')}
             isOpen={openSections.includes('star')}
             onToggle={() => toggleSection('star')}
           >
@@ -155,7 +155,7 @@ export default function FilterSidebar({
                     ))}
                   </div>
                   <span className="font-body text-sm text-[#4A5468]">
-                    {stars} {stars === 1 ? 'Star' : 'Stars'}
+                    {stars} {stars === 1 ? t('search.star') : t('search.stars')}
                   </span>
                 </label>
               ))}
@@ -164,7 +164,7 @@ export default function FilterSidebar({
 
           {/* Guest Rating */}
           <FilterSection
-            label="Guest Rating"
+            label={t('search.guestRating')}
             isOpen={openSections.includes('guest')}
             onToggle={() => toggleSection('guest')}
           >
@@ -190,7 +190,7 @@ export default function FilterSidebar({
 
           {/* Property Type */}
           <FilterSection
-            label="Property Type"
+            label={t('search.propertyType')}
             isOpen={openSections.includes('type')}
             onToggle={() => toggleSection('type')}
           >
@@ -222,7 +222,7 @@ export default function FilterSidebar({
 
           {/* Amenities */}
           <FilterSection
-            label="Amenities"
+            label={t('search.amenities')}
             isOpen={openSections.includes('amenities')}
             onToggle={() => toggleSection('amenities')}
           >
@@ -249,7 +249,7 @@ export default function FilterSidebar({
 
           {/* Booking Policy */}
           <FilterSection
-            label="Booking Policy"
+            label={t('search.bookingPolicy')}
             isOpen={openSections.includes('policy')}
             onToggle={() => toggleSection('policy')}
           >
