@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Users, Search, ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/i18n';
 
 interface CompactSearchBarProps {
   collapsed: boolean;
@@ -9,6 +10,7 @@ interface CompactSearchBarProps {
 }
 
 export default function CompactSearchBar({ collapsed, onToggleCollapse }: CompactSearchBarProps) {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [destination, setDestination] = useState(searchParams.get('destination') || 'Paris, France');
@@ -63,7 +65,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
         ) : (
           <div className="animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center justify-between mb-2 sm:hidden">
-              <span className="font-body text-sm font-medium text-[#1A2B47]">Modify Search</span>
+              <span className="font-body text-sm font-medium text-[#1A2B47]">{t('search.modifySearch')}</span>
               <button
                 onClick={() => {
                   setIsCollapsed(true);
@@ -88,7 +90,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                 <MapPin size={18} className="text-[#7A8494] shrink-0" />
                 <div className="min-w-0">
                   <p className="font-body text-[11px] font-medium text-[#7A8494] uppercase tracking-wider">
-                    Destination
+                    {t('hero.where').replace('?', '')}
                   </p>
                   <p className="font-body text-sm text-[#1A2B47] truncate">{destination}</p>
                 </div>
@@ -108,7 +110,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                 <Calendar size={18} className="text-[#7A8494] shrink-0" />
                 <div className="min-w-0">
                   <p className="font-body text-[11px] font-medium text-[#7A8494] uppercase tracking-wider">
-                    Dates
+                    {t('hero.checkIn')} – {t('hero.checkOut')}
                   </p>
                   <p className="font-body text-sm text-[#1A2B47] truncate">{dates}</p>
                 </div>
@@ -128,7 +130,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                 <Users size={18} className="text-[#7A8494] shrink-0" />
                 <div className="min-w-0">
                   <p className="font-body text-[11px] font-medium text-[#7A8494] uppercase tracking-wider">
-                    Guests
+                    {t('hero.guests')}
                   </p>
                   <p className="font-body text-sm text-[#1A2B47] truncate">{guests}</p>
                 </div>
@@ -154,13 +156,13 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
             {/* Active field dropdowns */}
             {activeField === 'destination' && (
               <div className="mt-2 p-4 bg-white rounded-xl shadow-lg border border-[#E2E6EC] max-w-[1000px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">DESTINATION</p>
+                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">{t('hero.where')}</p>
                 <input
                   type="text"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="w-full px-4 py-3 border border-[#E2E6EC] rounded-xl font-body text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D4A] focus:border-transparent transition-all"
-                  placeholder="Where are you going?"
+                  placeholder={t('hero.where')}
                   autoFocus
                 />
                 <div className="mt-3 flex gap-2">
@@ -179,7 +181,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
 
             {activeField === 'dates' && (
               <div className="mt-2 p-4 bg-white rounded-xl shadow-lg border border-[#E2E6EC] max-w-[1000px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">DATES</p>
+                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">{t('hero.checkIn')} – {t('hero.checkOut')}</p>
                 <input
                   type="text"
                   value={dates}
@@ -215,7 +217,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
 
             {activeField === 'guests' && (
               <div className="mt-2 p-4 bg-white rounded-xl shadow-lg border border-[#E2E6EC] max-w-[1000px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">GUESTS</p>
+                <p className="font-body text-xs font-medium text-[#7A8494] mb-2">{t('hero.guests')}</p>
                 <input
                   type="text"
                   value={guests}

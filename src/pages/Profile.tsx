@@ -549,8 +549,8 @@ function RewardsTab() {
               <span className="font-body text-white/80">{currentTier?.name}</span>
               <span className="font-body text-white/60">
                 {nextTierName
-                  ? `${(nextTier - rewardsPoints).toLocaleString('en-US')} {t('profile.points')} to ${nextTierName.name}`
-                  : 'Max tier reached!'}
+                  ? `${(nextTier - rewardsPoints).toLocaleString('en-US')} ${t('profile.points')} to ${nextTierName.name}`
+                  : t('profile.maxTier')}
               </span>
             </div>
             <Progress value={progress} className="h-2 bg-white/20" />
@@ -620,7 +620,7 @@ function RewardsTab() {
               {t('profile.rewards')}
             </DialogTitle>
             <DialogDescription className="font-body text-[#7A8494]">
-              You have {rewardsPoints.toLocaleString('en-US')} {t('profile.points')} available
+              {t('profile.pointsAvailable').replace('{count}', rewardsPoints.toLocaleString('en-US')).replace('{points}', t('profile.points'))}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
@@ -648,7 +648,7 @@ function RewardsTab() {
                   disabled={rewardsPoints < reward.cost}
                   className="font-body text-xs rounded-lg"
                 >
-                  {rewardsPoints >= reward.cost ? 'Redeem' : 'Locked'}
+                  {rewardsPoints >= reward.cost ? t('profile.redeem') : t('profile.locked')}
                 </Button>
               </div>
             ))}

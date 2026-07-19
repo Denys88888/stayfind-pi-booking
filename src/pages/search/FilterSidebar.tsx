@@ -3,6 +3,7 @@ import { X, Star, ChevronDown, ChevronUp } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/i18n';
 import type { FilterState } from '@/types/search';
 import { PROPERTY_TYPES, AMENITIES_LIST, GUEST_RATING_OPTIONS } from '@/data/hotelData';
 
@@ -21,6 +22,7 @@ export default function FilterSidebar({
   onClose,
   resultCount,
 }: FilterSidebarProps) {
+  const { t } = useTranslation();
   const [openSections, setOpenSections] = useState<string[]>([
     'price',
     'star',
@@ -259,7 +261,7 @@ export default function FilterSidebar({
                     updateFilters({ freeCancellation: checked as boolean })
                   }
                 />
-                <span className="font-body text-sm text-[#4A5468]">Free cancellation</span>
+                <span className="font-body text-sm text-[#4A5468]">{t('search.freeCancellation')}</span>
               </label>
               <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F8F9FB] cursor-pointer transition-colors">
                 <Checkbox
@@ -268,7 +270,7 @@ export default function FilterSidebar({
                     updateFilters({ breakfastIncluded: checked as boolean })
                   }
                 />
-                <span className="font-body text-sm text-[#4A5468]">Breakfast included</span>
+                <span className="font-body text-sm text-[#4A5468]">{t('search.breakfastIncluded')}</span>
               </label>
             </div>
           </FilterSection>

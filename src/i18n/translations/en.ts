@@ -56,6 +56,7 @@ const en: TranslationSet = {
     perNight: 'per night',
     map: 'Map',
     list: 'List',
+    modifySearch: 'Modify Search',
     freeCancellation: 'Free cancellation',
     breakfastIncluded: 'Breakfast included',
     roomsLeft: 'Only {count} rooms left!',
@@ -180,6 +181,10 @@ const en: TranslationSet = {
     points: 'points',
     goldMember: 'Gold Member',
     signOut: 'Sign Out',
+    maxTier: 'Max tier reached!',
+    pointsAvailable: 'You have {count} {points} available',
+    redeem: 'Redeem',
+    locked: 'Locked',
   },
   common: {
     required: 'Required',
