@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>StayFind</title>
+    <!-- SPA fallback for Render static hosting (no rewrite rules active).
+         The app uses HashRouter, so /admin → /#/admin etc. -->
+    <script>
+      var p = window.location.pathname + window.location.search;
+      window.location.replace('/#' + (p === '/404.html' ? '/' : p));
+    </script>
+  </head>
+  <body></body>
+</html>

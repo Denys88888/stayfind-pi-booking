@@ -29,6 +29,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- HashRouter: direct path loads (/admin, /search) → hash routes (/#/admin) -->
+    <script>
+      (function () {
+        var p = window.location.pathname;
+        if (p !== '/' && !window.location.hash) {
+          window.location.replace('/#' + p + window.location.search);
+        }
+      })();
+    </script>
+
     <!-- Pi Network SDK v2.0 -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
