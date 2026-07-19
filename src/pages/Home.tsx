@@ -540,6 +540,14 @@ function PropertiesSection() {
     { name: 'Coastal Escape Resort', location: 'Santorini, Greece', rating: 9.5, price: 310, image: '/hotel-2.jpg', tag: 'Top Rated' },
   ];
 
+  const tagLabels: Record<string, string> = {
+    Luxury: t('hero.tagLuxury'),
+    Trending: t('hero.tagTrending'),
+    'Top Rated': t('search.sortBestReviewed'),
+    'Best Value': t('hero.tagBestValue'),
+    Boutique: t('hero.tagBoutique'),
+  };
+
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   const toggleFavorite = (i: number) => {
@@ -581,7 +589,7 @@ function PropertiesSection() {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <span className="absolute top-3 left-3 bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2.5 py-1 rounded-md">
-                  {prop.tag}
+                  {tagLabels[prop.tag] || prop.tag}
                 </span>
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleFavorite(i); }}

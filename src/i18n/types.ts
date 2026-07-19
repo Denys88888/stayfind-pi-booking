@@ -31,6 +31,10 @@ export interface TranslationSet {
     guests: string;
     searchBtn: string;
     popular: string;
+    tagLuxury: string;
+    tagTrending: string;
+    tagBestValue: string;
+    tagBoutique: string;
     adults: string;
     adultsAge: string;
     children: string;
