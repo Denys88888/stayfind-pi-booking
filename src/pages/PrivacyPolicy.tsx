@@ -55,7 +55,7 @@ export default function PrivacyPolicy() {
             className="inline-flex items-center gap-2 font-body text-sm text-[#7A8494] hover:text-[#E85D4A] transition-colors mb-8"
           >
             <ArrowLeft size={16} />
-            {t('common.cancel')}
+            {t('common.back')}
           </Link>
 
           {/* Header */}
@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
             </h1>
           </div>
           <p className="font-body text-sm text-[#7A8494] mb-10">
-            Last updated: January 1, 2026
+            {t('common.lastUpdated')} January 1, 2026
           </p>
 
           {/* Sections */}
@@ -94,17 +94,17 @@ export default function PrivacyPolicy() {
           {/* Contact */}
           <div className="mt-8 bg-[#0F1B2E] rounded-2xl p-6 text-center">
             <h3 className="font-display text-lg font-semibold text-white mb-2">
-              Questions?
+              {t('common.questions')}
             </h3>
             <p className="font-body text-sm text-white/70 mb-4">
-              If you have any questions about this Privacy Policy, please contact us.
+              {t('common.questionsDesc')}
             </p>
             <Link
               to="mailto:privacy@stayfind.app"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#E85D4A] text-white font-body text-sm font-medium rounded-xl hover:bg-[#D14A38] transition-colors"
             >
               <Mail size={16} />
-              Contact Us
+              {t('common.contactUs')}
             </Link>
           </div>
         </div>

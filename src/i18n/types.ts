@@ -327,6 +327,11 @@ export interface TranslationSet {
     notFound: string;
     notFoundDesc: string;
     and: string;
+    back: string;
+    questions: string;
+    questionsDesc: string;
+    contactUs: string;
+    lastUpdated: string;
     previous: string;
     next: string;
     scrollToTop: string;
