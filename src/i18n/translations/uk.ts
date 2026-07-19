@@ -242,6 +242,7 @@ const uk: TranslationSet = {
     pbStep3: 'Введіть свій PiNet URL або відскануйте код',
     notInBrowser: 'Ви знаходитесь у звичайному браузері. Pi SDK доступний лише в Pi Browser.',
     continueDemo: 'Продовжити в демо-режимі',
+    proceedToCheckout: 'Перейти до оформлення',
     downloadReceipt: 'Завантажити чек',
   },
   profile: {

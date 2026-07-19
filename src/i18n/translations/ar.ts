@@ -242,6 +242,7 @@ const ar: TranslationSet = {
     pbStep3: 'أدخل رابط PiNet أو امسح الكود',
     notInBrowser: 'أنت حالياً في متصفح عادي. Pi SDK متاح فقط داخل Pi Browser.',
     continueDemo: 'المتابعة في وضع العرض التوضيحي',
+    proceedToCheckout: 'المتابعة للدفع',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {

@@ -242,6 +242,7 @@ const it: TranslationSet = {
     pbStep3: 'Inserisci il tuo URL PiNet o scansiona il codice',
     notInBrowser: 'Sei in un browser normale. Il Pi SDK è disponibile solo in Pi Browser.',
     continueDemo: 'Continua in modalità demo',
+    proceedToCheckout: 'Procedi al pagamento',
     downloadReceipt: 'Scarica ricevuta',
   },
   profile: {

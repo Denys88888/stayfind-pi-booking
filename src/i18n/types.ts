@@ -246,6 +246,7 @@ export interface TranslationSet {
     pbStep3: string;
     notInBrowser: string;
     continueDemo: string;
+    proceedToCheckout: string;
   };
   profile: {
     welcome: string;

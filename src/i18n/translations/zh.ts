@@ -242,6 +242,7 @@ const zh: TranslationSet = {
     pbStep3: '输入您的 PiNet 地址或扫描二维码',
     notInBrowser: '您当前在普通浏览器中。Pi SDK 仅在 Pi 浏览器中可用。',
     continueDemo: '在演示模式下继续',
+    proceedToCheckout: '进行结账',
     downloadReceipt: '下载收据',
   },
   profile: {

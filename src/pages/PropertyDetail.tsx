@@ -1251,6 +1251,7 @@ function SimilarProperties({ hotel }: { hotel: HotelData }) {
 /*  Property Detail Page                                              */
 /* ------------------------------------------------------------------ */
 export default function PropertyDetail() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
@@ -1326,13 +1327,13 @@ export default function PropertyDetail() {
                     totalPi: selectedRoom.totalPriceInPi,
                     taxes: selectedRoom.taxes,
                     nights: 7,
-                    guests: '2 Adults',
+                    guests: `2 ${t('hero.adults')}`,
                   },
                 })
               }
               className="bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] active:scale-[0.98]"
             >
-              Proceed to Checkout
+              {t('checkout.proceedToCheckout')}
             </button>
           </motion.div>
         )}

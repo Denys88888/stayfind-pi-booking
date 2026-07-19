@@ -242,6 +242,7 @@ const tr: TranslationSet = {
     pbStep3: 'PiNet URL\'nizi girin veya kodu tarayın',
     notInBrowser: 'Normal bir tarayıcıdasınız. Pi SDK yalnızca Pi Browser\'da kullanılabilir.',
     continueDemo: 'Demo modunda devam et',
+    proceedToCheckout: 'Ödemeye geç',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {
