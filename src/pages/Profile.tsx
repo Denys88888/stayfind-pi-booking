@@ -46,6 +46,9 @@ import {
   usdToPi,
 } from '@/lib/piPayments';
 import { getBookings, fetchBookingsRemote, cancelBookingRemote, type Booking as StoredBooking } from '@/lib/bookingStorage';
+import { useFavoriteIds, toggleFavorite } from '@/lib/favoritesStorage';
+import { hotels } from '@/data/hotelData';
+import { getProfileSettings, saveProfileSettings, type ProfileSettings } from '@/lib/profileSettings';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -102,39 +105,6 @@ function StatCard({
 }
 
 /* bookings are loaded from localStorage via bookingStorage */
-
-const favorites = [
-  {
-    id: 1,
-    name: 'The Grand Palace Hotel',
-    location: 'Paris, France',
-    rating: 9.4,
-    price: 285,
-    piPrice: usdToPi(285),
-    image: '/hotel-1.jpg',
-    saved: '2 days ago',
-  },
-  {
-    id: 2,
-    name: 'Skyline Resort & Spa',
-    location: 'Dubai, UAE',
-    rating: 9.1,
-    price: 420,
-    piPrice: usdToPi(420),
-    image: '/hotel-2.jpg',
-    saved: '1 week ago',
-  },
-  {
-    id: 3,
-    name: 'Oceanview Paradise',
-    location: 'Maldives',
-    rating: 9.8,
-    price: 680,
-    piPrice: usdToPi(680),
-    image: '/hotel-5.jpg',
-    saved: '2 weeks ago',
-  },
-];
 
 /* ─── Status Badge ─── */
 function StatusBadge({ status }: { status: string }) {
@@ -340,6 +310,17 @@ function BookingsTab({ piUid }: { piUid: string }) {
 function FavoritesTab() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const favoriteIds = useFavoriteIds();
+  const favorites = hotels
+    .filter((h) => favoriteIds.includes(h.id))
+    .map((h) => ({
+      id: h.id,
+      name: h.name,
+      location: h.location,
+      rating: h.rating,
+      piPrice: usdToPi(h.price),
+      image: h.images[0],
+    }));
 
   return (
     <AnimatedSection>
@@ -374,7 +355,7 @@ function FavoritesTab() {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <button
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite(fav.id); }}
                   className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm"
                 >
                   <Heart size={16} className="text-[#E85D4A] fill-[#E85D4A]" />
@@ -402,7 +383,6 @@ function FavoritesTab() {
                     <span className="text-[#7A8494]">/{t('search.perNight')}</span>
                   </p>
                 </div>
-                <p className="font-body text-xs text-[#C5CBD4] mt-1">{t('profile.saved')} {fav.saved}</p>
               </CardContent>
             </Card>
           ))}
@@ -417,9 +397,16 @@ function AccountTab() {
   const { t } = useTranslation();
   const { user, signOut, isSandbox } = usePiAuth();
   const [saved, setSaved] = useState(false);
-  const [piAddress, setPiAddress] = useState('');
+  const [settings, setSettings] = useState<ProfileSettings>(() =>
+    user?.uid ? getProfileSettings(user.uid) : { firstName: '', lastName: '', email: '', phone: '', piAddress: '' }
+  );
+
+  const update = (field: keyof ProfileSettings) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSettings((s) => ({ ...s, [field]: e.target.value }));
 
   const handleSave = () => {
+    if (!user?.uid) return;
+    saveProfileSettings(user.uid, settings);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -441,7 +428,8 @@ function AccountTab() {
                 {t('profile.firstName')}
               </Label>
               <Input
-                defaultValue={user?.username ?? ''}
+                value={settings.firstName || user?.username || ''}
+                onChange={update('firstName')}
                 className="rounded-xl border-[#E2E6EC]"
                 placeholder={t('profile.firstName')}
               />
@@ -451,6 +439,8 @@ function AccountTab() {
                 {t('profile.lastName')}
               </Label>
               <Input
+                value={settings.lastName}
+                onChange={update('lastName')}
                 className="rounded-xl border-[#E2E6EC]"
                 placeholder={t('profile.lastName')}
               />
@@ -460,7 +450,8 @@ function AccountTab() {
             <Label className="font-body text-sm text-[#4A5468]">{t('profile.email')}</Label>
             <Input
               type="email"
-              defaultValue={''}
+              value={settings.email}
+              onChange={update('email')}
               className="rounded-xl border-[#E2E6EC]"
               placeholder={t('profile.email')}
             />
@@ -469,6 +460,8 @@ function AccountTab() {
             <Label className="font-body text-sm text-[#4A5468]">{t('profile.phone')}</Label>
             <Input
               type="tel"
+              value={settings.phone}
+              onChange={update('phone')}
               className="rounded-xl border-[#E2E6EC]"
               placeholder={t('profile.phone')}
             />
@@ -511,8 +504,8 @@ function AccountTab() {
               {t('checkout.piCrypto')} {t('profile.address')}
             </Label>
             <Input
-              value={piAddress}
-              onChange={(e) => setPiAddress(e.target.value)}
+              value={settings.piAddress}
+              onChange={update('piAddress')}
               className="rounded-xl border-[#E2E6EC] font-mono text-sm"
               placeholder={t('profile.walletPlaceholder')}
             />
@@ -705,6 +698,7 @@ export default function Profile() {
   const { user, isAuthenticated, isSandbox } = usePiAuth();
   const navigate = useNavigate();
   const [profileBookings, setProfileBookings] = useState<StoredBooking[]>(getBookings);
+  const favoriteIds = useFavoriteIds();
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -781,7 +775,7 @@ export default function Profile() {
                   />
                   <StatCard
                     label={t('profile.labelSaved')}
-                    value={String(favorites.length)}
+                    value={String(favoriteIds.length)}
                     icon={Heart}
                     color="rose"
                   />

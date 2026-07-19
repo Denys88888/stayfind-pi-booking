@@ -7,6 +7,7 @@ import { formatPiAmount, usdToPi } from '@/lib/piPayments';
 import type { HotelData, RoomType } from '@/data/propertyData';
 import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
+import { useIsFavorite } from '@/lib/favoritesStorage';
 
 import {
   ChevronLeft,
@@ -70,7 +71,7 @@ const fadeUp = {
 function PhotoGallery({ hotel }: { hotel: HotelData }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImg, setCurrentImg] = useState(0);
-  const [favorited, setFavorited] = useState(false);
+  const [favorited, toggleFavorited] = useIsFavorite(Number(hotel.id));
   const [mobileIdx, setMobileIdx] = useState(0);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -147,7 +148,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
 
         {/* Favorite Button */}
         <button
-          onClick={() => setFavorited((p) => !p)}
+          onClick={() => toggleFavorited()}
           className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_2px_12px_rgba(15,27,46,0.15)] hover:scale-105 transition-transform duration-200 z-10"
         >
           <motion.div
@@ -197,7 +198,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
           <ChevronLeft size={20} className="text-[#0F1B2E]" />
         </button>
         <button
-          onClick={() => setFavorited((p) => !p)}
+          onClick={() => toggleFavorited()}
           className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_2px_12px_rgba(15,27,46,0.15)] z-10"
         >
           <Heart
@@ -313,7 +314,7 @@ function PhotoGallery({ hotel }: { hotel: HotelData }) {
 /*  Section 2: Property Header                                        */
 /* ------------------------------------------------------------------ */
 function PropertyHeader({ hotel }: { hotel: HotelData }) {
-  const [favorited, setFavorited] = useState(false);
+  const [favorited, toggleFavorited] = useIsFavorite(Number(hotel.id));
   const { t } = useTranslation();
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -363,7 +364,7 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
               </h1>
               {/* Favorite Button */}
               <button
-                onClick={() => setFavorited((p) => !p)}
+                onClick={() => toggleFavorited()}
                 className="mt-1 md:mt-2 flex-shrink-0 w-9 h-9 rounded-full bg-[#F8F9FB] flex items-center justify-center hover:bg-[#FEF2F0] transition-colors"
                 aria-label={t('common.toggleFavorite')}
               >

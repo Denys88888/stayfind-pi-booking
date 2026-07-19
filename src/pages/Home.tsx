@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/popover';
 import { useTranslation } from '@/i18n';
 import Layout from '@/components/Layout';
+import { hotels } from '@/data/hotelData';
+import { useIsFavorite } from '@/lib/favoritesStorage';
 
 /* ───────── Animation helpers ───────── */
 const fadeUp = {
@@ -529,17 +531,7 @@ function PropertiesSection() {
   const { t } = useTranslation();
   const { ref, inView } = useScrollReveal();
 
-  const properties = [
-    { name: 'The Grand Palace Hotel', location: 'Paris, France', rating: 9.4, price: 285, image: '/hotel-1.jpg', tag: 'Luxury' },
-    { name: 'Skyline Resort & Spa', location: 'Dubai, UAE', rating: 9.1, price: 420, image: '/hotel-2.jpg', tag: 'Trending' },
-    { name: 'Zen Garden Retreat', location: 'Bali, Indonesia', rating: 9.6, price: 195, image: '/hotel-3.jpg', tag: 'Top Rated' },
-    { name: 'Metropolitan Suites', location: 'New York, USA', rating: 8.9, price: 350, image: '/hotel-4.jpg', tag: 'Best Value' },
-    { name: 'Oceanview Paradise', location: 'Maldives', rating: 9.8, price: 680, image: '/hotel-5.jpg', tag: 'Luxury' },
-    { name: 'Historic Central Inn', location: 'London, UK', rating: 9.2, price: 240, image: '/hotel-6.jpg', tag: 'Boutique' },
-    { name: 'Sakura Boutique Hotel', location: 'Tokyo, Japan', rating: 9.3, price: 180, image: '/hotel-1.jpg', tag: 'Trending' },
-    { name: 'Coastal Escape Resort', location: 'Santorini, Greece', rating: 9.5, price: 310, image: '/hotel-2.jpg', tag: 'Top Rated' },
-  ];
-
+  const tagCycle = ['Luxury', 'Trending', 'Top Rated', 'Best Value', 'Boutique'];
   const tagLabels: Record<string, string> = {
     Luxury: t('hero.tagLuxury'),
     Trending: t('hero.tagTrending'),
@@ -548,16 +540,15 @@ function PropertiesSection() {
     Boutique: t('hero.tagBoutique'),
   };
 
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
-
-  const toggleFavorite = (i: number) => {
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(i)) next.delete(i);
-      else next.add(i);
-      return next;
-    });
-  };
+  const properties = hotels.slice(0, 8).map((h, i) => ({
+    id: h.id,
+    name: h.name,
+    location: h.location,
+    rating: h.rating,
+    price: h.price,
+    image: h.images[0],
+    tag: tagCycle[i % tagCycle.length],
+  }));
 
   return (
     <section ref={ref} className="bg-white py-20">
@@ -573,67 +564,87 @@ function PropertiesSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {properties.map((prop, i) => (
-            <motion.div
-              key={`${prop.name}-${i}`}
-              custom={i + 1}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              className="bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,27,46,0.06)] hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)] hover:-translate-y-1 transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer group"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={prop.image}
-                  alt={prop.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <span className="absolute top-3 left-3 bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2.5 py-1 rounded-md">
-                  {tagLabels[prop.tag] || prop.tag}
-                </span>
-                <button
-                  onClick={(e) => { e.stopPropagation(); toggleFavorite(i); }}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center transition-all duration-300 hover:scale-110"
-                >
-                  <Heart
-                    size={16}
-                    className={favorites.has(i) ? 'text-[#E85D4A] fill-[#E85D4A]' : 'text-[#7A8494]'}
-                  />
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="p-5">
-                <h3 className="font-body text-base font-semibold text-[#1A2B47] truncate">{prop.name}</h3>
-                <div className="flex items-center gap-1 mt-1">
-                  <MapPin size={14} className="text-[#C5CBD4]" />
-                  <span className="font-body text-sm text-[#7A8494]">{prop.location}</span>
-                </div>
-                <div className="w-full h-px bg-[#F0F2F5] my-3" />
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-[#0F1B2E] text-white font-body text-sm font-bold px-2.5 py-1 rounded-lg rounded-bl-none">
-                      {prop.rating}
-                    </span>
-                    <span className="font-body text-xs text-[#7A8494]">{t('property.excellent')}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-body text-lg font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(prop.price))}</span>
-                    <span className="font-body text-xs text-[#7A8494]">/{t('property.night')}</span>
-                    <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${prop.price} USD</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 mt-3">
-                  {[Wifi, Car, Coffee, Utensils].map((Icon, j) => (
-                    <Icon key={j} size={16} className="text-[#7A8494]" />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            <PropertyCard key={prop.id} prop={prop} index={i} inView={inView} tagLabels={tagLabels} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function PropertyCard({
+  prop,
+  index,
+  inView,
+  tagLabels,
+}: {
+  prop: { id: number; name: string; location: string; rating: number; price: number; image: string; tag: string };
+  index: number;
+  inView: boolean;
+  tagLabels: Record<string, string>;
+}) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [isFav, toggleFav] = useIsFavorite(prop.id);
+
+  return (
+    <motion.div
+      custom={index + 1}
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      onClick={() => navigate(`/property/${prop.id}`)}
+      className="bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,27,46,0.06)] hover:shadow-[0_12px_40px_rgba(15,27,46,0.12)] hover:-translate-y-1 transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer group"
+    >
+      {/* Image */}
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img
+          src={prop.image}
+          alt={prop.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <span className="absolute top-3 left-3 bg-[#FEF2F0] text-[#D14A38] font-body text-xs font-medium px-2.5 py-1 rounded-md">
+          {tagLabels[prop.tag] || prop.tag}
+        </span>
+        <button
+          onClick={(e) => { e.stopPropagation(); toggleFav(); }}
+          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center transition-all duration-300 hover:scale-110"
+        >
+          <Heart
+            size={16}
+            className={isFav ? 'text-[#E85D4A] fill-[#E85D4A]' : 'text-[#7A8494]'}
+          />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-5">
+        <h3 className="font-body text-base font-semibold text-[#1A2B47] truncate">{prop.name}</h3>
+        <div className="flex items-center gap-1 mt-1">
+          <MapPin size={14} className="text-[#C5CBD4]" />
+          <span className="font-body text-sm text-[#7A8494]">{prop.location}</span>
+        </div>
+        <div className="w-full h-px bg-[#F0F2F5] my-3" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="bg-[#0F1B2E] text-white font-body text-sm font-bold px-2.5 py-1 rounded-lg rounded-bl-none">
+              {prop.rating}
+            </span>
+            <span className="font-body text-xs text-[#7A8494]">{t('property.excellent')}</span>
+          </div>
+          <div className="text-right">
+            <span className="font-body text-lg font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(prop.price))}</span>
+            <span className="font-body text-xs text-[#7A8494]">/{t('property.night')}</span>
+            <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${prop.price} USD</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 mt-3">
+          {[Wifi, Car, Coffee, Utensils].map((Icon, j) => (
+            <Icon key={j} size={16} className="text-[#7A8494]" />
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 

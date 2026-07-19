@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import type { Hotel } from '@/types/search';
 import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 import { useTranslation } from '@/i18n';
+import { useIsFavorite } from '@/lib/favoritesStorage';
 
 interface HotelCardProps {
   hotel: Hotel;
@@ -34,7 +35,7 @@ const AMENITY_ICONS: Record<string, React.ElementType> = {
 export default function HotelCard({ hotel, index, viewMode, isActive, onHover }: HotelCardProps) {
   const { t } = useTranslation();
   const [imgIndex, setImgIndex] = useState(0);
-  const [isFav, setIsFav] = useState(false);
+  const [isFav, toggleFav] = useIsFavorite(hotel.id);
   const [imgHovered, setImgHovered] = useState(false);
 
   const discount = Math.round(
@@ -121,7 +122,7 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
 
           {/* Favorite Button */}
           <button
-            onClick={() => setIsFav(!isFav)}
+            onClick={(e) => { e.preventDefault(); toggleFav(); }}
             className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-200"
           >
             <motion.div
