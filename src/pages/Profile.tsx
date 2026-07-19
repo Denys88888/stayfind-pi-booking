@@ -474,7 +474,7 @@ function AccountTab() {
               value={piAddress}
               onChange={(e) => setPiAddress(e.target.value)}
               className="rounded-xl border-[#E2E6EC] font-mono text-sm"
-              placeholder="Enter your Pi wallet address"
+              placeholder={t('profile.walletPlaceholder')}
             />
           </div>
           <Button
@@ -570,26 +570,26 @@ function RewardsTab() {
         {[
           {
             icon: Star,
-            label: 'Earn Rate',
+            label: t('profile.earnRate'),
             value: '5x points',
             desc: 'per π spent on bookings',
           },
           {
             icon: CalendarDays,
-            label: 'Early Access',
+            label: t('profile.earlyAccess'),
             value: '48 hours',
             desc: 'to exclusive deals',
           },
           {
             icon: BedDouble,
-            label: 'Room Upgrades',
+            label: t('profile.roomUpgrades'),
             value: '2 free/yr',
             desc: 'when available',
           },
           {
             icon: Shield,
-            label: 'Late Checkout',
-            value: 'Guaranteed',
+            label: t('profile.lateCheckout'),
+            value: t('profile.guaranteed'),
             desc: 'until 2 PM',
           },
         ].map((benefit) => (
@@ -625,10 +625,10 @@ function RewardsTab() {
           </DialogHeader>
           <div className="space-y-3 py-4">
             {[
-              { name: '$10 Booking Credit', cost: 1000 },
-              { name: 'Free Room Upgrade', cost: 2000 },
-              { name: 'Late Checkout', cost: 500 },
-              { name: 'Free Breakfast', cost: 800 },
+              { name: t('profile.rewardCredit'), cost: 1000 },
+              { name: t('profile.rewardRoomUpgrade'), cost: 2000 },
+              { name: t('profile.rewardLateCheckout'), cost: 500 },
+              { name: t('profile.rewardBreakfast'), cost: 800 },
             ].map((reward) => (
               <div
                 key={reward.name}
@@ -733,19 +733,19 @@ export default function Profile() {
                 </p>
                 <div className="flex items-center justify-center sm:justify-start gap-4 mt-3">
                   <StatCard
-                    label="Bookings"
+                    label={t('profile.labelBookings')}
                     value={String(profileBookings.length)}
                     icon={CalendarDays}
                     color="blue"
                   />
                   <StatCard
-                    label="Saved"
+                    label={t('profile.labelSaved')}
                     value={String(favorites.length)}
                     icon={Heart}
                     color="rose"
                   />
                   <StatCard
-                    label="Points"
+                    label={t('profile.labelPoints')}
                     value="2.4K"
                     icon={Gift}
                     color="amber"
