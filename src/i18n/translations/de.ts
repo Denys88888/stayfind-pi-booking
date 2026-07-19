@@ -250,6 +250,7 @@ const de: TranslationSet = {
     proceedToCheckout: 'Weiter zur Kasse',
     completionFailed: 'Die Zahlung war erfolgreich, aber die Serverbestätigung ist fehlgeschlagen. Sie wird bei Ihrer nächsten Anmeldung automatisch abgeschlossen.',
     paymentCancelled: 'Die Zahlung wurde storniert.',
+    roomUnavailable: 'Dieses Zimmer ist für die ausgewählten Daten nicht mehr verfügbar.',
     downloadReceipt: 'Quittung herunterladen',
   },
   profile: {

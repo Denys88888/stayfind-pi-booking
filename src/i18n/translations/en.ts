@@ -251,6 +251,7 @@ const en: TranslationSet = {
     proceedToCheckout: 'Proceed to Checkout',
     completionFailed: 'Your payment went through, but server confirmation failed. It will finalize automatically on your next sign-in.',
     paymentCancelled: 'Payment was cancelled.',
+    roomUnavailable: 'This room is no longer available for the selected dates.',
     downloadReceipt: 'Download Receipt',
   },
   profile: {

@@ -250,6 +250,7 @@ const zh: TranslationSet = {
     proceedToCheckout: '进行结账',
     completionFailed: '您的付款已完成，但服务器确认失败。下次登录时将自动完成。',
     paymentCancelled: '付款已取消。',
+    roomUnavailable: '该房间在所选日期已不可预订。',
     downloadReceipt: '下载收据',
   },
   profile: {

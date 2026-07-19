@@ -45,7 +45,7 @@ import {
   formatPiAmount,
   usdToPi,
 } from '@/lib/piPayments';
-import { getBookings, cancelBooking, type Booking as StoredBooking } from '@/lib/bookingStorage';
+import { getBookings, fetchBookingsRemote, cancelBookingRemote, type Booking as StoredBooking } from '@/lib/bookingStorage';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -171,15 +171,28 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 /* ─── Tab: Bookings ─── */
-function BookingsTab() {
+function BookingsTab({ piUid }: { piUid: string }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeSub, setActiveSub] = useState('all');
   const [bookings, setBookings] = useState<StoredBooking[]>(getBookings);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBookings(getBookings());
-  }, []);
+    let cancelled = false;
+    fetchBookingsRemote(piUid).then((list) => {
+      if (!cancelled) {
+        setBookings(list);
+        setLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [piUid]);
+
+  const handleCancel = async (id: string) => {
+    const updated = await cancelBookingRemote(piUid, id);
+    setBookings(updated);
+  };
 
   const filtered =
     activeSub === 'all'
@@ -211,7 +224,11 @@ function BookingsTab() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-12 font-body text-sm text-[#7A8494]">
+          {t('common.loading')}
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-12">
           <CalendarDays size={48} className="mx-auto text-[#C5CBD4] mb-4" />
           <h3 className="font-display text-lg font-semibold text-[#0F1B2E] mb-2">
@@ -292,7 +309,7 @@ function BookingsTab() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setBookings(cancelBooking(booking.id))}
+                          onClick={() => handleCancel(booking.id)}
                           className="font-body text-xs rounded-lg text-rose-600 border-rose-200 hover:bg-rose-50"
                         >
                           {t('profile.cancelBooking')}
@@ -690,8 +707,9 @@ export default function Profile() {
   const [profileBookings, setProfileBookings] = useState<StoredBooking[]>(getBookings);
 
   useEffect(() => {
-    setProfileBookings(getBookings());
-  }, []);
+    if (!user?.uid) return;
+    fetchBookingsRemote(user.uid).then(setProfileBookings);
+  }, [user?.uid]);
 
   /* ─── Unauthenticated state ─── */
   if (!isAuthenticated || !user) {
@@ -796,7 +814,7 @@ export default function Profile() {
             </TabsList>
 
             <TabsContent value="bookings">
-              <BookingsTab />
+              <BookingsTab piUid={user.uid} />
             </TabsContent>
             <TabsContent value="favorites">
               <FavoritesTab />

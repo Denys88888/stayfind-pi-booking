@@ -250,6 +250,7 @@ const ru: TranslationSet = {
     proceedToCheckout: 'Перейти к оформлению',
     completionFailed: 'Оплата прошла, но серверное подтверждение не удалось. Оно завершится автоматически при следующем входе.',
     paymentCancelled: 'Платёж был отменён.',
+    roomUnavailable: 'Этот номер больше недоступен на выбранные даты.',
     downloadReceipt: 'Скачать чек',
   },
   profile: {

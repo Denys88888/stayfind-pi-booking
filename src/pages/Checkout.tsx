@@ -41,7 +41,7 @@ import {
   usdToPi,
   formatPiAmount,
 } from '@/lib/piPayments';
-import { saveBooking, generateBookingId } from '@/lib/bookingStorage';
+import { createBookingRemote, checkAvailability, generateBookingId } from '@/lib/bookingStorage';
 import { isPiSdkAvailable, isPiBrowser } from '@/hooks/usePiAuth';
 import PiBrowserRequired from '@/components/PiBrowserRequired';
 
@@ -572,6 +572,7 @@ function StepPayment({
   onPay,
   onBack,
   bookingData,
+  hotelId,
   piSubtotal,
   piTaxes,
   piDiscount,
@@ -580,6 +581,7 @@ function StepPayment({
   onPay: (txId: string) => void;
   onBack: () => void;
   bookingData: typeof FALLBACK_BOOKING;
+  hotelId: string;
   piSubtotal: number;
   piTaxes: number;
   piDiscount: number;
@@ -615,6 +617,18 @@ function StepPayment({
 
     setProcessing(true);
     setPaymentError(null);
+
+    const available = await checkAvailability(
+      hotelId,
+      bookingData.roomType,
+      bookingData.checkIn,
+      bookingData.checkOut
+    );
+    if (!available) {
+      setProcessing(false);
+      setPaymentError(t('checkout.roomUnavailable'));
+      return;
+    }
 
     /* Demo mode (outside Pi Browser): simulate the payment instead of
        calling Pi.createPayment, which never resolves there. */
@@ -1123,6 +1137,7 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
 
 /* ─── Main Checkout Page ─── */
 export default function Checkout() {
+  const { user } = usePiAuth();
   const [step, setStep] = useState(1);
   const [txId, setTxId] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -1153,24 +1168,26 @@ export default function Checkout() {
   const piDiscount = usdToPi(bookingData.discount);
   const piTotal = piSubtotal + piTaxes - piDiscount;
 
-  const handlePay = (id: string) => {
-    saveBooking({
-      id: generateBookingId(),
-      hotelId: String(state.hotelId || '1'),
-      hotelName: bookingData.hotelName,
-      roomType: bookingData.roomType,
-      image: bookingData.image,
-      location: bookingData.address,
-      checkIn: bookingData.checkIn,
-      checkOut: bookingData.checkOut,
-      nights: bookingData.nights,
-      guests: bookingData.guests,
-      totalUsd: bookingData.total,
-      totalPi: piTotal,
-      txid: id,
-      bookedAt: new Date().toISOString(),
-      status: 'confirmed',
-    });
+  const handlePay = async (id: string) => {
+    if (user?.uid) {
+      await createBookingRemote(user.uid, {
+        id: generateBookingId(),
+        hotelId: String(state.hotelId || '1'),
+        hotelName: bookingData.hotelName,
+        roomType: bookingData.roomType,
+        image: bookingData.image,
+        location: bookingData.address,
+        checkIn: bookingData.checkIn,
+        checkOut: bookingData.checkOut,
+        nights: bookingData.nights,
+        guests: bookingData.guests,
+        totalUsd: bookingData.total,
+        totalPi: piTotal,
+        txid: id,
+        bookedAt: new Date().toISOString(),
+        status: 'confirmed',
+      });
+    }
     setTxId(id);
     setStep(3);
   };
@@ -1194,6 +1211,7 @@ export default function Checkout() {
             <StepPayment
               onPay={handlePay}
               onBack={() => setStep(1)}
+              hotelId={String(state.hotelId || '1')}
               {...sidebarProps}
             />
           )}

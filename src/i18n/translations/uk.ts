@@ -250,6 +250,7 @@ const uk: TranslationSet = {
     proceedToCheckout: 'Перейти до оформлення',
     completionFailed: 'Оплата пройшла, але серверне підтвердження не вдалося. Воно завершиться автоматично при наступному вході.',
     paymentCancelled: 'Платіж було скасовано.',
+    roomUnavailable: 'Цей номер більше недоступний на обрані дати.',
     downloadReceipt: 'Завантажити чек',
   },
   profile: {

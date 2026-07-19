@@ -250,6 +250,7 @@ const tr: TranslationSet = {
     proceedToCheckout: 'Ödemeye geç',
     completionFailed: 'Ödemeniz gerçekleşti ancak sunucu onayı başarısız oldu. Bir sonraki girişinizde otomatik olarak tamamlanacak.',
     paymentCancelled: 'Ödeme iptal edildi.',
+    roomUnavailable: 'Bu oda seçilen tarihler için artık müsait değil.',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {

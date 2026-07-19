@@ -254,6 +254,7 @@ export interface TranslationSet {
     proceedToCheckout: string;
     completionFailed: string;
     paymentCancelled: string;
+    roomUnavailable: string;
   };
   profile: {
     welcome: string;

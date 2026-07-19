@@ -250,6 +250,7 @@ const pl: TranslationSet = {
     proceedToCheckout: 'Przejdź do płatności',
     completionFailed: 'Płatność przeszła, ale potwierdzenie serwera nie powiodło się. Zostanie sfinalizowana automatycznie przy następnym logowaniu.',
     paymentCancelled: 'Płatność została anulowana.',
+    roomUnavailable: 'Ten pokój nie jest już dostępny na wybrane daty.',
     downloadReceipt: 'Pobierz potwierdzenie',
   },
   profile: {

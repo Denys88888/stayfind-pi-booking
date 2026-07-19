@@ -250,6 +250,7 @@ const ar: TranslationSet = {
     proceedToCheckout: 'المتابعة للدفع',
     completionFailed: 'تم الدفع، لكن تأكيد الخادم فشل. سيكتمل تلقائياً عند تسجيل دخولك التالي.',
     paymentCancelled: 'تم إلغاء الدفع.',
+    roomUnavailable: 'هذه الغرفة لم تعد متاحة للتواريخ المحددة.',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {
