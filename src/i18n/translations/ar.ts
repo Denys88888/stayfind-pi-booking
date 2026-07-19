@@ -139,6 +139,9 @@ const ar: TranslationSet = {
     ratingValue: 'القيمة مقابل المال',
     ratingLocation: 'الموقع',
     ratingWifi: 'واي فاي مجاني',
+    forNights: 'لـ {count} ليالٍ',
+    houseRules: 'قواعد المنزل',
+    amenitiesSubtitle: 'كل ما تحتاجه لإقامة مريحة',
     wonderful: 'رائع',
   },
   checkout: {

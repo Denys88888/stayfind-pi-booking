@@ -139,6 +139,9 @@ const es: TranslationSet = {
     ratingValue: 'Relación calidad-precio',
     ratingLocation: 'Ubicación',
     ratingWifi: 'WiFi gratuito',
+    forNights: 'por {count} noches',
+    houseRules: 'Normas de la casa',
+    amenitiesSubtitle: 'Todo lo que necesitas para una estancia cómoda',
     wonderful: 'Maravilloso',
   },
   checkout: {

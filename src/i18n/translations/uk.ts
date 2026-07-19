@@ -139,6 +139,9 @@ const uk: TranslationSet = {
     ratingValue: 'Співвідношення ціна/якість',
     ratingLocation: 'Розташування',
     ratingWifi: 'Безкоштовний Wi-Fi',
+    forNights: 'за {count} ночей',
+    houseRules: 'Правила будинку',
+    amenitiesSubtitle: 'Все необхідне для комфортного проживання',
     wonderful: 'Чудово',
   },
   checkout: {

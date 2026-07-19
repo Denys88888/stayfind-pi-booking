@@ -139,6 +139,9 @@ const tr: TranslationSet = {
     ratingValue: 'Fiyat/Performans',
     ratingLocation: 'Konum',
     ratingWifi: 'Ücretsiz WiFi',
+    forNights: '{count} gece için',
+    houseRules: 'Ev Kuralları',
+    amenitiesSubtitle: 'Konforlu bir konaklama için ihtiyacınız olan her şey',
     wonderful: 'Harika',
   },
   checkout: {

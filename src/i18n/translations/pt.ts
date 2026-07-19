@@ -139,6 +139,9 @@ const pt: TranslationSet = {
     ratingValue: 'Custo-benefício',
     ratingLocation: 'Localização',
     ratingWifi: 'WiFi grátis',
+    forNights: 'por {count} noites',
+    houseRules: 'Regras da casa',
+    amenitiesSubtitle: 'Tudo que você precisa para uma estadia confortável',
     wonderful: 'Maravilhoso',
   },
   checkout: {

@@ -139,6 +139,9 @@ const ru: TranslationSet = {
     ratingValue: 'Соотношение цена/качество',
     ratingLocation: 'Расположение',
     ratingWifi: 'Бесплатный Wi-Fi',
+    forNights: 'за {count} ночей',
+    houseRules: 'Правила дома',
+    amenitiesSubtitle: 'Всё необходимое для комфортного проживания',
     wonderful: 'Великолепно',
   },
   checkout: {

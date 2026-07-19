@@ -570,7 +570,7 @@ function OverviewSection({ hotel }: { hotel: HotelData }) {
               transition={{ duration: 0.5, ease: easeSmooth }}
             >
               <h3 className="font-display text-lg font-semibold text-[#1A2B47] mb-4">
-                House Rules
+                {t('property.houseRules')}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
@@ -784,7 +784,7 @@ function RoomsSection({
                           ≈ ${room.pricePerNight.toLocaleString()} USD
                         </p>
                         <p className="font-body text-sm text-[#4A5468] mt-2">
-                          {formatPiAmount(room.totalPriceInPi)} for 7 {t('property.nights')}
+                          {formatPiAmount(room.totalPriceInPi)} {t('property.forNights').replace('{count}', '7')}
                         </p>
                         <p className="font-body text-xs text-[#C5CBD4] mt-0.5">
                           + {formatPiAmount(usdToPi(room.taxes))} {t('checkout.taxesFees')}
@@ -843,7 +843,7 @@ function AmenitiesSection({ hotel }: { hotel: HotelData }) {
             {t('property.amenities')}
           </h2>
           <p className="font-body text-sm sm:text-base text-[#7A8494]">
-            {t('property.about')}
+            {t('property.amenitiesSubtitle')}
           </p>
         </motion.div>
 

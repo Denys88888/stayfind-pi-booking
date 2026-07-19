@@ -139,6 +139,9 @@ const zh: TranslationSet = {
     ratingValue: '性价比',
     ratingLocation: '位置',
     ratingWifi: '免费WiFi',
+    forNights: '共{count}晚',
+    houseRules: '住宿规则',
+    amenitiesSubtitle: '舒适入住所需的一切',
     wonderful: '绝佳',
   },
   checkout: {

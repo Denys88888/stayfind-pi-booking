@@ -137,6 +137,9 @@ export interface TranslationSet {
     veryGood: string;
     excellent: string;
     wonderful: string;
+    forNights: string;
+    houseRules: string;
+    amenitiesSubtitle: string;
     filterAll: string;
     filterCouples: string;
     filterFamilies: string;
