@@ -42,7 +42,9 @@
     <!-- Pi Network SDK v2.0 -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-      Pi.init({ version: "2.0", sandbox: true });
+      // Sandbox only OUTSIDE Pi Browser (sandbox.minepi.com testing).
+      // Inside Pi Browser sandbox:true hangs authenticate (WorkPro experience).
+      Pi.init({ version: "2.0", sandbox: !/PiBrowser/i.test(navigator.userAgent) });
     </script>
   </head>
   <body>
