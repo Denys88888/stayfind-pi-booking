@@ -502,10 +502,10 @@ export default function Search() {
                         <SearchIcon size={32} className="text-[#C5CBD4]" />
                       </div>
                       <h3 className="font-display text-xl font-semibold text-[#1A2B47] mb-2">
-                        {t('common.error')}
+                        {t('search.noResults')}
                       </h3>
                       <p className="font-body text-sm text-[#7A8494] max-w-md mb-6">
-                        {t('home.popularSubtitle')}
+                        {t('search.noResultsDesc')}
                       </p>
                       <button
                         onClick={() => setFilters(INITIAL_FILTERS)}
@@ -540,7 +540,7 @@ export default function Search() {
                 {filteredHotels.length > 0 && (
                   <div className="mt-8 flex flex-col items-center gap-3">
                     <p className="font-body text-sm text-[#7A8494]">
-                      Showing {paginatedHotels.length} of {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
+                      {t('search.showingOf').replace('{shown}', String(paginatedHotels.length)).replace('{total}', String(filteredHotels.length))}
                     </p>
                     {hasMore ? (
                       <button
@@ -554,12 +554,12 @@ export default function Search() {
                             {t('common.loading')}
                           </>
                         ) : (
-                          t('search.title')
+                          t('search.loadMore')
                         )}
                       </button>
                     ) : (
                       <p className="font-body text-sm text-[#C5CBD4]">
-                        You&apos;ve seen all properties
+                        {t('search.seenAll')}
                       </p>
                     )}
                   </div>

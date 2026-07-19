@@ -69,6 +69,11 @@ export interface TranslationSet {
     freeCancellation: string;
     breakfastIncluded: string;
     roomsLeft: string;
+    showingOf: string;
+    loadMore: string;
+    seenAll: string;
+    noResults: string;
+    noResultsDesc: string;
     viewDeal: string;
     showOnMap: string;
     starRating: string;
