@@ -45,10 +45,13 @@ export interface TranslationSet {
     tagTrending: string;
     tagBestValue: string;
     tagBoutique: string;
+    adult: string;
     adults: string;
     adultsAge: string;
+    child: string;
     children: string;
     childrenAge: string;
+    room: string;
     rooms: string;
     trust1: string;
     trust2: string;

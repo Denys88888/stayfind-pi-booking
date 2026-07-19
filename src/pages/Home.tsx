@@ -105,7 +105,7 @@ function HeroSection() {
     navigate(`/search?${params.toString()}`);
   };
 
-  const guestLabel = `${guests.adults} ${t('hero.adults')}${guests.children > 0 ? ` \u00B7 ${guests.children} ${t('hero.children')}` : ''}`;
+  const guestLabel = `${guests.adults} ${guests.adults === 1 ? t('hero.adult') : t('hero.adults')}${guests.children > 0 ? ` \u00B7 ${guests.children} ${guests.children === 1 ? t('hero.child') : t('hero.children')}` : ''}`;
 
   return (
     <section className="relative min-h-[100dvh] min-h-[700px] flex items-center justify-center overflow-hidden">

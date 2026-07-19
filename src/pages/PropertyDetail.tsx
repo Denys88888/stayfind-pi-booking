@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { getHotelById } from '@/data/propertyData';
@@ -671,10 +671,12 @@ function RoomsSection({
   hotel,
   selectedRoom,
   onSelectRoom,
+  nights,
 }: {
   hotel: HotelData;
   selectedRoom: RoomType | null;
   onSelectRoom: (room: RoomType | null) => void;
+  nights: number;
 }) {
   const { t } = useTranslation();
   return (
@@ -784,7 +786,7 @@ function RoomsSection({
                           ≈ ${room.pricePerNight.toLocaleString()} USD
                         </p>
                         <p className="font-body text-sm text-[#4A5468] mt-2">
-                          {formatPiAmount(room.totalPriceInPi)} {t('property.forNights').replace('{count}', '7')}
+                          {formatPiAmount(room.totalPriceInPi)} {t('property.forNights').replace('{count}', String(nights))}
                         </p>
                         <p className="font-body text-xs text-[#C5CBD4] mt-0.5">
                           + {formatPiAmount(usdToPi(room.taxes))} {t('checkout.taxesFees')}
@@ -1254,10 +1256,25 @@ export default function PropertyDetail() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
 
   const hotel = getHotelById(id ?? '');
+
+  // Dates & guests from URL params (passed by HeroSection/CompactSearchBar)
+  const checkInParam = searchParams.get('checkIn') || '';
+  const checkOutParam = searchParams.get('checkOut') || '';
+  const adultsParam = parseInt(searchParams.get('adults') || '2', 10);
+  const childrenParam = parseInt(searchParams.get('children') || '0', 10);
+  const roomsParam = parseInt(searchParams.get('rooms') || '1', 10);
+  const nightsFromParams = (() => {
+    if (!checkInParam || !checkOutParam) return 7;
+    const ms = new Date(checkOutParam).getTime() - new Date(checkInParam).getTime();
+    const n = Math.round(ms / 86400000);
+    return n > 0 ? n : 7;
+  })();
+  const guestLabel = `${adultsParam} ${adultsParam === 1 ? t('hero.adult') : t('hero.adults')}${childrenParam > 0 ? ` · ${childrenParam} ${childrenParam === 1 ? t('hero.child') : t('hero.children')}` : ''}${roomsParam > 1 ? ` · ${roomsParam} ${t('hero.rooms')}` : ''}`;
 
   useEffect(() => {
     if (!hotel) {
@@ -1292,7 +1309,7 @@ export default function PropertyDetail() {
         <PropertyHeader hotel={hotel} />
         <TabNavigation activeTab={activeTab} />
         <OverviewSection hotel={hotel} />
-        <RoomsSection hotel={hotel} selectedRoom={selectedRoom} onSelectRoom={setSelectedRoom} />
+        <RoomsSection hotel={hotel} selectedRoom={selectedRoom} onSelectRoom={setSelectedRoom} nights={nightsFromParams} />
         <AmenitiesSection hotel={hotel} />
         <ReviewsSection hotel={hotel} />
         <LocationSection hotel={hotel} />
@@ -1326,8 +1343,10 @@ export default function PropertyDetail() {
                     totalUsd: selectedRoom.totalPrice,
                     totalPi: selectedRoom.totalPriceInPi,
                     taxes: selectedRoom.taxes,
-                    nights: 7,
-                    guests: `2 ${t('hero.adults')}`,
+                    checkIn: checkInParam,
+                    checkOut: checkOutParam,
+                    nights: nightsFromParams,
+                    guests: guestLabel,
                   },
                 })
               }

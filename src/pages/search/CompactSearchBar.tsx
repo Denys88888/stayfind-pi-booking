@@ -23,7 +23,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
     const fmt = (x: Date) => x.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     return `${fmt(d)} \u2013 ${fmt(d2)}`;
   });
-  const [guests, setGuests] = useState(searchParams.get('guests') || `2 ${t('hero.adults')}, 1 ${t('hero.rooms')}`);
+  const [guests, setGuests] = useState(searchParams.get('guests') || `2 ${t('hero.adults')}, 1 ${t('hero.room')}`);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const barRef = useRef<HTMLDivElement>(null);
@@ -228,9 +228,9 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                 />
                 <div className="mt-3 flex gap-2">
                   {[
-                    `1 ${t('hero.adults')}, 1 ${t('hero.rooms')}`,
-                    `2 ${t('hero.adults')}, 1 ${t('hero.rooms')}`,
-                    `2 ${t('hero.adults')}, 2 ${t('hero.children')}, 1 ${t('hero.rooms')}`,
+                    `1 ${t('hero.adult')}, 1 ${t('hero.room')}`,
+                    `2 ${t('hero.adults')}, 1 ${t('hero.room')}`,
+                    `2 ${t('hero.adults')}, 2 ${t('hero.children')}, 1 ${t('hero.room')}`,
                   ].map((g) => (
                     <button
                       key={g}
