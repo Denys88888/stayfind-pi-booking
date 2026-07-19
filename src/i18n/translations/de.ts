@@ -260,6 +260,7 @@ const de: TranslationSet = {
     favorites: 'Favoriten',
     account: 'Kontoeinstellungen',
     upcoming: 'Bevorstehend',
+    pending: 'Ausstehend',
     completed: 'Abgeschlossen',
     cancelled: 'Storniert',
     status: 'Status',

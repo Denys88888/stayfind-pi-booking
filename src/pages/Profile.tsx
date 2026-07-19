@@ -193,7 +193,7 @@ function BookingsTab() {
                 : 'bg-white text-[#4A5468] hover:bg-[#F0F2F5]'
             )}
           >
-            {tab === 'all' ? t('profile.bookings') : tab === 'confirmed' ? t('profile.upcoming') : t('profile.completed')}
+            {tab === 'all' ? t('profile.bookings') : tab === 'confirmed' ? t('profile.upcoming') : t('profile.pending')}
           </button>
         ))}
       </div>

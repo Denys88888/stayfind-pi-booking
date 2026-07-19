@@ -260,6 +260,7 @@ const ru: TranslationSet = {
     favorites: 'Избранное',
     account: 'Настройки аккаунта',
     upcoming: 'Предстоящие',
+    pending: 'Ожидание',
     completed: 'Завершенные',
     cancelled: 'Отмененные',
     status: 'Статус',

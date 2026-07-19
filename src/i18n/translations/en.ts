@@ -261,6 +261,7 @@ const en: TranslationSet = {
     favorites: 'Favorites',
     account: 'Account Settings',
     upcoming: 'Upcoming',
+    pending: 'Pending',
     completed: 'Completed',
     cancelled: 'Cancelled',
     status: 'Status',

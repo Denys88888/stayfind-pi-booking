@@ -260,6 +260,7 @@ const zh: TranslationSet = {
     favorites: '收藏',
     account: '账户设置',
     upcoming: '即将到来',
+    pending: '待处理',
     completed: '已完成',
     cancelled: '已取消',
     status: '状态',

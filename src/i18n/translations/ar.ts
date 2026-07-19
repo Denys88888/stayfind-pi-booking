@@ -260,6 +260,7 @@ const ar: TranslationSet = {
     favorites: 'المفضلة',
     account: 'إعدادات الحساب',
     upcoming: 'القادمة',
+    pending: 'قيد الانتظار',
     completed: 'المكتملة',
     cancelled: 'الملغاة',
     status: 'الحالة',

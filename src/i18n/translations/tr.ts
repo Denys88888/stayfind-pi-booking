@@ -260,6 +260,7 @@ const tr: TranslationSet = {
     favorites: 'Favoriler',
     account: 'Hesap Ayarları',
     upcoming: 'Yaklaşan',
+    pending: 'Bekleyen',
     completed: 'Tamamlanan',
     cancelled: 'İptal Edilen',
     status: 'Durum',

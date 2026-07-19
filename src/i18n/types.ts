@@ -263,6 +263,7 @@ export interface TranslationSet {
     favorites: string;
     account: string;
     upcoming: string;
+    pending: string;
     completed: string;
     cancelled: string;
     status: string;

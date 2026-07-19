@@ -260,6 +260,7 @@ const uk: TranslationSet = {
     favorites: 'Обране',
     account: 'Налаштування облікового запису',
     upcoming: 'Майбутні',
+    pending: 'Очікування',
     completed: 'Завершені',
     cancelled: 'Скасовані',
     status: 'Статус',
