@@ -348,7 +348,7 @@ function DestinationsSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,27,46,0.75)] via-transparent to-transparent" />
               {dest.featured && (
                 <span className="absolute top-4 right-4 bg-[#E85D4A] text-white font-body text-xs font-semibold px-3 py-1 rounded-md">
-                  Popular
+                  {t('home.popularBadge')}
                 </span>
               )}
               <div className="absolute bottom-5 left-5 transition-transform duration-[400ms] group-hover:-translate-y-1">
@@ -356,7 +356,7 @@ function DestinationsSection() {
                   {dest.city}
                 </h3>
                 <p className="font-body text-xs text-white/80 mt-1">
-                  {dest.country} &middot; {dest.properties} properties
+                  {dest.country} &middot; {dest.properties} {t('home.properties')}
                 </p>
               </div>
             </motion.div>
@@ -374,11 +374,11 @@ function PropertyTypesSection() {
   const navigate = useNavigate();
 
   const types = [
-    { name: 'Hotels', count: '850,000+', image: '/prop-type-hotel.jpg' },
-    { name: 'Apartments', count: '1,200,000+', image: '/prop-type-apartment.jpg' },
-    { name: 'Resorts', count: '180,000+', image: '/prop-type-resort.jpg' },
-    { name: 'Villas', count: '95,000+', image: '/prop-type-villa.jpg' },
-    { name: 'Cabins', count: '65,000+', image: '/prop-type-cabin.jpg' },
+    { value: 'Hotels', label: t('search.propHotel'), count: '850,000+', image: '/prop-type-hotel.jpg' },
+    { value: 'Apartments', label: t('search.propApartment'), count: '1,200,000+', image: '/prop-type-apartment.jpg' },
+    { value: 'Resorts', label: t('search.propResort'), count: '180,000+', image: '/prop-type-resort.jpg' },
+    { value: 'Villas', label: t('search.propVilla'), count: '95,000+', image: '/prop-type-villa.jpg' },
+    { value: 'Cabins', label: t('search.propCabin'), count: '65,000+', image: '/prop-type-cabin.jpg' },
   ];
 
   return (
@@ -396,23 +396,23 @@ function PropertyTypesSection() {
         <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
           {types.map((type, i) => (
             <motion.div
-              key={type.name}
+              key={type.value}
               custom={i + 1}
               variants={fadeUp}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
-              onClick={() => navigate(`/search?type=${type.name.toLowerCase()}`)}
+              onClick={() => navigate(`/search?type=${type.value.toLowerCase()}`)}
               className="w-[200px] sm:w-[240px] flex-shrink-0 cursor-pointer group snap-start"
             >
               <div className="aspect-[4/3] rounded-2xl overflow-hidden">
                 <img
                   src={type.image}
-                  alt={type.name}
+                  alt={type.label}
                   className="w-full h-full object-cover transition-transform duration-350 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-105"
                 />
               </div>
               <h3 className="font-body text-base font-semibold text-[#1A2B47] mt-3 group-hover:text-[#E85D4A] transition-colors">
-                {type.name}
+                {type.label}
               </h3>
               <p className="font-body text-sm text-[#7A8494]">{type.count}</p>
             </motion.div>
@@ -430,10 +430,10 @@ function DealsSection() {
   const navigate = useNavigate();
 
   const deals = [
-    { title: 'Romantic Paris Getaway', location: 'Paris, France', discount: 'Save 30%', image: '/dest-paris.jpg' },
-    { title: 'Tokyo Adventure', location: 'Tokyo, Japan', discount: 'Save 25%', image: '/dest-tokyo.jpg' },
-    { title: 'Bali Wellness Retreat', location: 'Ubud, Bali', discount: 'Save 35%', image: '/dest-bali.jpg' },
-    { title: 'NYC Weekend Special', location: 'New York, USA', discount: 'Save 20%', image: '/dest-newyork.jpg' },
+    { title: t('home.deal1Title'), location: 'Paris, France', percent: '30', image: '/dest-paris.jpg' },
+    { title: t('home.deal2Title'), location: 'Tokyo, Japan', percent: '25', image: '/dest-tokyo.jpg' },
+    { title: t('home.deal3Title'), location: 'Ubud, Bali', percent: '35', image: '/dest-bali.jpg' },
+    { title: t('home.deal4Title'), location: 'New York, USA', percent: '20', image: '/dest-newyork.jpg' },
   ];
 
   return (
@@ -509,7 +509,7 @@ function DealsSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,27,46,0.7)] to-transparent" />
                 <span className="absolute top-3 left-3 bg-[#E85D4A] text-white font-body text-[11px] font-semibold px-2 py-1 rounded">
-                  {deal.discount}
+                  {t('home.dealSave')} {deal.percent}%
                 </span>
                 <div className="absolute bottom-3 left-3 right-3">
                   <h4 className="font-body text-sm font-semibold text-white leading-tight">{deal.title}</h4>
@@ -763,7 +763,7 @@ function TestimonialsSection() {
             <button
               onClick={prev}
               className="w-12 h-12 rounded-full bg-[#F0F2F5] flex items-center justify-center text-[#1A2B47] hover:bg-[#FEF2F0] hover:text-[#E85D4A] transition-colors"
-              aria-label="Previous"
+              aria-label={t('common.previous')}
             >
               <ChevronLeft size={20} />
             </button>
@@ -776,14 +776,14 @@ function TestimonialsSection() {
                     'w-2 h-2 rounded-full transition-colors',
                     i === current ? 'bg-[#E85D4A]' : 'bg-[#E2E6EC]'
                   )}
-                  aria-label={`Go to slide ${i + 1}`}
+                  aria-label={t('common.goToSlide').replace('{num}', String(i + 1))}
                 />
               ))}
             </div>
             <button
               onClick={next}
               className="w-12 h-12 rounded-full bg-[#F0F2F5] flex items-center justify-center text-[#1A2B47] hover:bg-[#FEF2F0] hover:text-[#E85D4A] transition-colors"
-              aria-label="Next"
+              aria-label={t('common.next')}
             >
               <ChevronRight size={20} />
             </button>
@@ -854,6 +854,7 @@ function CTASection() {
 
 /* ───────── Scroll to Top Button ───────── */
 function ScrollToTop() {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -868,7 +869,7 @@ function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       className="fixed bottom-20 right-6 z-50 w-12 h-12 rounded-full bg-[#E85D4A] text-white flex items-center justify-center shadow-lg hover:bg-[#D14A38] hover:scale-110 transition-all duration-300"
-      aria-label="Scroll to top"
+      aria-label={t('common.scrollToTop')}
     >
       <ArrowUp size={20} />
     </button>

@@ -159,7 +159,7 @@ export default function Navbar() {
           <button
             className="md:hidden p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label={t('common.toggleMenu')}
           >
             {mobileOpen ? (
               <X className={isOverHero ? 'text-white' : 'text-[#0F1B2E]'} size={24} />

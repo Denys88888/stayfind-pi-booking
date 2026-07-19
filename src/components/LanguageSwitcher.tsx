@@ -9,7 +9,7 @@ interface LanguageSwitcherProps {
 }
 
 export default function LanguageSwitcher({ variant = 'navbar', className }: LanguageSwitcherProps) {
-  const { currentLang, setLang } = useTranslation();
+  const { currentLang, setLang, t } = useTranslation();
 
   return (
     <div className={cn('relative flex items-center', className)}>
@@ -24,7 +24,7 @@ export default function LanguageSwitcher({ variant = 'navbar', className }: Lang
           'appearance-none bg-transparent border border-current/20 rounded-lg pl-8 pr-6 font-body text-sm cursor-pointer hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-[#E85D4A]/30',
           variant === 'compact' ? 'h-8 text-xs' : 'h-9'
         )}
-        aria-label="Select language"
+        aria-label={t('common.selectLanguage')}
       >
         {LANGUAGES.map((lang) => (
           <option key={lang.code} value={lang.code}>

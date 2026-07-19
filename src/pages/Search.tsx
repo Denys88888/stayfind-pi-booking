@@ -366,7 +366,7 @@ export default function Search() {
                         ? 'bg-[#0F1B2E] text-white shadow-sm'
                         : 'text-[#7A8494] hover:text-[#1A2B47]'
                     )}
-                    aria-label="List view"
+                    aria-label={t('search.list')}
                   >
                     <LayoutList size={16} />
                   </button>
@@ -378,7 +378,7 @@ export default function Search() {
                         ? 'bg-[#0F1B2E] text-white shadow-sm'
                         : 'text-[#7A8494] hover:text-[#1A2B47]'
                     )}
-                    aria-label="Map view"
+                    aria-label={t('search.map')}
                   >
                     <Map size={16} />
                   </button>

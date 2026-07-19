@@ -365,7 +365,7 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
               <button
                 onClick={() => setFavorited((p) => !p)}
                 className="mt-1 md:mt-2 flex-shrink-0 w-9 h-9 rounded-full bg-[#F8F9FB] flex items-center justify-center hover:bg-[#FEF2F0] transition-colors"
-                aria-label="Toggle favorite"
+                aria-label={t('common.toggleFavorite')}
               >
                 <motion.div
                   animate={favorited ? { scale: [1, 1.3, 1] } : { scale: 1 }}

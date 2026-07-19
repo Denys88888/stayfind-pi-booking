@@ -58,6 +58,8 @@ export interface TranslationSet {
   home: {
     popularTitle: string;
     popularSubtitle: string;
+    popularBadge: string;
+    properties: string;
     typesTitle: string;
     dealsTitle: string;
     dealsSubtitle: string;
@@ -71,6 +73,11 @@ export interface TranslationSet {
     ctaTitle: string;
     ctaSubtitle: string;
     ctaBtn: string;
+    dealSave: string;
+    deal1Title: string;
+    deal2Title: string;
+    deal3Title: string;
+    deal4Title: string;
   };
   search: {
     title: string;
@@ -319,6 +326,13 @@ export interface TranslationSet {
     notFound: string;
     notFoundDesc: string;
     and: string;
+    previous: string;
+    next: string;
+    scrollToTop: string;
+    toggleFavorite: string;
+    selectLanguage: string;
+    toggleMenu: string;
+    goToSlide: string;
   };
   footer: {
     aboutUs: string;
