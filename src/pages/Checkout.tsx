@@ -343,7 +343,7 @@ function StepDetails({
     if (!email.trim()) {
       newErrors.email = `${t('checkout.email')} ${t('common.required')}`;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = t('checkout.emailInvalid');
     }
     if (!phone.trim()) newErrors.phone = `${t('checkout.phone')} ${t('common.required')}`;
     setErrors(newErrors);
@@ -527,7 +527,7 @@ function StepDetails({
               <SelectItem value="6:00 PM – 8:00 PM">
                 6:00 PM – 8:00 PM
               </SelectItem>
-              <SelectItem value="After 8:00 PM">After 8:00 PM</SelectItem>
+              <SelectItem value="After 8:00 PM">{t('checkout.afterPM')}</SelectItem>
             </SelectContent>
           </Select>
         </div>

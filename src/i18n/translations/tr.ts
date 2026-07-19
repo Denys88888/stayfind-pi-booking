@@ -107,6 +107,7 @@ const tr: TranslationSet = {
     wonderful: 'Harika',
   },
   checkout: {
+    emailInvalid: 'Lütfen geçerli bir e-posta adresi girin',
     step1: 'Bilgileriniz',
     step2: 'Pi Ödemesi',
     step3: 'Onay',
@@ -120,6 +121,7 @@ const tr: TranslationSet = {
       'Herhangi bir özel isteğiniz var mı? (örn. erken giriş,
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', belirli oda konumu, diyet gereksinimleri...)',
     arrivalTime: 'Tahmini Varış Saati',
+    afterPM: 'Saat 20:00'den sonra',
     checkInStarts: 'Giriş saat 15:00\'te başlar',
     saveDetails: 'Bir sonraki rezervasyon için bilgilerimi kaydet',
     continue: 'Pi Ödemesine Devam Et',

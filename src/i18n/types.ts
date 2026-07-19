@@ -112,6 +112,7 @@ export interface TranslationSet {
     ratingWifi: string;
   };
   checkout: {
+    emailInvalid: string;
     step1: string;
     step2: string;
     step3: string;
@@ -125,6 +126,7 @@ export interface TranslationSet {
     requestsPlaceholder: string;
     arrivalTime: string;
     checkInStarts: string;
+    afterPM: string;
     saveDetails: string;
     continue: string;
     payWithPi: string;

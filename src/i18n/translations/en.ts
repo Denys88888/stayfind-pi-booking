@@ -103,6 +103,7 @@ const en: TranslationSet = {
     ratingWifi: 'Free WiFi',
   },
   checkout: {
+    emailInvalid: 'Please enter a valid email address',
     step1: 'Your Details',
     step2: 'Pi Payment',
     step3: 'Confirmation',
@@ -117,6 +118,7 @@ const en: TranslationSet = {
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: 'Estimated Arrival Time',
     checkInStarts: 'Check-in starts at 3:00 PM',
+    afterPM: 'After 8:00 PM',
     saveDetails: 'Save my details for faster checkout next time',
     continue: 'Continue to Pi Payment',
     payWithPi: 'Pay with Pi',

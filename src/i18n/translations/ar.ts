@@ -107,6 +107,7 @@ const ar: TranslationSet = {
     wonderful: 'رائع',
   },
   checkout: {
+    emailInvalid: 'يرجى إدخال عنوان بريد إلكتروني صالح',
     step1: 'بياناتك',
     step2: 'الدفع بـ Pi',
     step3: 'تأكيد',
@@ -120,6 +121,7 @@ const ar: TranslationSet = {
       'أي طلبات خاصة؟ (مثال: تسجيل وصول مبكر، موقع محدد للغرفة، متطلبات غذائية...)',
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: 'وقت الوصول المتوقع',
+    afterPM: 'بعد الساعة 8 مساءً',
     checkInStarts: 'تسجيل الوصول يبدأ الساعة 3:00 مساءً',
     saveDetails: 'حفظ بياناتي لتسجيل وصول أسرع في المرة القادمة',
     continue: 'المتابعة إلى الدفع بـ Pi',

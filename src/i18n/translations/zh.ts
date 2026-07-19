@@ -107,6 +107,7 @@ const zh: TranslationSet = {
     wonderful: '绝佳',
   },
   checkout: {
+    emailInvalid: '请输入有效的电子邮件地址',
     step1: '您的详情',
     step2: 'Pi 支付',
     step3: '确认',
@@ -120,6 +121,7 @@ const zh: TranslationSet = {
       '有什么特殊要求吗？（例如提前入住、特定房间位置、饮食要求……）',
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: '预计到达时间',
+    afterPM: '晚上8点以后',
     checkInStarts: '入住从下午3:00开始',
     saveDetails: '保存我的信息以便下次更快结账',
     continue: '继续 Pi 支付',

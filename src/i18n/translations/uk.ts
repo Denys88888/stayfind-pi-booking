@@ -107,6 +107,7 @@ const uk: TranslationSet = {
     wonderful: 'Чудово',
   },
   checkout: {
+    emailInvalid: 'Будь ласка, введіть дійсну адресу електронної пошти',
     step1: 'Ваші дані',
     step2: 'Оплата Pi',
     step3: 'Підтвердження',
@@ -120,6 +121,7 @@ const uk: TranslationSet = {
       'Є особливі побажання? (наприклад,
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', ранній заїзд, конкретне розташування номера, дієтичні вимоги...)',
     arrivalTime: 'Орієнтовний час прибуття',
+    afterPM: 'Після 20:00',
     checkInStarts: 'Заїзд починається о 15:00',
     saveDetails: 'Зберегти мої дані для прискореного оформлення наступного разу',
     continue: 'Перейти до оплати Pi',

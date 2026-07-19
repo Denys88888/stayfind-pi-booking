@@ -107,6 +107,7 @@ const de: TranslationSet = {
     wonderful: 'Wunderbar',
   },
   checkout: {
+    emailInvalid: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
     step1: 'Ihre Daten',
     step2: 'Pi-Zahlung',
     step3: 'Bestätigung',
@@ -120,6 +121,7 @@ const de: TranslationSet = {
       'Besondere Wünsche? (z.B. früher Check-in,
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', bestimmte Zimmerlage, diätetische Anforderungen...)',
     arrivalTime: 'Geschätzte Ankunftszeit',
+    afterPM: 'Nach 20:00 Uhr',
     checkInStarts: 'Check-in ab 15:00 Uhr',
     saveDetails: 'Meine Daten für schnelleren Checkout speichern',
     continue: 'Weiter zur Pi-Zahlung',

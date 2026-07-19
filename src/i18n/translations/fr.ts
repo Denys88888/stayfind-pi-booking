@@ -107,6 +107,7 @@ const fr: TranslationSet = {
     wonderful: 'Merveilleux',
   },
   checkout: {
+    emailInvalid: 'Veuillez entrer une adresse e-mail valide',
     step1: 'Vos coordonnées',
     step2: 'Paiement Pi',
     step3: 'Confirmation',
@@ -120,6 +121,7 @@ const fr: TranslationSet = {
       "Des demandes spéciales ? (p. ex.,
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', arrivée anticipée, emplacement spécifique de la chambre, exigences alimentaires...)",
     arrivalTime: "Heure d'arrivée estimée",
+    afterPM: 'Après 20h00',
     checkInStarts: "L'enregistrement commence à 15h00",
     saveDetails: 'Enregistrer mes coordonnées pour un paiement plus rapide la prochaine fois',
     continue: 'Continuer au paiement Pi',

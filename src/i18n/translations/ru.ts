@@ -107,6 +107,7 @@ const ru: TranslationSet = {
     wonderful: 'Великолепно',
   },
   checkout: {
+    emailInvalid: 'Введите корректный адрес электронной почты',
     step1: 'Ваши данные',
     step2: 'Оплата Pi',
     step3: 'Подтверждение',
@@ -120,6 +121,7 @@ const ru: TranslationSet = {
       'Есть особые пожелания? (например,
     requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', ранний заезд, конкретное расположение номера, диетические требования...)',
     arrivalTime: 'Предполагаемое время прибытия',
+    afterPM: 'После 20:00',
     checkInStarts: 'Заезд начинается в 15:00',
     saveDetails: 'Сохранить мои данные для ускоренного оформления в следующий раз',
     continue: 'Перейти к оплате Pi',
