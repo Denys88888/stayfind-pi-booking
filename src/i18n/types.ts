@@ -280,6 +280,9 @@ export interface TranslationSet {
     nights: string;
     room: string;
     cancelBooking: string;
+    refundCompleted: string;
+    refundProcessing: string;
+    refundPending: string;
     viewDetails: string;
     noBookings: string;
     personalInfo: string;

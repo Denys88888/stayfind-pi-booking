@@ -270,6 +270,20 @@ function BookingsTab({ piUid }: { piUid: string }) {
                     </div>
                   </div>
 
+                  {booking.status === 'cancelled' && booking.refundStatus && (
+                    <p className="font-body text-xs mt-3">
+                      {booking.refundStatus === 'completed' && (
+                        <span className="text-emerald-600">{t('profile.refundCompleted')}</span>
+                      )}
+                      {booking.refundStatus === 'processing' && (
+                        <span className="text-amber-600">{t('profile.refundProcessing')}</span>
+                      )}
+                      {(booking.refundStatus === 'pending_manual' || booking.refundStatus === 'failed') && (
+                        <span className="text-[#7A8494]">{t('profile.refundPending')}</span>
+                      )}
+                    </p>
+                  )}
+
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#F0F2F5]">
                     <div className="flex items-center gap-2 text-sm text-[#4A5468]">
                       <span className="font-body text-[#7A8494]">{booking.guests}</span>

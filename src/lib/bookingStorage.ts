@@ -15,6 +15,8 @@ export interface Booking {
   txid?: string;
   bookedAt: string;
   status: 'confirmed' | 'pending' | 'cancelled';
+  refundStatus?: 'processing' | 'completed' | 'failed' | 'pending_manual';
+  refundTxid?: string;
 }
 
 const KEY = 'stayfind_bookings';
