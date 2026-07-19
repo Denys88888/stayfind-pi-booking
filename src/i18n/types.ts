@@ -252,6 +252,8 @@ export interface TranslationSet {
     notInBrowser: string;
     continueDemo: string;
     proceedToCheckout: string;
+    completionFailed: string;
+    paymentCancelled: string;
   };
   profile: {
     welcome: string;

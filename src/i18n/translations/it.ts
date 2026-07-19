@@ -248,6 +248,8 @@ const it: TranslationSet = {
     notInBrowser: 'Sei in un browser normale. Il Pi SDK è disponibile solo in Pi Browser.',
     continueDemo: 'Continua in modalità demo',
     proceedToCheckout: 'Procedi al pagamento',
+    completionFailed: 'Il pagamento è andato a buon fine, ma la conferma del server non è riuscita. Verrà finalizzata automaticamente al prossimo accesso.',
+    paymentCancelled: 'Il pagamento è stato annullato.',
     downloadReceipt: 'Scarica ricevuta',
   },
   profile: {

@@ -229,7 +229,7 @@ const en: TranslationSet = {
     decentralized: 'Decentralized Payment',
     yourEmail: 'your email',
     bookingConfirmed: 'Booking Confirmed!',
-    confirmEmail: 'A confirmation email has been sent to',
+    confirmEmail: 'Your booking is saved in your profile. Contact email:',
     bookingRef: 'Booking Reference',
     copy: 'Copy',
     copied: 'Copied!',
@@ -249,6 +249,8 @@ const en: TranslationSet = {
     notInBrowser: 'You are currently in a regular browser. Pi SDK is only available inside Pi Browser.',
     continueDemo: 'Continue in Demo Mode',
     proceedToCheckout: 'Proceed to Checkout',
+    completionFailed: 'Your payment went through, but server confirmation failed. It will finalize automatically on your next sign-in.',
+    paymentCancelled: 'Payment was cancelled.',
     downloadReceipt: 'Download Receipt',
   },
   profile: {

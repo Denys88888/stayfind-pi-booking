@@ -228,7 +228,7 @@ const ar: TranslationSet = {
     decentralized: 'دفع لامركزي',
     yourEmail: 'بريدك الإلكتروني',
     bookingConfirmed: 'تم تأكيد الحجز!',
-    confirmEmail: 'تم إرسال بريد التأكيد إلى',
+    confirmEmail: 'تم حفظ حجزك في ملفك الشخصي. البريد الإلكتروني للتواصل:',
     bookingRef: 'مرجع الحجز',
     copy: 'نسخ',
     copied: 'تم النسخ!',
@@ -248,6 +248,8 @@ const ar: TranslationSet = {
     notInBrowser: 'أنت حالياً في متصفح عادي. Pi SDK متاح فقط داخل Pi Browser.',
     continueDemo: 'المتابعة في وضع العرض التوضيحي',
     proceedToCheckout: 'المتابعة للدفع',
+    completionFailed: 'تم الدفع، لكن تأكيد الخادم فشل. سيكتمل تلقائياً عند تسجيل دخولك التالي.',
+    paymentCancelled: 'تم إلغاء الدفع.',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {

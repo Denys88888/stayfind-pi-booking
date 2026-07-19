@@ -13,7 +13,7 @@ export interface Booking {
   totalPi: number;
   txid?: string;
   bookedAt: string;
-  status: 'confirmed' | 'pending';
+  status: 'confirmed' | 'pending' | 'cancelled';
 }
 
 const KEY = 'stayfind_bookings';
@@ -26,6 +26,14 @@ export function saveBooking(b: Booking): void {
   const list = getBookings();
   list.unshift(b);
   localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50)));
+}
+
+export function cancelBooking(id: string): Booking[] {
+  const list = getBookings().map((b) =>
+    b.id === id ? { ...b, status: 'cancelled' as const } : b
+  );
+  localStorage.setItem(KEY, JSON.stringify(list));
+  return list;
 }
 
 export function generateBookingId(): string {

@@ -228,7 +228,7 @@ const zh: TranslationSet = {
     decentralized: '去中心化支付',
     yourEmail: '您的邮箱',
     bookingConfirmed: '预订已确认！',
-    confirmEmail: '确认邮件已发送至',
+    confirmEmail: '您的预订已保存在个人资料中。联系邮箱：',
     bookingRef: '预订参考号',
     copy: '复制',
     copied: '已复制！',
@@ -248,6 +248,8 @@ const zh: TranslationSet = {
     notInBrowser: '您当前在普通浏览器中。Pi SDK 仅在 Pi 浏览器中可用。',
     continueDemo: '在演示模式下继续',
     proceedToCheckout: '进行结账',
+    completionFailed: '您的付款已完成，但服务器确认失败。下次登录时将自动完成。',
+    paymentCancelled: '付款已取消。',
     downloadReceipt: '下载收据',
   },
   profile: {

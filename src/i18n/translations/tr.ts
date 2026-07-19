@@ -228,7 +228,7 @@ const tr: TranslationSet = {
     decentralized: 'Merkeziyetsiz Ödeme',
     yourEmail: 'e-postanız',
     bookingConfirmed: 'Rezervasyon Onaylandı!',
-    confirmEmail: 'Onay e-postası şu adrese gönderildi:',
+    confirmEmail: 'Rezervasyonunuz profilinizde kayıtlı. İletişim e-postası:',
     bookingRef: 'Rezervasyon Referansı',
     copy: 'Kopyala',
     copied: 'Kopyalandı!',
@@ -248,6 +248,8 @@ const tr: TranslationSet = {
     notInBrowser: 'Normal bir tarayıcıdasınız. Pi SDK yalnızca Pi Browser\'da kullanılabilir.',
     continueDemo: 'Demo modunda devam et',
     proceedToCheckout: 'Ödemeye geç',
+    completionFailed: 'Ödemeniz gerçekleşti ancak sunucu onayı başarısız oldu. Bir sonraki girişinizde otomatik olarak tamamlanacak.',
+    paymentCancelled: 'Ödeme iptal edildi.',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {

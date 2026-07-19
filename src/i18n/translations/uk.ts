@@ -228,7 +228,7 @@ const uk: TranslationSet = {
     decentralized: 'Децентралізований платіж',
     yourEmail: 'вашу пошту',
     bookingConfirmed: 'Бронювання підтверджено!',
-    confirmEmail: 'Лист із підтвердженням надіслано на',
+    confirmEmail: 'Бронь збережено у вашому профілі. Контактний email:',
     bookingRef: 'Номер бронювання',
     copy: 'Копіювати',
     copied: 'Скопійовано!',
@@ -248,6 +248,8 @@ const uk: TranslationSet = {
     notInBrowser: 'Ви знаходитесь у звичайному браузері. Pi SDK доступний лише в Pi Browser.',
     continueDemo: 'Продовжити в демо-режимі',
     proceedToCheckout: 'Перейти до оформлення',
+    completionFailed: 'Оплата пройшла, але серверне підтвердження не вдалося. Воно завершиться автоматично при наступному вході.',
+    paymentCancelled: 'Платіж було скасовано.',
     downloadReceipt: 'Завантажити чек',
   },
   profile: {

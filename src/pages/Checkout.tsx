@@ -647,8 +647,13 @@ function StepPayment({
       });
     } catch (err: unknown) {
       setProcessing(false);
+      const raw = err instanceof Error ? err.message : '';
       const message =
-        err instanceof Error ? err.message : t('common.error');
+        raw === 'COMPLETION_FAILED'
+          ? t('checkout.completionFailed')
+          : raw === 'Payment was cancelled'
+          ? t('checkout.paymentCancelled')
+          : raw || t('common.error');
       setPaymentError(message);
     }
   };

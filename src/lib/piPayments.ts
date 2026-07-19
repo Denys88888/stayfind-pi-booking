@@ -155,18 +155,27 @@ export async function createPiPayment(
         onPaymentId?.(paymentId);
       },
 
-      /** Phase 3: Server-Side Completion */
+      /** Phase 3: Server-Side Completion.
+       *  Per Pi docs: if /complete returns non-200, do NOT mark the payment
+       *  complete and do NOT deliver. Retry, then surface the error — Pi will
+       *  re-deliver it via onIncompletePaymentFound on next authenticate. */
       async onReadyForServerCompletion(paymentId: string, txid: string) {
         console.log('[PiPayment] Phase 3 — Ready for server completion:', paymentId, txid);
-        try {
-          await serverSideComplete(paymentId, txid);
-        } catch (err) {
-          // Testnet: backend may not be deployed yet — log but continue.
-          // Production: set PI_SERVER_API_KEY and deploy stayfind-api before mainnet.
-          console.warn('[PiPayment] Server completion failed (testnet ok):', err);
+        let lastErr: unknown;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            await serverSideComplete(paymentId, txid);
+            onTransactionId?.(txid);
+            resolve();
+            return;
+          } catch (err) {
+            lastErr = err;
+            console.warn(`[PiPayment] Completion attempt ${attempt}/3 failed:`, err);
+            if (attempt < 3) await new Promise((r) => setTimeout(r, 1500 * attempt));
+          }
         }
-        onTransactionId?.(txid);
-        resolve();
+        console.error('[PiPayment] Server completion failed after retries:', lastErr);
+        reject(new Error('COMPLETION_FAILED'));
       },
 
       onCancel(paymentId: string) {

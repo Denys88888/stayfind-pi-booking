@@ -228,7 +228,7 @@ const ru: TranslationSet = {
     decentralized: 'Децентрализованный платёж',
     yourEmail: 'ваш email',
     bookingConfirmed: 'Бронирование подтверждено!',
-    confirmEmail: 'Письмо с подтверждением отправлено на',
+    confirmEmail: 'Бронь сохранена в вашем профиле. Контактный email:',
     bookingRef: 'Номер бронирования',
     copy: 'Копировать',
     copied: 'Скопировано!',
@@ -248,6 +248,8 @@ const ru: TranslationSet = {
     notInBrowser: 'Вы находитесь в обычном браузере. Pi SDK доступен только в Pi Browser.',
     continueDemo: 'Продолжить в демо-режиме',
     proceedToCheckout: 'Перейти к оформлению',
+    completionFailed: 'Оплата прошла, но серверное подтверждение не удалось. Оно завершится автоматически при следующем входе.',
+    paymentCancelled: 'Платёж был отменён.',
     downloadReceipt: 'Скачать чек',
   },
   profile: {

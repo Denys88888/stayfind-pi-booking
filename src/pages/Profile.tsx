@@ -45,7 +45,7 @@ import {
   formatPiAmount,
   usdToPi,
 } from '@/lib/piPayments';
-import { getBookings, type Booking as StoredBooking } from '@/lib/bookingStorage';
+import { getBookings, cancelBooking, type Booking as StoredBooking } from '@/lib/bookingStorage';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -188,8 +188,8 @@ function BookingsTab() {
 
   return (
     <AnimatedSection>
-      <div className="flex gap-2 mb-6">
-        {['all', 'confirmed', 'pending'].map((tab) => (
+      <div className="flex gap-2 mb-6 flex-wrap">
+        {['all', 'confirmed', 'pending', 'cancelled'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveSub(tab)}
@@ -200,7 +200,13 @@ function BookingsTab() {
                 : 'bg-white text-[#4A5468] hover:bg-[#F0F2F5]'
             )}
           >
-            {tab === 'all' ? t('profile.bookings') : tab === 'confirmed' ? t('profile.upcoming') : t('profile.pending')}
+            {tab === 'all'
+              ? t('profile.bookings')
+              : tab === 'confirmed'
+              ? t('profile.upcoming')
+              : tab === 'pending'
+              ? t('profile.pending')
+              : t('profile.cancelled')}
           </button>
         ))}
       </div>
@@ -282,6 +288,16 @@ function BookingsTab() {
                       <span className="font-body text-[#7A8494]">{booking.guests}</span>
                     </div>
                     <div className="flex gap-2">
+                      {booking.status !== 'cancelled' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setBookings(cancelBooking(booking.id))}
+                          className="font-body text-xs rounded-lg text-rose-600 border-rose-200 hover:bg-rose-50"
+                        >
+                          {t('profile.cancelBooking')}
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"
