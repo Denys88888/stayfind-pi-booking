@@ -17,7 +17,6 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import {
   CalendarDays,
   MapPin,
@@ -27,20 +26,11 @@ import {
   User,
   Heart,
   Settings,
-  Shield,
-  Gift,
   Star,
   LogOut,
   CheckCircle2,
   AlertTriangle,
 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import {
   formatPiAmount,
   usdToPi,
@@ -551,160 +541,6 @@ function AccountTab() {
   );
 }
 
-/* ─── Tab: Rewards ─── */
-function RewardsTab() {
-  const { t } = useTranslation();
-  const [redeemOpen, setRedeemOpen] = useState(false);
-  const rewardsPoints = 2450;
-  const nextTier = 5000;
-  const progress = (rewardsPoints / nextTier) * 100;
-
-  const tiers = [
-    { name: t('profile.guest'), min: 0, color: '#7A8494' },
-    { name: t('profile.goldMember'), min: 2500, color: '#E8A838' },
-    { name: t('profile.platinum'), min: 5000, color: '#3B82F6' },
-    { name: t('profile.diamond'), min: 10000, color: '#0F1B2E' },
-  ];
-
-  const currentTier = tiers
-    .slice()
-    .reverse()
-    .find((t) => rewardsPoints >= t.min);
-  const nextTierName = tiers.find((t) => rewardsPoints < t.min);
-
-  return (
-    <AnimatedSection className="space-y-6">
-      <Card className="border border-[#E2E6EC] rounded-2xl bg-gradient-to-br from-[#0F1B2E] to-[#1A2B47]">
-        <CardContent className="p-6 text-white">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <p className="font-body text-sm text-white/60">{t('profile.rewards')}</p>
-              <p className="font-display text-4xl font-semibold mt-1">
-                {rewardsPoints.toLocaleString()}
-              </p>
-              <p className="font-body text-sm text-white/60 mt-1">
-                {t('profile.points')}
-              </p>
-            </div>
-            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-              <Gift size={32} className="text-[#E8A838]" />
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="font-body text-white/80">{currentTier?.name}</span>
-              <span className="font-body text-white/60">
-                {nextTierName
-                  ? t('profile.pointsToTier').replace('{count}', (nextTier - rewardsPoints).toLocaleString()).replace('{points}', t('profile.points')).replace('{tier}', nextTierName.name)
-                  : t('profile.maxTier')}
-              </span>
-            </div>
-            <Progress value={progress} className="h-2 bg-white/20" />
-          </div>
-
-          <Button
-            onClick={() => setRedeemOpen(true)}
-            className="w-full bg-white/10 hover:bg-white/20 text-white font-body rounded-xl"
-          >
-            <Gift size={16} className="mr-2" />
-            {t('profile.redeemPoints')}
-          </Button>
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {[
-          {
-            icon: Star,
-            label: t('profile.earnRate'),
-            value: t('profile.earnRateValue'),
-            desc: t('profile.earnRateDesc'),
-          },
-          {
-            icon: CalendarDays,
-            label: t('profile.earlyAccess'),
-            value: t('profile.earlyAccessValue'),
-            desc: t('profile.earlyAccessDesc'),
-          },
-          {
-            icon: BedDouble,
-            label: t('profile.roomUpgrades'),
-            value: t('profile.roomUpgradesValue'),
-            desc: t('profile.roomUpgradesDesc'),
-          },
-          {
-            icon: Shield,
-            label: t('profile.lateCheckout'),
-            value: t('profile.guaranteed'),
-            desc: t('profile.lateCheckoutDesc'),
-          },
-        ].map((benefit) => (
-          <Card
-            key={benefit.label}
-            className="border border-[#E2E6EC] rounded-2xl hover:shadow-md transition-shadow"
-          >
-            <CardContent className="p-5 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#FEF2F0] flex items-center justify-center shrink-0">
-                <benefit.icon size={20} className="text-[#E85D4A]" />
-              </div>
-              <div>
-                <p className="font-body text-xs text-[#7A8494]">{benefit.label}</p>
-                <p className="font-display text-base font-semibold text-[#0F1B2E]">
-                  {benefit.value}
-                </p>
-                <p className="font-body text-xs text-[#7A8494]">{benefit.desc}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Dialog open={redeemOpen} onOpenChange={setRedeemOpen}>
-        <DialogContent className="sm:max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="font-display text-lg text-[#0F1B2E]">
-              {t('profile.rewards')}
-            </DialogTitle>
-            <DialogDescription className="font-body text-[#7A8494]">
-              {t('profile.pointsAvailable').replace('{count}', rewardsPoints.toLocaleString()).replace('{points}', t('profile.points'))}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 py-4">
-            {[
-              { name: t('profile.rewardCredit'), cost: 1000 },
-              { name: t('profile.rewardRoomUpgrade'), cost: 2000 },
-              { name: t('profile.rewardLateCheckout'), cost: 500 },
-              { name: t('profile.rewardBreakfast'), cost: 800 },
-            ].map((reward) => (
-              <div
-                key={reward.name}
-                className="flex items-center justify-between p-4 border border-[#E2E6EC] rounded-xl"
-              >
-                <div>
-                  <p className="font-body text-sm font-medium text-[#0F1B2E]">
-                    {reward.name}
-                  </p>
-                  <p className="font-body text-xs text-[#7A8494]">
-                    {reward.cost.toLocaleString()} {t('profile.points')}
-                  </p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={rewardsPoints < reward.cost}
-                  className="font-body text-xs rounded-lg"
-                >
-                  {rewardsPoints >= reward.cost ? t('profile.redeem') : t('profile.locked')}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </AnimatedSection>
-  );
-}
 
 /* ─── Main Profile Page ─── */
 export default function Profile() {
@@ -750,7 +586,6 @@ export default function Profile() {
     { value: 'bookings', label: t('profile.bookings'), icon: CalendarDays },
     { value: 'favorites', label: t('profile.favorites'), icon: Heart },
     { value: 'account', label: t('profile.account'), icon: Settings },
-    { value: 'rewards', label: t('profile.rewards'), icon: Gift },
   ];
 
   return (
@@ -793,12 +628,6 @@ export default function Profile() {
                     icon={Heart}
                     color="rose"
                   />
-                  <StatCard
-                    label={t('profile.labelPoints')}
-                    value="2.4K"
-                    icon={Gift}
-                    color="amber"
-                  />
                 </div>
               </div>
             </div>
@@ -829,9 +658,6 @@ export default function Profile() {
             </TabsContent>
             <TabsContent value="account">
               <AccountTab />
-            </TabsContent>
-            <TabsContent value="rewards">
-              <RewardsTab />
             </TabsContent>
           </Tabs>
         </div>
