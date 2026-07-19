@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Smartphone, Globe, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/i18n';
 
 interface PiBrowserRequiredProps {
   onContinueDemo?: () => void;
@@ -9,12 +10,13 @@ interface PiBrowserRequiredProps {
 }
 
 export default function PiBrowserRequired({ onContinueDemo, className }: PiBrowserRequiredProps) {
+  const { t } = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
 
   const piBrowserSteps = [
-    { step: 1, text: 'Open the Pi Network app on your phone', icon: Smartphone },
-    { step: 2, text: 'Tap the Pi Browser icon at the bottom', icon: Globe },
-    { step: 3, text: 'Enter your PiNet URL or scan the code below', icon: Globe },
+    { step: 1, text: t('checkout.pbStep1'), icon: Smartphone },
+    { step: 2, text: t('checkout.pbStep2'), icon: Globe },
+    { step: 3, text: t('checkout.pbStep3'), icon: Globe },
   ];
 
   return (
@@ -26,18 +28,18 @@ export default function PiBrowserRequired({ onContinueDemo, className }: PiBrows
 
       {/* Title */}
       <h2 className="font-display text-xl font-semibold text-[#1A2B47] mb-2">
-        Pi Browser Required
+        {t('checkout.piBrowserRequired')}
       </h2>
 
       {/* Description */}
       <p className="font-body text-sm text-[#7A8494] max-w-[320px] mb-4">
-        Pi payments work exclusively inside the Pi Browser. Please open this app in Pi Browser to continue.
+        {t('checkout.piBrowserDesc')}
       </p>
 
       {/* PiNet URL */}
       <div className="bg-[#F8F9FB] rounded-xl px-4 py-3 mb-4 w-full max-w-[320px]">
         <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider mb-1">
-          Your PiNet URL
+          {t('checkout.pinetUrl')}
         </p>
         <p className="font-body text-sm font-semibold text-[#7B5EA7] font-mono">
           stayfind.pinet
@@ -49,7 +51,7 @@ export default function PiBrowserRequired({ onContinueDemo, className }: PiBrows
         onClick={() => setShowDetails(!showDetails)}
         className="flex items-center gap-1 font-body text-sm text-[#E85D4A] hover:text-[#D14A38] transition-colors mb-4"
       >
-        How to open in Pi Browser
+        {t('checkout.howToOpenPiBrowser')}
         <ChevronRight
           size={14}
           className={cn('transition-transform', showDetails && 'rotate-90')}
@@ -76,7 +78,7 @@ export default function PiBrowserRequired({ onContinueDemo, className }: PiBrows
       <div className="flex items-start gap-2 bg-[#FEF2F0] rounded-xl p-3 mb-4 w-full max-w-[320px]">
         <AlertTriangle size={16} className="text-[#E8A838] shrink-0 mt-0.5" />
         <p className="font-body text-xs text-[#7A8494] text-left">
-          You are currently in a regular browser. Pi SDK is only available inside Pi Browser.
+          {t('checkout.notInBrowser')}
         </p>
       </div>
 
@@ -87,12 +89,10 @@ export default function PiBrowserRequired({ onContinueDemo, className }: PiBrows
           variant="outline"
           className="rounded-xl border-[#E2E6EC] font-body text-sm text-[#4A5468] hover:bg-[#F8F9FB] hover:text-[#E85D4A] px-6"
         >
-          Continue in Demo Mode
+          {t('checkout.continueDemo')}
           <ChevronRight size={14} className="ml-1" />
         </Button>
       )}
     </div>
   );
 }
-
-

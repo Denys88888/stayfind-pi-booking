@@ -163,6 +163,7 @@ export interface TranslationSet {
     guestReviews: string;
     ratingBreakdown: string;
     helpful: string;
+    similarTitle: string;
     filterAll: string;
     filterCouples: string;
     filterFamilies: string;
@@ -228,6 +229,16 @@ export interface TranslationSet {
     backHome: string;
     downloadReceipt: string;
     discountTooltip: string;
+    memo: string;
+    piBrowserRequired: string;
+    piBrowserDesc: string;
+    pinetUrl: string;
+    howToOpenPiBrowser: string;
+    pbStep1: string;
+    pbStep2: string;
+    pbStep3: string;
+    notInBrowser: string;
+    continueDemo: string;
   };
   profile: {
     welcome: string;

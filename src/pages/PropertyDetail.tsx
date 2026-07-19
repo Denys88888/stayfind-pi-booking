@@ -1204,7 +1204,7 @@ function SimilarProperties({ hotel }: { hotel: HotelData }) {
           transition={{ duration: 0.5, ease: easeSmooth }}
         >
           <h2 className="font-display text-xl sm:text-[22px] font-semibold text-[#0F1B2E] mb-6">
-            {t('home.popularTitle')}
+            {t('property.similarTitle')}
           </h2>
         </motion.div>
 

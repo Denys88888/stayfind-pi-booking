@@ -61,7 +61,7 @@ export default function IncompletePaymentDialog({
           {payment.memo && (
             <div className="flex items-center justify-between">
               <span className="font-body text-xs text-[#7A8494] uppercase tracking-wider">
-                {t('checkout.specialRequests')}
+                {t('checkout.memo')}
               </span>
               <span className="font-body text-sm text-[#4A5468] text-right max-w-[200px] truncate">
                 {payment.memo}
