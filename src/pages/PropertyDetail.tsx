@@ -406,7 +406,7 @@ function PropertyHeader({ hotel }: { hotel: HotelData }) {
               </span>
             </div>
             <span className="text-sm text-[#7A8494] font-body md:mt-1">
-              {hotel.reviewCount.toLocaleString('en-US')} {t('property.reviews')}
+              {hotel.reviewCount.toLocaleString()} {t('property.reviews')}
             </span>
           </div>
         </motion.div>
@@ -1064,7 +1064,7 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
               <span className="text-white/80 font-body text-xs">{hotel.ratingLabel}</span>
             </div>
             <p className="font-body text-sm text-[#7A8494] mt-3">
-              {hotel.reviewCount.toLocaleString('en-US')} {t('property.reviews')}
+              {hotel.reviewCount.toLocaleString()} {t('property.reviews')}
             </p>
           </div>
 

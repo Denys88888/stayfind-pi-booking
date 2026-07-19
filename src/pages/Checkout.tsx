@@ -200,7 +200,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
       <div className="flex items-center gap-1 mt-1">
         <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
         <span className="font-body text-sm text-[#7A8494]">
-          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString('en-US')}{' '}
+          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString()}{' '}
           {t('property.reviews')}
         </span>
       </div>
@@ -235,7 +235,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
               ${bookingData.pricePerNight} × {bookingData.nights} {t('property.nights')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
-              ${(bookingData.pricePerNight * bookingData.nights).toLocaleString('en-US')}
+              ${(bookingData.pricePerNight * bookingData.nights).toLocaleString()}
               <span className="text-[#7A8494] ml-1">
                 ({formatPiAmount(piSubtotal)})
               </span>
@@ -246,7 +246,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
               {t('checkout.taxesFees')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
-              ${bookingData.taxes.toLocaleString('en-US')}
+              ${bookingData.taxes.toLocaleString()}
               <span className="text-[#7A8494] ml-1">
                 ({formatPiAmount(piTaxes)})
               </span>
@@ -269,7 +269,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
                   </Tooltip>
                 </span>
                 <span className="font-body text-sm text-[#2D9F5E]">
-                  - ${bookingData.discount.toLocaleString('en-US')}
+                  - ${bookingData.discount.toLocaleString()}
                   <span className="text-[#7A8494] ml-1">
                     (-{formatPiAmount(piDiscount)})
                   </span>

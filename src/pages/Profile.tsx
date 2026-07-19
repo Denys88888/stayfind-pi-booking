@@ -533,7 +533,7 @@ function RewardsTab() {
             <div>
               <p className="font-body text-sm text-white/60">{t('profile.rewards')}</p>
               <p className="font-display text-4xl font-semibold mt-1">
-                {rewardsPoints.toLocaleString('en-US')}
+                {rewardsPoints.toLocaleString()}
               </p>
               <p className="font-body text-sm text-white/60 mt-1">
                 {t('profile.points')}
@@ -549,7 +549,7 @@ function RewardsTab() {
               <span className="font-body text-white/80">{currentTier?.name}</span>
               <span className="font-body text-white/60">
                 {nextTierName
-                  ? `${(nextTier - rewardsPoints).toLocaleString('en-US')} ${t('profile.points')} to ${nextTierName.name}`
+                  ? t('profile.pointsToTier').replace('{count}', (nextTier - rewardsPoints).toLocaleString()).replace('{points}', t('profile.points')).replace('{tier}', nextTierName.name)
                   : t('profile.maxTier')}
               </span>
             </div>
@@ -561,7 +561,7 @@ function RewardsTab() {
             className="w-full bg-white/10 hover:bg-white/20 text-white font-body rounded-xl"
           >
             <Gift size={16} className="mr-2" />
-            Redeem Points
+            {t('profile.redeemPoints')}
           </Button>
         </CardContent>
       </Card>
@@ -571,26 +571,26 @@ function RewardsTab() {
           {
             icon: Star,
             label: t('profile.earnRate'),
-            value: '5x points',
-            desc: 'per π spent on bookings',
+            value: t('profile.earnRateValue'),
+            desc: t('profile.earnRateDesc'),
           },
           {
             icon: CalendarDays,
             label: t('profile.earlyAccess'),
-            value: '48 hours',
-            desc: 'to exclusive deals',
+            value: t('profile.earlyAccessValue'),
+            desc: t('profile.earlyAccessDesc'),
           },
           {
             icon: BedDouble,
             label: t('profile.roomUpgrades'),
-            value: '2 free/yr',
-            desc: 'when available',
+            value: t('profile.roomUpgradesValue'),
+            desc: t('profile.roomUpgradesDesc'),
           },
           {
             icon: Shield,
             label: t('profile.lateCheckout'),
             value: t('profile.guaranteed'),
-            desc: 'until 2 PM',
+            desc: t('profile.lateCheckoutDesc'),
           },
         ].map((benefit) => (
           <Card
@@ -620,7 +620,7 @@ function RewardsTab() {
               {t('profile.rewards')}
             </DialogTitle>
             <DialogDescription className="font-body text-[#7A8494]">
-              {t('profile.pointsAvailable').replace('{count}', rewardsPoints.toLocaleString('en-US')).replace('{points}', t('profile.points'))}
+              {t('profile.pointsAvailable').replace('{count}', rewardsPoints.toLocaleString()).replace('{points}', t('profile.points'))}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
@@ -639,7 +639,7 @@ function RewardsTab() {
                     {reward.name}
                   </p>
                   <p className="font-body text-xs text-[#7A8494]">
-                    {reward.cost.toLocaleString('en-US')} {t('profile.points')}
+                    {reward.cost.toLocaleString()} {t('profile.points')}
                   </p>
                 </div>
                 <Button

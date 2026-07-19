@@ -310,7 +310,16 @@ export interface TranslationSet {
     maxTier: string;
     pointsAvailable: string;
     redeem: string;
+    redeemPoints: string;
     locked: string;
+    pointsToTier: string;
+    earnRateValue: string;
+    earnRateDesc: string;
+    earlyAccessValue: string;
+    earlyAccessDesc: string;
+    roomUpgradesValue: string;
+    roomUpgradesDesc: string;
+    lateCheckoutDesc: string;
   };
   common: {
     required: string;
