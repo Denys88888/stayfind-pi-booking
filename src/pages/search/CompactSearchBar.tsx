@@ -223,7 +223,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
                   className="w-full px-4 py-3 border border-[#E2E6EC] rounded-xl font-body text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D4A] focus:border-transparent transition-all"
-                  placeholder="Guests"
+                  placeholder={t("hero.guests")}
                   autoFocus
                 />
                 <div className="mt-3 flex gap-2">
