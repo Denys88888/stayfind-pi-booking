@@ -140,6 +140,12 @@ export interface TranslationSet {
     member: string;
     guest: string;
     notSignedIn: string;
+    signIn: string;
+    saved: string;
+    piBalance: string;
+    trips: string;
+    noFavorites: string;
+    noFavoritesDesc: string;
     bookings: string;
     favorites: string;
     account: string;
