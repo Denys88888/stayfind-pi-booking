@@ -98,6 +98,18 @@ export interface TranslationSet {
     veryGood: string;
     excellent: string;
     wonderful: string;
+    filterAll: string;
+    filterCouples: string;
+    filterFamilies: string;
+    filterSolo: string;
+    filterBusiness: string;
+    ratingStaff: string;
+    ratingFacilities: string;
+    ratingCleanliness: string;
+    ratingComfort: string;
+    ratingValue: string;
+    ratingLocation: string;
+    ratingWifi: string;
   };
   checkout: {
     step1: string;

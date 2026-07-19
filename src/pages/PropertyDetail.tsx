@@ -974,7 +974,13 @@ function ReviewCard({
 function ReviewsSection({ hotel }: { hotel: HotelData }) {
   const [filter, setFilter] = useState('All');
   const { t } = useTranslation();
-  const filters = ['All', 'Couples', 'Families', 'Solo', 'Business'];
+  const filterDefs = [
+    { key: 'All', label: t('property.filterAll') },
+    { key: 'Couples', label: t('property.filterCouples') },
+    { key: 'Families', label: t('property.filterFamilies') },
+    { key: 'Solo', label: t('property.filterSolo') },
+    { key: 'Business', label: t('property.filterBusiness') },
+  ];
 
   const filteredReviews =
     filter === 'All'
@@ -992,19 +998,19 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
         );
 
   const breakdown = [
-    { label: 'Staff', score: hotel.ratingBreakdown.staff },
-    { label: 'Facilities', score: hotel.ratingBreakdown.facilities },
-    { label: 'Cleanliness', score: hotel.ratingBreakdown.cleanliness },
-    { label: 'Comfort', score: hotel.ratingBreakdown.comfort },
-    { label: 'Value for money', score: hotel.ratingBreakdown.value },
-    { label: 'Location', score: hotel.ratingBreakdown.location },
-    { label: 'Free WiFi', score: hotel.ratingBreakdown.wifi },
+    { label: t('property.ratingStaff'), score: hotel.ratingBreakdown.staff },
+    { label: t('property.ratingFacilities'), score: hotel.ratingBreakdown.facilities },
+    { label: t('property.ratingCleanliness'), score: hotel.ratingBreakdown.cleanliness },
+    { label: t('property.ratingComfort'), score: hotel.ratingBreakdown.comfort },
+    { label: t('property.ratingValue'), score: hotel.ratingBreakdown.value },
+    { label: t('property.ratingLocation'), score: hotel.ratingBreakdown.location },
+    { label: t('property.ratingWifi'), score: hotel.ratingBreakdown.wifi },
   ];
 
   const topCategories = [
-    { label: 'Cleanliness', score: hotel.ratingBreakdown.cleanliness },
-    { label: 'Location', score: hotel.ratingBreakdown.location },
-    { label: 'Staff', score: hotel.ratingBreakdown.staff },
+    { label: t('property.ratingCleanliness'), score: hotel.ratingBreakdown.cleanliness },
+    { label: t('property.ratingLocation'), score: hotel.ratingBreakdown.location },
+    { label: t('property.ratingStaff'), score: hotel.ratingBreakdown.staff },
   ];
 
   return (
@@ -1026,18 +1032,18 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {filters.map((f) => (
+            {filterDefs.map((fd) => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
+                key={fd.key}
+                onClick={() => setFilter(fd.key)}
                 className={cn(
                   'px-3 py-1.5 rounded-full font-body text-xs font-medium transition-colors duration-200',
-                  filter === f
+                  filter === fd.key
                     ? 'bg-[#0F1B2E] text-white'
                     : 'bg-white text-[#4A5468] border border-[#E2E6EC] hover:border-[#C5CBD4]'
                 )}
               >
-                {f}
+                {fd.label}
               </button>
             ))}
           </div>
