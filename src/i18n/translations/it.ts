@@ -170,6 +170,7 @@ const it: TranslationSet = {
     topCategories: 'Categorie migliori',
     guestReviews: 'Recensioni degli ospiti',
     ratingBreakdown: 'Dettaglio valutazione',
+    helpful: 'Utile ({count})',
     wonderful: 'Meraviglioso',
   },
   checkout: {

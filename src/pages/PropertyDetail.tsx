@@ -962,7 +962,7 @@ function ReviewCard({
 
       <button className="flex items-center gap-1.5 text-[#7A8494] hover:text-[#E85D4A] transition-colors">
         <ThumbsUp size={14} />
-        <span className="font-body text-xs">Helpful ({review.helpful})</span>
+        <span className="font-body text-xs">{t('property.helpful').replace('{count}', String(review.helpful))}</span>
       </button>
     </motion.div>
   );

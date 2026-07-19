@@ -170,6 +170,7 @@ const uk: TranslationSet = {
     topCategories: 'Топ категорії',
     guestReviews: 'Відгуки гостей',
     ratingBreakdown: 'Деталі рейтингу',
+    helpful: 'Корисно ({count})',
     wonderful: 'Чудово',
   },
   checkout: {

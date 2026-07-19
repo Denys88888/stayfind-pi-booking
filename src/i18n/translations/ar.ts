@@ -170,6 +170,7 @@ const ar: TranslationSet = {
     topCategories: 'أفضل الفئات',
     guestReviews: 'تقييمات الضيوف',
     ratingBreakdown: 'تفاصيل التقييم',
+    helpful: 'مفيد ({count})',
     wonderful: 'رائع',
   },
   checkout: {

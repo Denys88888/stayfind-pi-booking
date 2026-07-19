@@ -158,6 +158,7 @@ const en: TranslationSet = {
     topCategories: 'Top Categories',
     guestReviews: 'Guest Reviews',
     ratingBreakdown: 'Rating Breakdown',
+    helpful: 'Helpful ({count})',
     wonderful: 'Wonderful',
     filterAll: 'All',
     filterCouples: 'Couples',

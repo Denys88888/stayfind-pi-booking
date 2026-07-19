@@ -170,6 +170,7 @@ const zh: TranslationSet = {
     topCategories: '热门分类',
     guestReviews: '客人评价',
     ratingBreakdown: '评分明细',
+    helpful: '有用 ({count})',
     wonderful: '绝佳',
   },
   checkout: {

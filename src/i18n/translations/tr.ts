@@ -170,6 +170,7 @@ const tr: TranslationSet = {
     topCategories: 'En iyi kategoriler',
     guestReviews: 'Misafir yorumları',
     ratingBreakdown: 'Puan dağılımı',
+    helpful: 'Faydalı ({count})',
     wonderful: 'Harika',
   },
   checkout: {

@@ -162,6 +162,7 @@ export interface TranslationSet {
     topCategories: string;
     guestReviews: string;
     ratingBreakdown: string;
+    helpful: string;
     filterAll: string;
     filterCouples: string;
     filterFamilies: string;

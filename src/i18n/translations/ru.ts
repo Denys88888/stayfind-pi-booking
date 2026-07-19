@@ -170,6 +170,7 @@ const ru: TranslationSet = {
     topCategories: 'Топ категории',
     guestReviews: 'Отзывы гостей',
     ratingBreakdown: 'Детали рейтинга',
+    helpful: 'Полезно ({count})',
     wonderful: 'Великолепно',
   },
   checkout: {
