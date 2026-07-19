@@ -140,10 +140,17 @@ const favorites = [
 function StatusBadge({ status }: { status: string }) {
   const { t } = useTranslation();
   switch (status) {
+    case 'confirmed':
     case 'upcoming':
       return (
         <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-50 font-body text-xs font-medium">
           {t('profile.upcoming')}
+        </Badge>
+      );
+    case 'pending':
+      return (
+        <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-50 font-body text-xs font-medium">
+          {t('profile.pending')}
         </Badge>
       );
     case 'completed':
