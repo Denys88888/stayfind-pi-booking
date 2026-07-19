@@ -117,6 +117,8 @@ const zh: TranslationSet = {
     wonderful: '绝佳',
   },
   checkout: {
+    checkInAfter: '下午3点以后',
+    checkOutBefore: '上午11点之前',
     demoModeBanner: '演示模式 — 没有真实的Pi交易。在Pi Browser中打开以进行实时付款。',
     emailInvalid: '请输入有效的电子邮件地址',
     step1: '您的详情',

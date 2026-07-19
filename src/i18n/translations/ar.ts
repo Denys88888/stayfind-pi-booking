@@ -117,6 +117,8 @@ const ar: TranslationSet = {
     wonderful: 'رائع',
   },
   checkout: {
+    checkInAfter: 'بعد الساعة 3 مساءً',
+    checkOutBefore: 'قبل الساعة 11 صباحاً',
     demoModeBanner: 'وضع تجريبي — لا توجد معاملة Pi حقيقية. افتح في Pi Browser للمدفوعات الحية.',
     emailInvalid: 'يرجى إدخال عنوان بريد إلكتروني صالح',
     step1: 'بياناتك',

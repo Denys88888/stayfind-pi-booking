@@ -113,6 +113,8 @@ const en: TranslationSet = {
     ratingWifi: 'Free WiFi',
   },
   checkout: {
+    checkInAfter: 'After 3:00 PM',
+    checkOutBefore: 'Before 11:00 AM',
     demoModeBanner: 'Demo Mode — No real Pi transaction. Open in Pi Browser for live payments.',
     emailInvalid: 'Please enter a valid email address',
     step1: 'Your Details',

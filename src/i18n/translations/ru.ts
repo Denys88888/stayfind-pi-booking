@@ -117,6 +117,8 @@ const ru: TranslationSet = {
     wonderful: 'Великолепно',
   },
   checkout: {
+    checkInAfter: 'После 15:00',
+    checkOutBefore: 'До 11:00',
     demoModeBanner: 'Демо-режим — реальная транзакция Pi не выполняется. Откройте в Pi Browser для живых платежей.',
     emailInvalid: 'Введите корректный адрес электронной почты',
     step1: 'Ваши данные',

@@ -117,6 +117,8 @@ const uk: TranslationSet = {
     wonderful: 'Чудово',
   },
   checkout: {
+    checkInAfter: 'Після 15:00',
+    checkOutBefore: 'До 11:00',
     demoModeBanner: 'Демо-режим — реальна транзакція Pi не виконується. Відкрийте в Pi Browser для живих платежів.',
     emailInvalid: 'Будь ласка, введіть дійсну адресу електронної пошти',
     step1: 'Ваші дані',

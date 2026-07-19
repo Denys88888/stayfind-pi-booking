@@ -117,6 +117,8 @@ const it: TranslationSet = {
     wonderful: 'Meraviglioso',
   },
   checkout: {
+    checkInAfter: 'Dopo le 15:00',
+    checkOutBefore: 'Prima delle 11:00',
     demoModeBanner: 'Modalità demo — Nessuna transazione Pi reale. Apri in Pi Browser per pagamenti live.',
     emailInvalid: 'Inserisci un indirizzo email valido',
     step1: 'I tuoi dati',

@@ -1005,7 +1005,7 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
               {t('profile.checkIn')}
             </p>
             <p className="font-body text-sm text-[#4A5468] mt-0.5">
-              {bookingData.checkIn} · After 3:00 PM
+              {bookingData.checkIn} · {t('checkout.checkInAfter')}
             </p>
           </div>
           <div>
@@ -1013,7 +1013,7 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
               {t('profile.checkOut')}
             </p>
             <p className="font-body text-sm text-[#4A5468] mt-0.5">
-              {bookingData.checkOut} · Before 11:00 AM
+              {bookingData.checkOut} · {t('checkout.checkOutBefore')}
             </p>
           </div>
           <div>
