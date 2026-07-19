@@ -254,7 +254,7 @@ const pt: TranslationSet = {
     welcome: 'Bem-vindo de volta,',
     member: 'Membro da Pi Network',
     guest: 'Visitante',
-    signIn: 'Sign in with Pi to view your bookings.',
+    signIn: 'Entre com Pi para ver suas reservas e gerenciar sua conta.',
     saved: 'Saved',
     piBalance: 'Pi Balance',
     trips: 'Trips',
@@ -367,6 +367,7 @@ const pt: TranslationSet = {
     terms: 'Termos de serviço',
     privacy: 'Política de privacidade',
     cookies: 'Política de cookies',
+    piSecure: 'Pagamentos seguros na blockchain Pi',
     copyright: '\u00A9 2026 StayFind. Todos os direitos reservados.',
   },
 };

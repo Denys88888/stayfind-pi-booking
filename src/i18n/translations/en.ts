@@ -368,6 +368,7 @@ const en: TranslationSet = {
     terms: 'Terms of Service',
     privacy: 'Privacy Policy',
     cookies: 'Cookie Policy',
+    piSecure: 'Secure payments on the Pi blockchain',
     copyright: '\u00A9 2026 StayFind. All rights reserved.',
   },
 };

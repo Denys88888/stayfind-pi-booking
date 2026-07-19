@@ -254,7 +254,7 @@ const zh: TranslationSet = {
     welcome: '欢迎回来，',
     member: 'Pi Network 成员',
     guest: '访客',
-    signIn: 'Sign in with Pi to view your bookings.',
+    signIn: '使用 Pi 登录以查看预订并管理账户。',
     saved: 'Saved',
     piBalance: 'Pi Balance',
     trips: 'Trips',
@@ -367,6 +367,7 @@ const zh: TranslationSet = {
     terms: '服务条款',
     privacy: '隐私政策',
     cookies: 'Cookie 政策',
+    piSecure: '在 Pi 区块链上安全支付',
     copyright: '\u00A9 2026 StayFind. 保留所有权利。',
   },
 };

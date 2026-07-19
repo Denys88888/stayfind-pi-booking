@@ -141,7 +141,7 @@ export default function Footer() {
             Powered by Pi Network
           </a>
           <p className="font-body text-xs text-[#7A8494]">
-            Secure payments on the Pi blockchain
+            {t('footer.piSecure')}
           </p>
         </div>
 

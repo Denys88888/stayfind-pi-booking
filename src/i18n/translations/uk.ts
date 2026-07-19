@@ -254,7 +254,7 @@ const uk: TranslationSet = {
     welcome: 'Ласкаво просимо,',
     member: 'Учасник Pi Network',
     guest: 'Гість',
-    signIn: 'Sign in with Pi to view your bookings.',
+    signIn: 'Увійдіть через Pi, щоб переглядати бронювання та керувати акаунтом.',
     saved: 'Saved',
     piBalance: 'Pi Balance',
     trips: 'Trips',
@@ -367,6 +367,7 @@ const uk: TranslationSet = {
     terms: 'Умови використання',
     privacy: 'Політика конфіденційності',
     cookies: 'Політика використання файлів cookie',
+    piSecure: 'Безпечні платежі в блокчейні Pi',
     copyright: '\u00A9 2026 StayFind. Усі права захищені.',
   },
 };

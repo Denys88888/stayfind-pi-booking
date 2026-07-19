@@ -371,6 +371,7 @@ export interface TranslationSet {
     privacy: string;
     cookies: string;
     copyright: string;
+    piSecure: string;
   };
 }
 
