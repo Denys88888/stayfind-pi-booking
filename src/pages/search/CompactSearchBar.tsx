@@ -20,10 +20,10 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
     d.setDate(d.getDate() + 14);
     const d2 = new Date(d);
     d2.setDate(d2.getDate() + 7);
-    const fmt = (x: Date) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const fmt = (x: Date) => x.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     return `${fmt(d)} \u2013 ${fmt(d2)}`;
   });
-  const [guests, setGuests] = useState(searchParams.get('guests') || '2 Adults, 1 Room');
+  const [guests, setGuests] = useState(searchParams.get('guests') || `2 ${t('hero.adults')}, 1 ${t('hero.rooms')}`);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const barRef = useRef<HTMLDivElement>(null);
@@ -193,7 +193,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                 <div className="mt-3 flex gap-2">
                   {(() => {
                     const base = new Date();
-                    const fmt = (x: Date) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    const fmt = (x: Date) => x.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                     const range = (offset: number, len: number) => {
                       const a = new Date(base); a.setDate(a.getDate() + offset);
                       const b = new Date(a); b.setDate(b.getDate() + len);
@@ -227,17 +227,19 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                   autoFocus
                 />
                 <div className="mt-3 flex gap-2">
-                  {['1 Adult, 1 Room', '2 Adults, 1 Room', '2 Adults, 2 Children, 1 Room'].map(
-                    (g) => (
-                      <button
-                        key={g}
-                        onClick={() => setGuests(g)}
-                        className="px-3 py-1.5 bg-[#F8F9FB] hover:bg-[#FEF2F0] text-[#243B5D] hover:text-[#E85D4A] rounded-full font-body text-xs font-medium transition-colors"
-                      >
-                        {g}
-                      </button>
-                    )
-                  )}
+                  {[
+                    `1 ${t('hero.adults')}, 1 ${t('hero.rooms')}`,
+                    `2 ${t('hero.adults')}, 1 ${t('hero.rooms')}`,
+                    `2 ${t('hero.adults')}, 2 ${t('hero.children')}, 1 ${t('hero.rooms')}`,
+                  ].map((g) => (
+                    <button
+                      key={g}
+                      onClick={() => setGuests(g)}
+                      className="px-3 py-1.5 bg-[#F8F9FB] hover:bg-[#FEF2F0] text-[#243B5D] hover:text-[#E85D4A] rounded-full font-body text-xs font-medium transition-colors"
+                    >
+                      {g}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}

@@ -914,6 +914,43 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadReceipt = () => {
+    const lines = [
+      '================================================',
+      '         STAYFIND — BOOKING RECEIPT',
+      '================================================',
+      '',
+      `Booking Reference : ${bookingRef}`,
+      `Pi Transaction ID : ${txId || 'N/A'}`,
+      '',
+      '--- PROPERTY ---',
+      `Hotel             : ${bookingData.hotelName}`,
+      `Room              : ${bookingData.roomType}`,
+      `Address           : ${bookingData.address}`,
+      '',
+      '--- STAY ---',
+      `Check-in          : ${bookingData.checkIn}`,
+      `Check-out         : ${bookingData.checkOut}`,
+      `Nights            : ${bookingData.nights}`,
+      `Guests            : ${bookingData.guests}`,
+      '',
+      '--- PAYMENT ---',
+      `Total Paid        : ${formatPiAmount(piTotal)}`,
+      `Email             : ${userEmail || 'N/A'}`,
+      '',
+      '================================================',
+      '   Thank you for booking with StayFind!',
+      '================================================',
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `stayfind-receipt-${bookingRef}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div      className="max-w-[720px] mx-auto text-center"
     >
@@ -1056,7 +1093,7 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
         </Button>
         <Button
           variant="outline"
-          onClick={() => {}}
+          onClick={handleDownloadReceipt}
           className="flex-1 border-[#E2E6EC] text-[#1A2B47] font-body font-semibold rounded-xl py-6 text-base hover:bg-[#F8F9FB] transition-all"
         >
           <Download size={18} className="mr-2" />
