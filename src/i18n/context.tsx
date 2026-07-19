@@ -161,9 +161,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, []); // Run once on mount
 
-  /* Update URL when language changes (works with HashRouter) */
+  /* Update URL lang param when language changes.
+     Only append if hash routing is in use (hash starts with '#/')
+     — otherwise BrowserRouter search params would be corrupted. */
   useEffect(() => {
     const hash = window.location.hash;
+    if (!hash.startsWith('#/')) return; // BrowserRouter: skip, rely on localStorage
     const hashQueryIdx = hash.indexOf('?');
     let baseHash = hash;
     let hashParams = new URLSearchParams();
