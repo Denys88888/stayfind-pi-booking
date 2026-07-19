@@ -643,12 +643,12 @@ function FeaturesSection() {
   const { ref, inView } = useScrollReveal();
 
   const features = [
-    { icon: Sparkles, title: t('home.statHotels'), desc: t('home.popularSubtitle') },
-    { icon: Shield, title: t('home.dealsTitle'), desc: t('home.dealsSubtitle') },
-    { icon: Star, title: t('home.reviewsTitle'), desc: t('home.reviewers') },
-    { icon: Clock, title: t('home.statCountries'), desc: t('home.popularSubtitle') },
-    { icon: Users, title: t('home.statTravelers'), desc: t('home.reviewers') },
-    { icon: CreditCard, title: t('home.ctaTitle'), desc: t('home.ctaSubtitle') },
+    { icon: Sparkles, title: t('hero.feat1Title'), desc: t('hero.feat1Desc') },
+    { icon: Shield, title: t('hero.feat2Title'), desc: t('hero.feat2Desc') },
+    { icon: Star, title: t('hero.feat3Title'), desc: t('hero.feat3Desc') },
+    { icon: Clock, title: t('hero.feat4Title'), desc: t('hero.feat4Desc') },
+    { icon: Users, title: t('hero.feat5Title'), desc: t('hero.feat5Desc') },
+    { icon: CreditCard, title: t('hero.feat6Title'), desc: t('hero.feat6Desc') },
   ];
 
   return (

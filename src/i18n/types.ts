@@ -31,6 +31,12 @@ export interface TranslationSet {
     guests: string;
     searchBtn: string;
     popular: string;
+    feat1Title: string; feat1Desc: string;
+    feat2Title: string; feat2Desc: string;
+    feat3Title: string; feat3Desc: string;
+    feat4Title: string; feat4Desc: string;
+    feat5Title: string; feat5Desc: string;
+    feat6Title: string; feat6Desc: string;
     typesSubtitle: string;
     dealSave40: string;
     dealFeaturedTitle: string;
