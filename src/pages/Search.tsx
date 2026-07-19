@@ -53,7 +53,20 @@ export default function Search() {
     { label: t('search.ratingPleasant'), value: '6+' },
   ];
 
-  const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
+  const typeParam = searchParams.get('type'); // e.g. 'Hotels', 'Resorts'
+  // Map plural URL value → singular propertyType in data
+  const typeToPropertyType: Record<string, string> = {
+    Hotels: 'Hotel', Resorts: 'Resort', Villas: 'Villa',
+    Apartments: 'Apartment', Hostels: 'Hostel', BnBs: 'B&B',
+    Cabins: 'Cabin', Cottages: 'Cottage',
+  };
+  const initialPropertyTypes = typeParam && typeToPropertyType[typeParam]
+    ? [typeToPropertyType[typeParam]]
+    : [];
+  const [filters, setFilters] = useState<FilterState>({
+    ...INITIAL_FILTERS,
+    propertyTypes: initialPropertyTypes,
+  });
   const [sortBy, setSortBy] = useState<SortOption>('top-picks');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [filterOpen, setFilterOpen] = useState(false);

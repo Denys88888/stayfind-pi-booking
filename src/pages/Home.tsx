@@ -105,7 +105,7 @@ function HeroSection() {
     navigate(`/search?${params.toString()}`);
   };
 
-  const guestLabel = `${guests.adults} Adult${guests.adults !== 1 ? 's' : ''}${guests.children > 0 ? ` \u00B7 ${guests.children} Child${guests.children !== 1 ? 'ren' : ''}` : ''}`;
+  const guestLabel = `${guests.adults} ${t('hero.adults')}${guests.children > 0 ? ` \u00B7 ${guests.children} ${t('hero.children')}` : ''}`;
 
   return (
     <section className="relative min-h-[100dvh] min-h-[700px] flex items-center justify-center overflow-hidden">
@@ -401,7 +401,7 @@ function PropertyTypesSection() {
               variants={fadeUp}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
-              onClick={() => navigate(`/search?type=${type.value.toLowerCase()}`)}
+              onClick={() => navigate(`/search?type=${type.value}`)}
               className="w-[200px] sm:w-[240px] flex-shrink-0 cursor-pointer group snap-start"
             >
               <div className="aspect-[4/3] rounded-2xl overflow-hidden">
