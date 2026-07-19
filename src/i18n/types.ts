@@ -261,6 +261,9 @@ export interface TranslationSet {
     points: string;
     goldMember: string;
     signOut: string;
+    noBookingsExplore: string;
+    searchHotels: string;
+    address: string;
     maxTier: string;
     pointsAvailable: string;
     redeem: string;

@@ -193,7 +193,7 @@ function BookingsTab() {
                 : 'bg-white text-[#4A5468] hover:bg-[#F0F2F5]'
             )}
           >
-            {tab === 'all' ? t('profile.bookings') : tab.charAt(0).toUpperCase() + tab.slice(1)}
+            {tab === 'all' ? t('profile.bookings') : tab === 'confirmed' ? t('profile.upcoming') : t('profile.completed')}
           </button>
         ))}
       </div>
@@ -202,7 +202,7 @@ function BookingsTab() {
         <div className="text-center py-12">
           <CalendarDays size={48} className="mx-auto text-[#C5CBD4] mb-4" />
           <h3 className="font-display text-lg font-semibold text-[#0F1B2E] mb-2">
-            No bookings yet. Start exploring hotels!
+            {t('profile.noBookingsExplore')}
           </h3>
           <p className="font-body text-sm text-[#7A8494] mb-6">
             {t('home.ctaSubtitle')}
@@ -211,7 +211,7 @@ function BookingsTab() {
             onClick={() => navigate('/search')}
             className="bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl"
           >
-            Search Hotels
+            {t('profile.searchHotels')}
           </Button>
         </div>
       ) : (
