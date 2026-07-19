@@ -223,6 +223,7 @@ const zh: TranslationSet = {
     paid: '已支付',
     totalPaid: '支付总额',
     backHome: '返回首页',
+    discountTooltip: '已享会员专属折扣',
     downloadReceipt: '下载收据',
   },
   profile: {

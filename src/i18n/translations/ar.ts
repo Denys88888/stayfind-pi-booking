@@ -223,6 +223,7 @@ const ar: TranslationSet = {
     paid: 'مدفوع',
     totalPaid: 'إجمالي المدفوع',
     backHome: 'العودة للرئيسية',
+    discountTooltip: 'تم تطبيق خصم العضو الحصري',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {

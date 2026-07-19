@@ -227,6 +227,7 @@ export interface TranslationSet {
     totalPaid: string;
     backHome: string;
     downloadReceipt: string;
+    discountTooltip: string;
   };
   profile: {
     welcome: string;

@@ -264,7 +264,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                      <p className="font-body text-xs">{t('home.dealsSubtitle')}</p>
+                      <p className="font-body text-xs">{t('checkout.discountTooltip')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </span>

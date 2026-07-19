@@ -224,6 +224,7 @@ const en: TranslationSet = {
     paid: 'Paid',
     totalPaid: 'Total paid',
     backHome: 'Back to Home',
+    discountTooltip: 'Exclusive member discount applied',
     downloadReceipt: 'Download Receipt',
   },
   profile: {

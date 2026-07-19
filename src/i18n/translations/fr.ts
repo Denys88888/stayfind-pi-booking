@@ -223,6 +223,7 @@ const fr: TranslationSet = {
     paid: 'Payé',
     totalPaid: 'Total payé',
     backHome: "Retour à l'accueil",
+    discountTooltip: 'Remise exclusive membre appliquée',
     downloadReceipt: 'Télécharger le reçu',
   },
   profile: {

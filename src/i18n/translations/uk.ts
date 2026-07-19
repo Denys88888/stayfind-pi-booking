@@ -223,6 +223,7 @@ const uk: TranslationSet = {
     paid: 'Сплачено',
     totalPaid: 'Усього сплачено',
     backHome: 'На головну',
+    discountTooltip: 'Застосовано ексклюзивну знижку для учасників',
     downloadReceipt: 'Завантажити чек',
   },
   profile: {

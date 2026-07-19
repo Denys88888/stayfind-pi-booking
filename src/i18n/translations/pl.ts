@@ -223,6 +223,7 @@ const pl: TranslationSet = {
     paid: 'Opłacone',
     totalPaid: 'Łącznie opłacono',
     backHome: 'Powrót do strony głównej',
+    discountTooltip: 'Zastosowano ekskluzywną zniżkę dla członków',
     downloadReceipt: 'Pobierz potwierdzenie',
   },
   profile: {

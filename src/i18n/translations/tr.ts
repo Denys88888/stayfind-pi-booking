@@ -223,6 +223,7 @@ const tr: TranslationSet = {
     paid: 'Ödendi',
     totalPaid: 'Toplam ödenen',
     backHome: 'Ana Sayfaya Dön',
+    discountTooltip: 'Özel üye indirimi uygulandı',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {

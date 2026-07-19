@@ -223,6 +223,7 @@ const ru: TranslationSet = {
     paid: 'Оплачено',
     totalPaid: 'Всего оплачено',
     backHome: 'На главную',
+    discountTooltip: 'Применена эксклюзивная скидка для участников',
     downloadReceipt: 'Скачать чек',
   },
   profile: {
