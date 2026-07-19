@@ -42,7 +42,7 @@ import {
   formatPiAmount,
 } from '@/lib/piPayments';
 import { saveBooking, generateBookingId } from '@/lib/bookingStorage';
-import { isPiSdkAvailable } from '@/hooks/usePiAuth';
+import { isPiSdkAvailable, isPiBrowser } from '@/hooks/usePiAuth';
 import PiBrowserRequired from '@/components/PiBrowserRequired';
 
 /* ─── Pi conversion rate for reference ─── */
@@ -593,8 +593,10 @@ function StepPayment({
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [demoMode, setDemoMode] = useState(false);
 
-  const sdkAvailable = isPiSdkAvailable();
-  const showPiBrowserRequired = isAuthenticated && !sdkAvailable && !demoMode;
+  // Real payments only work inside Pi Browser: outside it the SDK script
+  // still loads (window.Pi exists) but createPayment/authenticate hang forever.
+  const paymentAvailable = isPiSdkAvailable() && isPiBrowser();
+  const showPiBrowserRequired = isAuthenticated && !paymentAvailable && !demoMode;
 
   const validate = useCallback(() => {
     const newErrors: FormErrors = {};
@@ -613,6 +615,16 @@ function StepPayment({
 
     setProcessing(true);
     setPaymentError(null);
+
+    /* Demo mode (outside Pi Browser): simulate the payment instead of
+       calling Pi.createPayment, which never resolves there. */
+    if (demoMode || !paymentAvailable) {
+      setTimeout(() => {
+        setProcessing(false);
+        onPay('demo_' + Date.now().toString(36));
+      }, 1500);
+      return;
+    }
 
     try {
       await createPiPayment({

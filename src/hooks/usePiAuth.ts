@@ -95,11 +95,13 @@ declare global {
 /*  Pi Browser Detection                                                */
 /* ------------------------------------------------------------------ */
 
-/** Detect if running inside Pi Browser */
+/** Detect if running inside Pi Browser.
+ *  UA-only: the SDK script loads in ANY browser, so window.Pi presence
+ *  does NOT mean Pi Browser — Pi.authenticate hangs forever outside it. */
 export function isPiBrowser(): boolean {
   if (typeof window === 'undefined') return false;
   const ua = navigator.userAgent || '';
-  return ua.includes('PiBrowser') || ua.includes('Pi Browser') || !!window.Pi;
+  return ua.includes('PiBrowser') || ua.includes('Pi Browser');
 }
 
 /** Detect if Pi SDK is available */
@@ -202,8 +204,9 @@ export function usePiAuth() {
 
   const authenticate = useCallback(
     async (scopes: AuthScope[] = ['username']): Promise<PiUser | null> => {
-      /* ── Sandbox mode: no Pi SDK ── */
-      if (!window.Pi) {
+      /* ── Sandbox mode: no Pi SDK, or SDK loaded outside Pi Browser
+            (Pi.authenticate never resolves there — would hang the UI) ── */
+      if (!window.Pi || !isPiBrowser()) {
         console.warn('[PiAuth] Pi SDK not available — using sandbox mode');
         const mockUser: PiUser = {
           uid: 'sandbox-' + Math.random().toString(36).slice(2, 10),
