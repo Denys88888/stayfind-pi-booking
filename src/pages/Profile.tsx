@@ -515,8 +515,8 @@ function RewardsTab() {
   const tiers = [
     { name: t('profile.guest'), min: 0, color: '#7A8494' },
     { name: t('profile.goldMember'), min: 2500, color: '#E8A838' },
-    { name: 'Platinum', min: 5000, color: '#3B82F6' },
-    { name: 'Diamond', min: 10000, color: '#0F1B2E' },
+    { name: t('profile.platinum'), min: 5000, color: '#3B82F6' },
+    { name: t('profile.diamond'), min: 10000, color: '#0F1B2E' },
   ];
 
   const currentTier = tiers

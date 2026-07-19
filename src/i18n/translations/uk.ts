@@ -317,6 +317,8 @@ const uk: TranslationSet = {
     roomUpgradesValue: '2 рази/рік',
     roomUpgradesDesc: 'за наявності',
     lateCheckoutDesc: 'до 14:00',
+    platinum: 'Платиновий',
+    diamond: 'Діамантовий',
   },
   common: {
     required: "Обов'язково",

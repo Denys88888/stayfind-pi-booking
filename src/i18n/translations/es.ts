@@ -317,6 +317,8 @@ const es: TranslationSet = {
     roomUpgradesValue: '2 gratis/año',
     roomUpgradesDesc: 'cuando esté disponible',
     lateCheckoutDesc: 'hasta las 14:00',
+    platinum: 'Platino',
+    diamond: 'Diamante',
   },
   common: {
     required: 'Obligatorio',

@@ -320,6 +320,8 @@ export interface TranslationSet {
     roomUpgradesValue: string;
     roomUpgradesDesc: string;
     lateCheckoutDesc: string;
+    platinum: string;
+    diamond: string;
   };
   common: {
     required: string;

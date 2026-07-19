@@ -318,6 +318,8 @@ const en: TranslationSet = {
     roomUpgradesValue: '2 free/yr',
     roomUpgradesDesc: 'when available',
     lateCheckoutDesc: 'until 2 PM',
+    platinum: 'Platinum',
+    diamond: 'Diamond',
   },
   common: {
     required: 'Required',

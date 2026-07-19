@@ -317,6 +317,8 @@ const tr: TranslationSet = {
     roomUpgradesValue: '2 ücretsiz/yıl',
     roomUpgradesDesc: 'uygun olduğunda',
     lateCheckoutDesc: '14:00\'e kadar',
+    platinum: 'Platin',
+    diamond: 'Elmas',
   },
   common: {
     required: 'Zorunlu',

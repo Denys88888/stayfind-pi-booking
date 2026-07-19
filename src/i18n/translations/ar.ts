@@ -317,6 +317,8 @@ const ar: TranslationSet = {
     roomUpgradesValue: 'مرتان مجاناً/سنة',
     roomUpgradesDesc: 'عند الإتاحة',
     lateCheckoutDesc: 'حتى الساعة 2:00 مساءً',
+    platinum: 'بلاتيني',
+    diamond: 'ألماسي',
   },
   common: {
     required: 'مطلوب',

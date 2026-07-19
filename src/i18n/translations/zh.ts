@@ -317,6 +317,8 @@ const zh: TranslationSet = {
     roomUpgradesValue: '每年2次免费',
     roomUpgradesDesc: '可用时',
     lateCheckoutDesc: '下午2点前',
+    platinum: '白金',
+    diamond: '钻石',
   },
   common: {
     required: '必填',

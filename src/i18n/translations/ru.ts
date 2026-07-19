@@ -317,6 +317,8 @@ const ru: TranslationSet = {
     roomUpgradesValue: '2 раза/год',
     roomUpgradesDesc: 'при наличии',
     lateCheckoutDesc: 'до 14:00',
+    platinum: 'Платиновый',
+    diamond: 'Бриллиантовый',
   },
   common: {
     required: 'Обязательно',
