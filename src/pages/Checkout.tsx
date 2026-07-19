@@ -129,7 +129,9 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
         {/* Connecting lines */}
         <div className="absolute top-[15px] left-[16px] right-[16px] h-[2px] bg-[#E2E6EC] z-0">
           <div
-            className="h-full bg-[#E85D4A]"          />
+            className="h-full bg-[#E85D4A] transition-all duration-500"
+            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+          />
         </div>
 
         {steps.map((label, idx) => {
