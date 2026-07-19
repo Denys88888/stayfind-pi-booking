@@ -11,7 +11,15 @@ interface CompactSearchBarProps {
 export default function CompactSearchBar({ collapsed, onToggleCollapse }: CompactSearchBarProps) {
   const [searchParams] = useSearchParams();
   const [destination, setDestination] = useState(searchParams.get('destination') || 'Paris, France');
-  const [dates, setDates] = useState(searchParams.get('dates') || 'Dec 15 \u2013 Dec 22');
+  const [dates, setDates] = useState(() => {
+    if (searchParams.get('dates')) return searchParams.get('dates')!;
+    const d = new Date();
+    d.setDate(d.getDate() + 14);
+    const d2 = new Date(d);
+    d2.setDate(d2.getDate() + 7);
+    const fmt = (x: Date) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `${fmt(d)} \u2013 ${fmt(d2)}`;
+  });
   const [guests, setGuests] = useState(searchParams.get('guests') || '2 Adults, 1 Room');
   const [activeField, setActiveField] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
@@ -170,7 +178,16 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                   autoFocus
                 />
                 <div className="mt-3 flex gap-2">
-                  {['Dec 15 \u2013 Dec 22', 'Dec 20 \u2013 Dec 27', 'Jan 10 \u2013 Jan 17'].map(
+                  {(() => {
+                    const base = new Date();
+                    const fmt = (x: Date) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    const range = (offset: number, len: number) => {
+                      const a = new Date(base); a.setDate(a.getDate() + offset);
+                      const b = new Date(a); b.setDate(b.getDate() + len);
+                      return `${fmt(a)} \u2013 ${fmt(b)}`;
+                    };
+                    return [range(14, 7), range(21, 7), range(30, 7)];
+                  })().map(
                     (d) => (
                       <button
                         key={d}

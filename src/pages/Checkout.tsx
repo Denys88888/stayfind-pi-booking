@@ -61,6 +61,8 @@ interface BookingState {
   taxes?: number;
   nights?: number;
   guests?: string;
+  checkIn?: string;
+  checkOut?: string;
 }
 
 /* ─── fallback booking data ─── */
@@ -70,8 +72,8 @@ const FALLBACK_BOOKING = {
   image: '/hotel-1.jpg',
   rating: 9.4,
   reviews: 1240,
-  checkIn: 'Dec 15, 2025',
-  checkOut: 'Dec 22, 2025',
+  checkIn: 'Dec 15, 2026',
+  checkOut: 'Dec 22, 2026',
   nights: 7,
   guests: '2 Adults',
   pricePerNight: 285,
@@ -787,12 +789,11 @@ function StepPayment({
               <span className="underline text-[#E85D4A] cursor-pointer">
                 {t('checkout.bookingCond')}
               </span>
-              ,{' '}
+              {', '}
               <span className="underline text-[#E85D4A] cursor-pointer">
                 {t('checkout.privacyPolicy')}
               </span>
-              ,{' '}
-              {t('common.and')}{' '}
+              {` ${t('common.and')} `}
               <span className="underline text-[#E85D4A] cursor-pointer">
                 {t('checkout.termsService')}
               </span>
@@ -1078,8 +1079,8 @@ export default function Checkout() {
     image: state.image || FALLBACK_BOOKING.image,
     rating: FALLBACK_BOOKING.rating,
     reviews: FALLBACK_BOOKING.reviews,
-    checkIn: FALLBACK_BOOKING.checkIn,
-    checkOut: FALLBACK_BOOKING.checkOut,
+    checkIn: state.checkIn || FALLBACK_BOOKING.checkIn,
+    checkOut: state.checkOut || FALLBACK_BOOKING.checkOut,
     nights: state.nights ?? FALLBACK_BOOKING.nights,
     guests: state.guests || FALLBACK_BOOKING.guests,
     pricePerNight: state.pricePerNight ?? FALLBACK_BOOKING.pricePerNight,
@@ -1093,7 +1094,7 @@ export default function Checkout() {
   const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
   const piTaxes = usdToPi(bookingData.taxes);
   const piDiscount = usdToPi(bookingData.discount);
-  const piTotal = state.totalPi ?? usdToPi(bookingData.total);
+  const piTotal = piSubtotal + piTaxes - piDiscount;
 
   const handlePay = (id: string) => {
     saveBooking({

@@ -215,7 +215,7 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
                 {hotel.ratingLabel}
               </span>
               <span className="font-body text-[11px] text-[#C5CBD4]">
-                {hotel.reviewCount.toLocaleString()} reviews
+                {hotel.reviewCount.toLocaleString('en-US')} reviews
               </span>
             </div>
           </div>

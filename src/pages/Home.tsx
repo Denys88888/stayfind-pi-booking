@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import {
   Search, MapPin, Calendar, Users, Heart, Star, ChevronLeft, ChevronRight,
-  Check, Sparkles, Shield, Clock, Lock, CreditCard, ArrowRight, ArrowUp,
+  Check, Sparkles, Shield, Clock, CreditCard, ArrowRight, ArrowUp,
   Wifi, Car, Coffee, Utensils, ChevronDown
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -31,7 +31,7 @@ const fadeUp = {
 
 function useScrollReveal() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const inView = useInView(ref, { once: true, amount: 0.05 });
   return { ref, inView };
 }
 
@@ -638,7 +638,7 @@ function FeaturesSection() {
     { icon: Shield, title: t('home.dealsTitle'), desc: t('home.dealsSubtitle') },
     { icon: Star, title: t('home.reviewsTitle'), desc: t('home.reviewers') },
     { icon: Clock, title: t('home.statCountries'), desc: t('home.popularSubtitle') },
-    { icon: Lock, title: t('home.statTravelers'), desc: t('home.reviewers') },
+    { icon: Users, title: t('home.statTravelers'), desc: t('home.reviewers') },
     { icon: CreditCard, title: t('home.ctaTitle'), desc: t('home.ctaSubtitle') },
   ];
 
