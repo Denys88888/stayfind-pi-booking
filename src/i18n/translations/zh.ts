@@ -301,6 +301,8 @@ const zh: TranslationSet = {
     close: '关闭',
     loading: '加载中...',
     error: '出了点问题',
+    notFound: '页面未找到',
+    notFoundDesc: '您查找的页面不存在或已被移动。',
     tryAgain: '重试',
     and: '和',
   },

@@ -305,6 +305,8 @@ export interface TranslationSet {
     loading: string;
     error: string;
     tryAgain: string;
+    notFound: string;
+    notFoundDesc: string;
     and: string;
   };
   footer: {

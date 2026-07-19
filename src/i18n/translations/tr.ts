@@ -301,6 +301,8 @@ const tr: TranslationSet = {
     close: 'Kapat',
     loading: 'Yükleniyor...',
     error: 'Bir şeyler ters gitti',
+    notFound: 'Sayfa bulunamadı',
+    notFoundDesc: 'Aradığınız sayfa mevcut değil veya taşındı.',
     tryAgain: 'Tekrar dene',
     and: 've',
   },

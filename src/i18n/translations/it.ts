@@ -301,6 +301,8 @@ const it: TranslationSet = {
     close: 'Chiudi',
     loading: 'Caricamento...',
     error: 'Qualcosa è andato storto',
+    notFound: 'Pagina non trovata',
+    notFoundDesc: 'La pagina che stai cercando non esiste o è stata spostata.',
     tryAgain: 'Riprova',
     and: 'e',
   },

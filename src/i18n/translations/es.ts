@@ -301,6 +301,8 @@ const es: TranslationSet = {
     close: 'Cerrar',
     loading: 'Cargando...',
     error: 'Algo salió mal',
+    notFound: 'Página no encontrada',
+    notFoundDesc: 'La página que buscas no existe o ha sido movida.',
     tryAgain: 'Intentar de nuevo',
     and: 'y',
   },

@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom';
+import { useTranslation } from '@/i18n';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import PropertyDetail from './pages/PropertyDetail';
@@ -9,13 +10,14 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Admin from './pages/Admin';
 
 function NotFound() {
+  const { t } = useTranslation();
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif', gap: 16, padding: 24 }}>
       <div style={{ fontSize: 72, fontWeight: 700, color: '#E85D4A', lineHeight: 1 }}>404</div>
-      <h1 style={{ fontSize: 24, fontWeight: 600, color: '#0F1B2E', margin: 0 }}>Page not found</h1>
-      <p style={{ color: '#7A8494', margin: 0, textAlign: 'center' }}>The page you're looking for doesn't exist or has been moved.</p>
+      <h1 style={{ fontSize: 24, fontWeight: 600, color: '#0F1B2E', margin: 0 }}>{t('common.notFound')}</h1>
+      <p style={{ color: '#7A8494', margin: 0, textAlign: 'center' }}>{t('common.notFoundDesc')}</p>
       <Link to="/" style={{ marginTop: 8, background: '#E85D4A', color: '#fff', padding: '10px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 600, fontSize: 15 }}>
-        Back to Home
+        {t('checkout.backHome')}
       </Link>
     </div>
   );

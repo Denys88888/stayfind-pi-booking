@@ -302,6 +302,8 @@ const en: TranslationSet = {
     close: 'Close',
     loading: 'Loading...',
     error: 'Something went wrong',
+    notFound: 'Page not found',
+    notFoundDesc: 'The page you\'re looking for doesn\'t exist or has been moved.',
     tryAgain: 'Try again',
     and: 'and',
   },

@@ -301,6 +301,8 @@ const fr: TranslationSet = {
     close: 'Fermer',
     loading: 'Chargement...',
     error: "Une erreur s'est produite",
+    notFound: 'Page introuvable',
+    notFoundDesc: 'La page que vous recherchez n\'existe pas ou a été déplacée.',
     tryAgain: 'Réessayer',
     and: 'et',
   },

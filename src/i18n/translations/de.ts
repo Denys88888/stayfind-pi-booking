@@ -301,6 +301,8 @@ const de: TranslationSet = {
     close: 'Schließen',
     loading: 'Laden...',
     error: 'Etwas ist schief gelaufen',
+    notFound: 'Seite nicht gefunden',
+    notFoundDesc: 'Die gesuchte Seite existiert nicht oder wurde verschoben.',
     tryAgain: 'Erneut versuchen',
     and: 'und',
   },

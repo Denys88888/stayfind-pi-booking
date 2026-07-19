@@ -301,6 +301,8 @@ const ar: TranslationSet = {
     close: 'إغلاق',
     loading: 'جاري التحميل...',
     error: 'حدث خطأ ما',
+    notFound: 'الصفحة غير موجودة',
+    notFoundDesc: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
     tryAgain: 'حاول مرة أخرى',
     and: 'و',
   },
