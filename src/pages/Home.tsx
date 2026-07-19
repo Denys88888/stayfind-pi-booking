@@ -389,7 +389,7 @@ function PropertyTypesSection() {
             {t('home.typesTitle')}
           </h2>
           <p className="font-body text-base text-[#7A8494] mt-2">
-            From boutique hotels to private villas, find the perfect accommodation
+            {t('hero.typesSubtitle')}
           </p>
         </motion.div>
 
@@ -468,13 +468,13 @@ function DealsSection() {
             <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,27,46,0.85)] via-transparent to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
               <span className="inline-block bg-[#E85D4A] text-white font-body text-xs font-semibold px-3 py-1 rounded-md mb-3">
-                SAVE 40%
+                {t('hero.dealSave40')}
               </span>
               <h3 className="font-display text-xl sm:text-2xl font-semibold text-white">
-                Summer Escape to the Maldives
+                {t('hero.dealFeaturedTitle')}
               </h3>
               <p className="font-body text-sm text-white/80 mt-2 max-w-md">
-                7 nights all-inclusive resort with private beach access and complimentary spa treatments
+                {t('hero.dealFeaturedDesc')}
               </p>
               <div className="flex items-center gap-3 mt-4">
                 <span className="font-body text-sm text-white/50 line-through">{formatPiAmount(usdToPi(2400))}</span>
