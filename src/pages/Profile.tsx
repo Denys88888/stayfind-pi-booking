@@ -533,7 +533,7 @@ function RewardsTab() {
             <div>
               <p className="font-body text-sm text-white/60">{t('profile.rewards')}</p>
               <p className="font-display text-4xl font-semibold mt-1">
-                {rewardsPoints.toLocaleString()}
+                {rewardsPoints.toLocaleString('en-US')}
               </p>
               <p className="font-body text-sm text-white/60 mt-1">
                 {t('profile.points')}
@@ -549,7 +549,7 @@ function RewardsTab() {
               <span className="font-body text-white/80">{currentTier?.name}</span>
               <span className="font-body text-white/60">
                 {nextTierName
-                  ? `${(nextTier - rewardsPoints).toLocaleString()} {t('profile.points')} to ${nextTierName.name}`
+                  ? `${(nextTier - rewardsPoints).toLocaleString('en-US')} {t('profile.points')} to ${nextTierName.name}`
                   : 'Max tier reached!'}
               </span>
             </div>
@@ -620,7 +620,7 @@ function RewardsTab() {
               {t('profile.rewards')}
             </DialogTitle>
             <DialogDescription className="font-body text-[#7A8494]">
-              You have {rewardsPoints.toLocaleString()} {t('profile.points')} available
+              You have {rewardsPoints.toLocaleString('en-US')} {t('profile.points')} available
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
@@ -639,7 +639,7 @@ function RewardsTab() {
                     {reward.name}
                   </p>
                   <p className="font-body text-xs text-[#7A8494]">
-                    {reward.cost.toLocaleString()} {t('profile.points')}
+                    {reward.cost.toLocaleString('en-US')} {t('profile.points')}
                   </p>
                 </div>
                 <Button

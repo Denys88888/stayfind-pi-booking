@@ -21,6 +21,10 @@ const zh: TranslationSet = {
     checkOut: '退房',
     guests: '客人',
     searchBtn: '搜索',
+    trust1: '2M+ 房源',
+    trust2: '最低价格保证',
+    trust3: '免费取消',
+    trust4: '全天候支持',
     popular: '热门：巴黎、东京、迪拜',
   },
   home: {
@@ -51,6 +55,11 @@ const zh: TranslationSet = {
     results: '找到 {count} 处住宿',
     perNight: '每晚',
     map: '地图',
+    freeCancellation: '免费取消',
+    breakfastIncluded: '含早餐',
+    roomsLeft: '仅剩{count}间客房!',
+    viewDeal: '查看优惠',
+    showOnMap: '在地图上显示',
     list: '列表',
   },
   property: {
@@ -92,6 +101,7 @@ const zh: TranslationSet = {
     specialRequests: '特殊要求',
     requestsHint:
       '有什么特殊要求吗？（例如提前入住、特定房间位置、饮食要求……）',
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: '预计到达时间',
     checkInStarts: '入住从下午3:00开始',
     saveDetails: '保存我的信息以便下次更快结账',

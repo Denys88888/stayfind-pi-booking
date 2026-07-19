@@ -21,6 +21,10 @@ const tr: TranslationSet = {
     checkOut: 'Çıkış',
     guests: 'Misafirler',
     searchBtn: 'Ara',
+    trust1: '2M+ Tesis',
+    trust2: 'En İyi Fiyat Garantisi',
+    trust3: 'Ücretsiz İptal',
+    trust4: '7/24 Destek',
     popular: 'Popüler: Paris, Tokyo, Dubai',
   },
   home: {
@@ -51,6 +55,11 @@ const tr: TranslationSet = {
     results: '{count} mülk bulundu',
     perNight: 'gecelik',
     map: 'Harita',
+    freeCancellation: 'Ücretsiz iptal',
+    breakfastIncluded: 'Kahvaltı dahil',
+    roomsLeft: 'Yalnızca {count} oda kaldı!',
+    viewDeal: 'Teklifi gör',
+    showOnMap: 'Haritada göster',
     list: 'Liste',
   },
   property: {
@@ -91,7 +100,8 @@ const tr: TranslationSet = {
     phone: 'Telefon',
     specialRequests: 'Özel İstekler',
     requestsHint:
-      'Herhangi bir özel isteğiniz var mı? (örn. erken giriş, belirli oda konumu, diyet gereksinimleri...)',
+      'Herhangi bir özel isteğiniz var mı? (örn. erken giriş,
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', belirli oda konumu, diyet gereksinimleri...)',
     arrivalTime: 'Tahmini Varış Saati',
     checkInStarts: 'Giriş saat 15:00\'te başlar',
     saveDetails: 'Bir sonraki rezervasyon için bilgilerimi kaydet',

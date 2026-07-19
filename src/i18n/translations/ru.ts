@@ -21,6 +21,10 @@ const ru: TranslationSet = {
     checkOut: 'Выезд',
     guests: 'Гости',
     searchBtn: 'Поиск',
+    trust1: '2M+ Объектов',
+    trust2: 'Гарантия лучшей цены',
+    trust3: 'Бесплатная отмена',
+    trust4: 'Поддержка 24/7',
     popular: 'Популярные: Париж, Токио, Дубай',
   },
   home: {
@@ -51,6 +55,11 @@ const ru: TranslationSet = {
     results: 'Найдено: {count}',
     perNight: 'за ночь',
     map: 'Карта',
+    freeCancellation: 'Бесплатная отмена',
+    breakfastIncluded: 'Завтрак включён',
+    roomsLeft: 'Осталось только {count} номера!',
+    viewDeal: 'Смотреть предложение',
+    showOnMap: 'Показать на карте',
     list: 'Список',
   },
   property: {
@@ -91,7 +100,8 @@ const ru: TranslationSet = {
     phone: 'Телефон',
     specialRequests: 'Особые пожелания',
     requestsHint:
-      'Есть особые пожелания? (например, ранний заезд, конкретное расположение номера, диетические требования...)',
+      'Есть особые пожелания? (например,
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', ранний заезд, конкретное расположение номера, диетические требования...)',
     arrivalTime: 'Предполагаемое время прибытия',
     checkInStarts: 'Заезд начинается в 15:00',
     saveDetails: 'Сохранить мои данные для ускоренного оформления в следующий раз',

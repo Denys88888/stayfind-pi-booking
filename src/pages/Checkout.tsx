@@ -200,7 +200,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
       <div className="flex items-center gap-1 mt-1">
         <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
         <span className="font-body text-sm text-[#7A8494]">
-          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString()}{' '}
+          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString('en-US')}{' '}
           {t('property.reviews')}
         </span>
       </div>
@@ -235,7 +235,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
               ${bookingData.pricePerNight} × {bookingData.nights} {t('property.nights')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
-              ${(bookingData.pricePerNight * bookingData.nights).toLocaleString()}
+              ${(bookingData.pricePerNight * bookingData.nights).toLocaleString('en-US')}
               <span className="text-[#7A8494] ml-1">
                 ({formatPiAmount(piSubtotal)})
               </span>
@@ -246,7 +246,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
               {t('checkout.taxesFees')}
             </span>
             <span className="font-body text-sm text-[#4A5468]">
-              ${bookingData.taxes.toLocaleString()}
+              ${bookingData.taxes.toLocaleString('en-US')}
               <span className="text-[#7A8494] ml-1">
                 ({formatPiAmount(piTaxes)})
               </span>
@@ -269,7 +269,7 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
                   </Tooltip>
                 </span>
                 <span className="font-body text-sm text-[#2D9F5E]">
-                  - ${bookingData.discount.toLocaleString()}
+                  - ${bookingData.discount.toLocaleString('en-US')}
                   <span className="text-[#7A8494] ml-1">
                     (-{formatPiAmount(piDiscount)})
                   </span>
@@ -493,7 +493,7 @@ function StepDetails({
             {t('checkout.requestsHint')}
           </p>
           <Textarea
-            placeholder={t('checkout.requestsHint')}
+            placeholder={t('checkout.requestsPlaceholder')}
             rows={4}
             value={requests}
             onChange={(e) => setRequests(e.target.value)}
@@ -900,11 +900,11 @@ function StepPayment({
 }
 
 /* ─── Step 3: Confirmation ─── */
-function StepConfirmation({ txId, bookingData, piTotal }: { txId: string; bookingData: typeof FALLBACK_BOOKING; piTotal: number }) {
+function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: string; bookingData: typeof FALLBACK_BOOKING; piTotal: number; userEmail?: string }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const bookingRef = txId.slice(0, 12).toUpperCase() || 'SF-2025-78432';
+  const bookingRef = txId.slice(0, 12).toUpperCase() || 'SF-2026-00001';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(bookingRef).catch(() => {});
@@ -932,7 +932,7 @@ function StepConfirmation({ txId, bookingData, piTotal }: { txId: string; bookin
 
       <p        className="font-body text-base text-[#7A8494] mt-2"
       >
-        {t('checkout.confirmEmail')} sarah.mitchell@email.com
+        {t('checkout.confirmEmail')} {userEmail || 'your email'}
       </p>
 
       {/* Booking Reference */}
@@ -1069,6 +1069,7 @@ function StepConfirmation({ txId, bookingData, piTotal }: { txId: string; bookin
 export default function Checkout() {
   const [step, setStep] = useState(1);
   const [txId, setTxId] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const location = useLocation();
   const state = (location.state || {}) as BookingState;
 
@@ -1131,7 +1132,7 @@ export default function Checkout() {
 
           {/* Steps */}
           {step === 1 && (
-            <StepDetails onContinue={() => setStep(2)} {...sidebarProps} />
+            <StepDetails onContinue={(data) => { if (data?.email) setUserEmail(data.email); setStep(2); }} {...sidebarProps} />
           )}
           {step === 2 && (
             <StepPayment
@@ -1141,7 +1142,7 @@ export default function Checkout() {
             />
           )}
           {step === 3 && (
-            <StepConfirmation txId={txId} bookingData={bookingData} piTotal={piTotal} />
+            <StepConfirmation txId={txId} bookingData={bookingData} piTotal={piTotal} userEmail={userEmail} />
           )}
         </div>
       </div>

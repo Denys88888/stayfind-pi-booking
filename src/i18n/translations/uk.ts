@@ -21,6 +21,10 @@ const uk: TranslationSet = {
     checkOut: 'Виїзд',
     guests: 'Гості',
     searchBtn: 'Пошук',
+    trust1: '2M+ Об'єктів',
+    trust2: 'Гарантія найкращої ціни',
+    trust3: 'Безкоштовна відміна',
+    trust4: 'Підтримка 24/7',
     popular: 'Популярні: Париж, Токіо, Дубай',
   },
   home: {
@@ -51,6 +55,11 @@ const uk: TranslationSet = {
     results: 'Знайдено: {count}',
     perNight: 'за ніч',
     map: 'Карта',
+    freeCancellation: 'Безкоштовна відміна',
+    breakfastIncluded: 'Сніданок включено',
+    roomsLeft: 'Залишилось лише {count} номери!',
+    viewDeal: 'Переглянути пропозицію',
+    showOnMap: 'Показати на карті',
     list: 'Список',
   },
   property: {
@@ -91,7 +100,8 @@ const uk: TranslationSet = {
     phone: 'Телефон',
     specialRequests: 'Особливі побажання',
     requestsHint:
-      'Є особливі побажання? (наприклад, ранній заїзд, конкретне розташування номера, дієтичні вимоги...)',
+      'Є особливі побажання? (наприклад,
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', ранній заїзд, конкретне розташування номера, дієтичні вимоги...)',
     arrivalTime: 'Орієнтовний час прибуття',
     checkInStarts: 'Заїзд починається о 15:00',
     saveDetails: 'Зберегти мої дані для прискореного оформлення наступного разу',

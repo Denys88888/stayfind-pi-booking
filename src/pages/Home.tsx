@@ -268,7 +268,7 @@ function HeroSection() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="absolute bottom-8 left-0 right-0 flex flex-wrap justify-center gap-x-8 gap-y-3 px-6"
         >
-          {['2M+ Properties', 'Best Price Guarantee', 'Free Cancellation', '24/7 Support'].map((item) => (
+          {[t('hero.trust1'), t('hero.trust2'), t('hero.trust3'), t('hero.trust4')].map((item) => (
             <div key={item} className="flex items-center gap-2">
               <Check size={14} className="text-white/70" />
               <span className="font-body text-xs font-medium uppercase tracking-[0.06em] text-white/70">

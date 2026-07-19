@@ -21,6 +21,10 @@ const fr: TranslationSet = {
     checkOut: 'Départ',
     guests: 'Voyageurs',
     searchBtn: 'Rechercher',
+    trust1: '2M+ Propriétés',
+    trust2: 'Meilleur Prix Garanti',
+    trust3: 'Annulation Gratuite',
+    trust4: 'Support 24/7',
     popular: 'Populaires : Paris, Tokyo, Dubaï',
   },
   home: {
@@ -51,6 +55,11 @@ const fr: TranslationSet = {
     results: '{count} propriétés trouvées',
     perNight: 'par nuit',
     map: 'Carte',
+    freeCancellation: 'Annulation gratuite',
+    breakfastIncluded: 'Petit-déjeuner inclus',
+    roomsLeft: 'Plus que {count} chambres!',
+    viewDeal: 'Voir l'offre',
+    showOnMap: 'Voir sur la carte',
     list: 'Liste',
   },
   property: {
@@ -91,7 +100,8 @@ const fr: TranslationSet = {
     phone: 'Téléphone',
     specialRequests: 'Demandes spéciales',
     requestsHint:
-      "Des demandes spéciales ? (p. ex., arrivée anticipée, emplacement spécifique de la chambre, exigences alimentaires...)",
+      "Des demandes spéciales ? (p. ex.,
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...', arrivée anticipée, emplacement spécifique de la chambre, exigences alimentaires...)",
     arrivalTime: "Heure d'arrivée estimée",
     checkInStarts: "L'enregistrement commence à 15h00",
     saveDetails: 'Enregistrer mes coordonnées pour un paiement plus rapide la prochaine fois',

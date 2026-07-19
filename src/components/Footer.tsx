@@ -51,17 +51,17 @@ export default function Footer() {
     {
       title: t('footer.aboutUs'),
       links: [
-        { label: t('footer.aboutUs'), to: '#' },
-        { label: t('footer.careers'), to: '#' },
-        { label: t('footer.press'), to: '#' },
+        { label: t('footer.aboutUs'), to: '/' },
+        { label: t('footer.careers'), to: '/' },
+        { label: t('footer.press'), to: '/' },
       ],
     },
     {
       title: t('footer.support'),
       links: [
-        { label: t('footer.helpCenter'), to: '#' },
-        { label: t('footer.safety'), to: '#' },
-        { label: t('footer.cancellation'), to: '#' },
+        { label: t('footer.helpCenter'), to: '/terms' },
+        { label: t('footer.safety'), to: '/terms' },
+        { label: t('footer.cancellation'), to: '/terms' },
       ],
     },
     {
@@ -69,7 +69,7 @@ export default function Footer() {
       links: [
         { label: t('footer.terms'), to: '/terms' },
         { label: t('footer.privacy'), to: '/privacy' },
-        { label: t('footer.cookies'), to: '#' },
+        { label: t('footer.cookies'), to: '/privacy' },
       ],
     },
   ];
@@ -157,17 +157,10 @@ export default function Footer() {
             {t('footer.copyright')}
           </p>
 
-          <div className="flex items-center gap-6">
-            {socialLinks.map((social) => (
-              <Link
-                key={social.label}
-                to="#"
-                className="text-[#C5CBD4] hover:text-[#E85D4A] transition-colors"
-                aria-label={social.label}
-              >
-                <social.icon size={18} />
-              </Link>
-            ))}
+          <div className="flex items-center gap-4">
+            <Link to="/terms" className="font-body text-xs text-[#7A8494] hover:text-[#C5CBD4] transition-colors">{t('footer.terms')}</Link>
+            <span className="text-[#243B5D]">·</span>
+            <Link to="/privacy" className="font-body text-xs text-[#7A8494] hover:text-[#C5CBD4] transition-colors">{t('footer.privacy')}</Link>
           </div>
         </div>
       </div>

@@ -21,6 +21,10 @@ const ar: TranslationSet = {
     checkOut: 'تسجيل المغادرة',
     guests: 'الضيوف',
     searchBtn: 'بحث',
+    trust1: '2M+ عقار',
+    trust2: 'ضمان أفضل سعر',
+    trust3: 'إلغاء مجاني',
+    trust4: 'دعم 24/7',
     popular: 'الشائع: باريس، طوكيو، دبي',
   },
   home: {
@@ -51,6 +55,11 @@ const ar: TranslationSet = {
     results: 'تم العثور على {count} عقار',
     perNight: 'لليلة',
     map: 'خريطة',
+    freeCancellation: 'إلغاء مجاني',
+    breakfastIncluded: 'الإفطار مشمول',
+    roomsLeft: 'تبقت {count} غرف فقط!',
+    viewDeal: 'عرض الصفقة',
+    showOnMap: 'إظهار على الخريطة',
     list: 'قائمة',
   },
   property: {
@@ -92,6 +101,7 @@ const ar: TranslationSet = {
     specialRequests: 'طلبات خاصة',
     requestsHint:
       'أي طلبات خاصة؟ (مثال: تسجيل وصول مبكر، موقع محدد للغرفة، متطلبات غذائية...)',
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: 'وقت الوصول المتوقع',
     checkInStarts: 'تسجيل الوصول يبدأ الساعة 3:00 مساءً',
     saveDetails: 'حفظ بياناتي لتسجيل وصول أسرع في المرة القادمة',

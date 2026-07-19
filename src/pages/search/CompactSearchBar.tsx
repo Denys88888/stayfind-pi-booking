@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Users, Search, ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +10,7 @@ interface CompactSearchBarProps {
 
 export default function CompactSearchBar({ collapsed, onToggleCollapse }: CompactSearchBarProps) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [destination, setDestination] = useState(searchParams.get('destination') || 'Paris, France');
   const [dates, setDates] = useState(() => {
     if (searchParams.get('dates')) return searchParams.get('dates')!;
@@ -134,7 +135,17 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
               </button>
 
               {/* Search Button */}
-              <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-lg sm:rounded-full transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] ml-0 sm:ml-1">
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  if (destination) params.set('destination', destination);
+                  if (dates) params.set('dates', dates);
+                  if (guests) params.set('guests', guests);
+                  navigate(`/search?${params.toString()}`);
+                  setActiveField(null);
+                }}
+                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-lg sm:rounded-full transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)] ml-0 sm:ml-1"
+              >
                 <Search size={16} />
                 <span className="sm:hidden">Search</span>
               </button>

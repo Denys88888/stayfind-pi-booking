@@ -22,6 +22,10 @@ const en: TranslationSet = {
     guests: 'Guests',
     searchBtn: 'Search',
     popular: 'Popular: Paris, Tokyo, Dubai',
+    trust1: '2M+ Properties',
+    trust2: 'Best Price Guarantee',
+    trust3: 'Free Cancellation',
+    trust4: '24/7 Support',
   },
   home: {
     popularTitle: 'Popular Destinations',
@@ -52,6 +56,11 @@ const en: TranslationSet = {
     perNight: 'per night',
     map: 'Map',
     list: 'List',
+    freeCancellation: 'Free cancellation',
+    breakfastIncluded: 'Breakfast included',
+    roomsLeft: 'Only {count} rooms left!',
+    viewDeal: 'View Deal',
+    showOnMap: 'Show on map',
   },
   property: {
     amenities: 'Amenities',
@@ -92,6 +101,7 @@ const en: TranslationSet = {
     specialRequests: 'Special Requests',
     requestsHint:
       'Any special requests? (e.g., early check-in, specific room location, dietary requirements...)',
+    requestsPlaceholder: 'e.g., early check-in, high floor, quiet room...',
     arrivalTime: 'Estimated Arrival Time',
     checkInStarts: 'Check-in starts at 3:00 PM',
     saveDetails: 'Save my details for faster checkout next time',

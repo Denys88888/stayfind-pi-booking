@@ -31,6 +31,10 @@ export interface TranslationSet {
     guests: string;
     searchBtn: string;
     popular: string;
+    trust1: string;
+    trust2: string;
+    trust3: string;
+    trust4: string;
   };
   home: {
     popularTitle: string;
@@ -61,6 +65,11 @@ export interface TranslationSet {
     perNight: string;
     map: string;
     list: string;
+    freeCancellation: string;
+    breakfastIncluded: string;
+    roomsLeft: string;
+    viewDeal: string;
+    showOnMap: string;
   };
   property: {
     amenities: string;
@@ -100,6 +109,7 @@ export interface TranslationSet {
     phone: string;
     specialRequests: string;
     requestsHint: string;
+    requestsPlaceholder: string;
     arrivalTime: string;
     checkInStarts: string;
     saveDetails: string;

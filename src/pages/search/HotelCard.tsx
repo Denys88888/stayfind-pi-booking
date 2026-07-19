@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import type { Hotel } from '@/types/search';
 import { usdToPi, formatPiAmount } from '@/lib/piPayments';
+import { useTranslation } from '@/i18n';
 
 interface HotelCardProps {
   hotel: Hotel;
@@ -31,6 +32,7 @@ const AMENITY_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function HotelCard({ hotel, index, viewMode, isActive, onHover }: HotelCardProps) {
+  const { t } = useTranslation();
   const [imgIndex, setImgIndex] = useState(0);
   const [isFav, setIsFav] = useState(false);
   const [imgHovered, setImgHovered] = useState(false);
@@ -225,7 +227,7 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
             <MapPin size={14} className="text-[#C5CBD4] shrink-0" />
             <span className="font-body text-sm text-[#7A8494] truncate">{hotel.location}</span>
             <span className="font-body text-xs text-[#E85D4A] shrink-0 cursor-pointer hover:underline">
-              Show on map
+              {t('search.showOnMap')}
             </span>
           </div>
 
@@ -262,18 +264,18 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
                 {hotel.freeCancellation && (
                   <span className="inline-flex items-center gap-1 font-body text-xs text-[#2D9F5E]">
                     <Check size={13} />
-                    Free cancellation
+                    {t('search.freeCancellation')}
                   </span>
                 )}
                 {hotel.breakfastIncluded && (
                   <span className="inline-flex items-center gap-1 font-body text-xs text-[#2D9F5E]">
                     <Check size={13} />
-                    Breakfast included
+                    {t('search.breakfastIncluded')}
                   </span>
                 )}
                 {hotel.roomsLeft && hotel.roomsLeft < 5 && (
                   <span className="font-body text-xs text-[#E8A838] font-medium">
-                    Only {hotel.roomsLeft} rooms left!
+                    {t('search.roomsLeft').replace('{count}', String(hotel.roomsLeft))}
                   </span>
                 )}
               </div>
@@ -288,13 +290,13 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
                 <span className="font-display text-xl sm:text-2xl font-bold text-[#E85D4A]">
                   {formatPiAmount(usdToPi(hotel.price))}
                 </span>
-                <p className="font-body text-[11px] text-[#7A8494]">per night</p>
+                <p className="font-body text-[11px] text-[#7A8494]">{t('search.perNight')}</p>
                 <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${hotel.price} USD</p>
                 <Link
                   to={`/property/${hotel.id}`}
                   className="inline-block mt-2 px-5 py-2.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)]"
                 >
-                  View Deal
+                  {t('search.viewDeal')}
                 </Link>
               </div>
             </div>
