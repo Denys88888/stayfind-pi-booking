@@ -201,6 +201,14 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
+                  {user.username.toLowerCase() === 'cherry19899' && (
+                    <Link
+                      to="/admin"
+                      className="font-body text-base font-medium text-[#6366f1] py-2"
+                    >
+                      ⚙️ Admin
+                    </Link>
+                  )}
                   <button
                     onClick={signOut}
                     className="font-body text-base font-medium text-[#7A8494] py-2 text-left hover:text-[#E85D4A] transition-colors"
