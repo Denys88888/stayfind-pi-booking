@@ -225,6 +225,8 @@ export interface TranslationSet {
     total: string;
     freeCancel: string;
     piSecured: string;
+    decentralized: string;
+    yourEmail: string;
     bookingConfirmed: string;
     confirmEmail: string;
     bookingRef: string;

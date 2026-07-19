@@ -876,11 +876,11 @@ function StepPayment({
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4 text-[#7A8494]">
           <span className="flex items-center gap-1 font-body text-xs">
             <Lock size={12} />
-            Pi Blockchain Secure
+            {t('checkout.piSecured')}
           </span>
           <span className="flex items-center gap-1 font-body text-xs">
             <Shield size={12} />
-            Decentralized Payment
+            {t('checkout.decentralized')}
           </span>
           <span className="flex items-center gap-1 font-body text-xs">
             <Wallet size={12} />
@@ -932,7 +932,7 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
 
       <p        className="font-body text-base text-[#7A8494] mt-2"
       >
-        {t('checkout.confirmEmail')} {userEmail || 'your email'}
+        {t('checkout.confirmEmail')} {userEmail || t('checkout.yourEmail')}
       </p>
 
       {/* Booking Reference */}

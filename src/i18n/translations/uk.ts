@@ -222,6 +222,8 @@ const uk: TranslationSet = {
     total: 'Разом',
     freeCancel: 'Безкоштовне скасування до {date}',
     piSecured: 'Захищено блокчейном Pi',
+    decentralized: 'Децентралізований платіж',
+    yourEmail: 'вашу пошту',
     bookingConfirmed: 'Бронювання підтверджено!',
     confirmEmail: 'Лист із підтвердженням надіслано на',
     bookingRef: 'Номер бронювання',

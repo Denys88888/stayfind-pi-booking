@@ -222,6 +222,8 @@ const tr: TranslationSet = {
     total: 'Toplam',
     freeCancel: '{date} tarihine kadar ücretsiz iptal',
     piSecured: 'Pi Blockchain ile Güvende',
+    decentralized: 'Merkeziyetsiz Ödeme',
+    yourEmail: 'e-postanız',
     bookingConfirmed: 'Rezervasyon Onaylandı!',
     confirmEmail: 'Onay e-postası şu adrese gönderildi:',
     bookingRef: 'Rezervasyon Referansı',

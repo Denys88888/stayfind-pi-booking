@@ -222,6 +222,8 @@ const ru: TranslationSet = {
     total: 'Итого',
     freeCancel: 'Бесплатная отмена до {date}',
     piSecured: 'Защищено блокчейном Pi',
+    decentralized: 'Децентрализованный платёж',
+    yourEmail: 'ваш email',
     bookingConfirmed: 'Бронирование подтверждено!',
     confirmEmail: 'Письмо с подтверждением отправлено на',
     bookingRef: 'Номер бронирования',

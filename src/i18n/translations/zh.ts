@@ -222,6 +222,8 @@ const zh: TranslationSet = {
     total: '总计',
     freeCancel: '{date}前可免费取消',
     piSecured: '由 Pi 区块链保障安全',
+    decentralized: '去中心化支付',
+    yourEmail: '您的邮箱',
     bookingConfirmed: '预订已确认！',
     confirmEmail: '确认邮件已发送至',
     bookingRef: '预订参考号',

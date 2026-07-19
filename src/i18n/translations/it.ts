@@ -222,6 +222,8 @@ const it: TranslationSet = {
     total: 'Totale',
     freeCancel: 'Cancellazione gratuita fino al {date}',
     piSecured: 'Protetto dalla blockchain Pi',
+    decentralized: 'Pagamento decentralizzato',
+    yourEmail: 'la tua email',
     bookingConfirmed: 'Prenotazione confermata!',
     confirmEmail: "Un'email di conferma è stata inviata a",
     bookingRef: 'Riferimento prenotazione',

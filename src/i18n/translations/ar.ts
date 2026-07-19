@@ -222,6 +222,8 @@ const ar: TranslationSet = {
     total: 'الإجمالي',
     freeCancel: 'إلغاء مجاني حتى {date}',
     piSecured: 'مؤمن ببلوكتشين Pi',
+    decentralized: 'دفع لامركزي',
+    yourEmail: 'بريدك الإلكتروني',
     bookingConfirmed: 'تم تأكيد الحجز!',
     confirmEmail: 'تم إرسال بريد التأكيد إلى',
     bookingRef: 'مرجع الحجز',
