@@ -117,6 +117,7 @@ const ar: TranslationSet = {
     wonderful: 'رائع',
   },
   checkout: {
+    demoModeBanner: 'وضع تجريبي — لا توجد معاملة Pi حقيقية. افتح في Pi Browser للمدفوعات الحية.',
     emailInvalid: 'يرجى إدخال عنوان بريد إلكتروني صالح',
     step1: 'بياناتك',
     step2: 'الدفع بـ Pi',

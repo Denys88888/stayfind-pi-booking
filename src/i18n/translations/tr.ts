@@ -117,6 +117,7 @@ const tr: TranslationSet = {
     wonderful: 'Harika',
   },
   checkout: {
+    demoModeBanner: 'Demo modu — Gerçek Pi işlemi yok. Canlı ödemeler için Pi Browser'da açın.',
     emailInvalid: 'Lütfen geçerli bir e-posta adresi girin',
     step1: 'Bilgileriniz',
     step2: 'Pi Ödemesi',

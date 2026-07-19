@@ -288,7 +288,7 @@ export default function Search() {
               {/* Right: Results count + Sort + View toggle */}
               <div className="flex items-center gap-3 shrink-0">
                 <span className="hidden lg:inline font-body text-sm text-[#7A8494]">
-                  {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
+                  {t('search.results').replace('{count}', String(filteredHotels.length))}
                 </span>
 
                 {/* Sort Dropdown */}
@@ -584,7 +584,7 @@ export default function Search() {
               {/* Side list */}
               <div className="w-full lg:w-[380px] shrink-0 overflow-y-auto rounded-2xl bg-[#F8F9FB] border border-[#E2E6EC] p-3 space-y-2">
                 <p className="font-body text-sm font-medium text-[#1A2B47] px-2 pt-1">
-                  {filteredHotels.length} {t('search.results').replace('{count}', String(filteredHotels.length))}
+                  {t('search.results').replace('{count}', String(filteredHotels.length))}
                 </p>
                 {filteredHotels.map((hotel, i) => (
                   <HotelCard

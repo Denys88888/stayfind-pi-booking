@@ -122,6 +122,7 @@ export interface TranslationSet {
     ratingWifi: string;
   };
   checkout: {
+    demoModeBanner: string;
     emailInvalid: string;
     step1: string;
     step2: string;

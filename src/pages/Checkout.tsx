@@ -665,7 +665,7 @@ function StepPayment({
           <div className="mb-4 flex items-center gap-2 bg-[#E8A838]/15 border border-[#E8A838]/30 rounded-xl px-4 py-2.5">
             <AlertTriangle size={14} className="text-[#E8A838] shrink-0" />
             <span className="font-body text-xs text-[#B07D1A]">
-              Demo Mode — No real Pi transaction. Open in Pi Browser for live payments.
+              {t('checkout.demoModeBanner')}
             </span>
           </div>
         )}

@@ -117,6 +117,7 @@ const pt: TranslationSet = {
     wonderful: 'Maravilhoso',
   },
   checkout: {
+    demoModeBanner: 'Modo demo — Sem transação Pi real. Abra no Pi Browser para pagamentos ao vivo.',
     emailInvalid: 'Por favor, insira um endereço de e-mail válido',
     step1: 'Seus dados',
     step2: 'Pagamento Pi',

@@ -117,6 +117,7 @@ const zh: TranslationSet = {
     wonderful: '绝佳',
   },
   checkout: {
+    demoModeBanner: '演示模式 — 没有真实的Pi交易。在Pi Browser中打开以进行实时付款。',
     emailInvalid: '请输入有效的电子邮件地址',
     step1: '您的详情',
     step2: 'Pi 支付',

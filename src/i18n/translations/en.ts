@@ -113,6 +113,7 @@ const en: TranslationSet = {
     ratingWifi: 'Free WiFi',
   },
   checkout: {
+    demoModeBanner: 'Demo Mode — No real Pi transaction. Open in Pi Browser for live payments.',
     emailInvalid: 'Please enter a valid email address',
     step1: 'Your Details',
     step2: 'Pi Payment',
