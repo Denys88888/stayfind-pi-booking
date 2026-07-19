@@ -43,6 +43,7 @@ interface GuestCounts {
 }
 
 function GuestSelector({ guests, onChange }: { guests: GuestCounts; onChange: (g: GuestCounts) => void }) {
+  const { t } = useTranslation();
   const update = (key: keyof GuestCounts, delta: number) => {
     const next = { ...guests, [key]: Math.max(0, guests[key] + delta) };
     if (key === 'adults' && next.adults < 1) next.adults = 1;
@@ -52,9 +53,9 @@ function GuestSelector({ guests, onChange }: { guests: GuestCounts; onChange: (g
   return (
     <div className="p-4 w-[280px]">
       {[
-        { key: 'adults' as const, label: 'Adults', sub: 'Age 13+' },
-        { key: 'children' as const, label: 'Children', sub: 'Age 2-12' },
-        { key: 'rooms' as const, label: 'Rooms', sub: '' },
+        { key: 'adults' as const, label: t('hero.adults'), sub: t('hero.adultsAge') },
+        { key: 'children' as const, label: t('hero.children'), sub: t('hero.childrenAge') },
+        { key: 'rooms' as const, label: t('hero.rooms'), sub: '' },
       ].map((item) => (
         <div key={item.key} className="flex items-center justify-between py-3 border-b border-[#F0F2F5] last:border-0">
           <div>

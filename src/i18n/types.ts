@@ -31,6 +31,11 @@ export interface TranslationSet {
     guests: string;
     searchBtn: string;
     popular: string;
+    adults: string;
+    adultsAge: string;
+    children: string;
+    childrenAge: string;
+    rooms: string;
     trust1: string;
     trust2: string;
     trust3: string;
