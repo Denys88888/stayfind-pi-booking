@@ -187,7 +187,7 @@ export default function CompactSearchBar({ collapsed, onToggleCollapse }: Compac
                   value={dates}
                   onChange={(e) => setDates(e.target.value)}
                   className="w-full px-4 py-3 border border-[#E2E6EC] rounded-xl font-body text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D4A] focus:border-transparent transition-all"
-                  placeholder="Check-in \u2013 Check-out"
+                  placeholder={t('hero.checkIn') + ' \u2013 ' + t('hero.checkOut')}
                   autoFocus
                 />
                 <div className="mt-3 flex gap-2">

@@ -167,6 +167,9 @@ const es: TranslationSet = {
     forNights: 'por {count} noches',
     houseRules: 'Normas de la casa',
     amenitiesSubtitle: 'Todo lo que necesitas para una estancia cómoda',
+    topCategories: 'Mejores categorías',
+    guestReviews: 'Opiniones de huéspedes',
+    ratingBreakdown: 'Desglose de puntuación',
     wonderful: 'Maravilloso',
   },
   checkout: {

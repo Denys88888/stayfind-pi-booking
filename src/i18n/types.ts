@@ -159,6 +159,9 @@ export interface TranslationSet {
     forNights: string;
     houseRules: string;
     amenitiesSubtitle: string;
+    topCategories: string;
+    guestReviews: string;
+    ratingBreakdown: string;
     filterAll: string;
     filterCouples: string;
     filterFamilies: string;

@@ -1071,7 +1071,7 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
           {/* Top Categories */}
           <div className="bg-white rounded-2xl p-6">
             <h4 className="font-display text-sm font-semibold text-[#0F1B2E] mb-4">
-              Top Categories
+              {t('property.topCategories')}
             </h4>
             <div className="flex flex-col gap-3">
               {topCategories.map((cat) => (
@@ -1094,7 +1094,7 @@ function ReviewsSection({ hotel }: { hotel: HotelData }) {
           {/* Rating Breakdown */}
           <div className="bg-white rounded-2xl p-6">
             <h4 className="font-display text-sm font-semibold text-[#0F1B2E] mb-4">
-              Rating Breakdown
+              {t('property.ratingBreakdown')}
             </h4>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               {breakdown.map((item) => (

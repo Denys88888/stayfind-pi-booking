@@ -167,6 +167,9 @@ const tr: TranslationSet = {
     forNights: '{count} gece için',
     houseRules: 'Ev Kuralları',
     amenitiesSubtitle: 'Konforlu bir konaklama için ihtiyacınız olan her şey',
+    topCategories: 'En iyi kategoriler',
+    guestReviews: 'Misafir yorumları',
+    ratingBreakdown: 'Puan dağılımı',
     wonderful: 'Harika',
   },
   checkout: {

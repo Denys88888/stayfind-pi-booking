@@ -167,6 +167,9 @@ const ru: TranslationSet = {
     forNights: 'за {count} ночей',
     houseRules: 'Правила дома',
     amenitiesSubtitle: 'Всё необходимое для комфортного проживания',
+    topCategories: 'Топ категории',
+    guestReviews: 'Отзывы гостей',
+    ratingBreakdown: 'Детали рейтинга',
     wonderful: 'Великолепно',
   },
   checkout: {

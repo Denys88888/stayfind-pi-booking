@@ -167,6 +167,9 @@ const ar: TranslationSet = {
     forNights: 'لـ {count} ليالٍ',
     houseRules: 'قواعد المنزل',
     amenitiesSubtitle: 'كل ما تحتاجه لإقامة مريحة',
+    topCategories: 'أفضل الفئات',
+    guestReviews: 'تقييمات الضيوف',
+    ratingBreakdown: 'تفاصيل التقييم',
     wonderful: 'رائع',
   },
   checkout: {

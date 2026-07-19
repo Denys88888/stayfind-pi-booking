@@ -167,6 +167,9 @@ const zh: TranslationSet = {
     forNights: '共{count}晚',
     houseRules: '住宿规则',
     amenitiesSubtitle: '舒适入住所需的一切',
+    topCategories: '热门分类',
+    guestReviews: '客人评价',
+    ratingBreakdown: '评分明细',
     wonderful: '绝佳',
   },
   checkout: {
