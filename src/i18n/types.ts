@@ -21,6 +21,7 @@ export interface TranslationSet {
     profile: string;
     bookings: string;
     language: string;
+    listProperty: string;
   };
   hero: {
     title: string;
@@ -363,6 +364,40 @@ export interface TranslationSet {
     toggleMenu: string;
     goToSlide: string;
   };
+  listing: {
+    heroTitle: string;
+    heroSubtitle: string;
+    signInRequired: string;
+    formName: string;
+    formLocation: string;
+    formLocationPlaceholder: string;
+    formAddress: string;
+    formAddressPlaceholder: string;
+    formPrice: string;
+    formDescription: string;
+    formDescriptionPlaceholder: string;
+    formPropertyType: string;
+    formAmenities: string;
+    formImages: string;
+    formImagesHint: string;
+    addImage: string;
+    removeImage: string;
+    submit: string;
+    submitting: string;
+    successTitle: string;
+    successDesc: string;
+    backToProfile: string;
+    myListings: string;
+    noListings: string;
+    noListingsDesc: string;
+    statusPending: string;
+    statusApproved: string;
+    statusRejected: string;
+    rejectedReason: string;
+    bookNow: string;
+    perNight: string;
+    notFound: string;
+  };
   footer: {
     aboutUs: string;
     howItWorks: string;
@@ -390,4 +425,5 @@ export type TranslationKey =
   | `checkout.${keyof TranslationSet['checkout']}`
   | `profile.${keyof TranslationSet['profile']}`
   | `common.${keyof TranslationSet['common']}`
+  | `listing.${keyof TranslationSet['listing']}`
   | `footer.${keyof TranslationSet['footer']}`;

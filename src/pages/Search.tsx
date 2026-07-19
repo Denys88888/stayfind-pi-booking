@@ -19,7 +19,31 @@ import FilterSidebar from './search/FilterSidebar';
 import HotelCard from './search/HotelCard';
 import MapView from './search/MapView';
 import { hotels } from '@/data/hotelData';
-import type { FilterState, SortOption } from '@/types/search';
+import type { FilterState, SortOption, Hotel } from '@/types/search';
+import { fetchApprovedListings, type Listing } from '@/lib/listingsStorage';
+
+function listingToHotel(l: Listing): Hotel {
+  return {
+    id: l.id,
+    name: l.name,
+    location: l.location,
+    address: l.address,
+    rating: 0,
+    ratingLabel: '',
+    reviewCount: 0,
+    price: l.price,
+    originalPrice: l.price,
+    images: l.images,
+    tags: [],
+    amenities: l.amenities,
+    coordinates: [48.8566, 2.3522],
+    starRating: 0,
+    propertyType: l.propertyType,
+    freeCancellation: false,
+    breakfastIncluded: l.amenities.includes('Breakfast'),
+    description: l.description,
+  };
+}
 
 const INITIAL_FILTERS: FilterState = {
   priceRange: [0, 600],
@@ -75,6 +99,14 @@ export default function Search() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [activeHotelId, setActiveHotelId] = useState<number | null>(null);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [listingHotels, setListingHotels] = useState<Hotel[]>([]);
+
+  /* ── User-submitted listings, merged into the static catalog ── */
+  useEffect(() => {
+    fetchApprovedListings().then((listings) => setListingHotels(listings.map(listingToHotel)));
+  }, []);
+
+  const allHotels = useMemo(() => [...hotels, ...listingHotels], [listingHotels]);
 
   /* ── Scroll: collapse search bar ── */
   useEffect(() => {
@@ -99,7 +131,7 @@ export default function Search() {
 
   /* ── Client-side filtering ── */
   const filteredHotels = useMemo(() => {
-    let result = [...hotels];
+    let result = [...allHotels];
 
     // Destination search
     if (destination.trim()) {
@@ -182,7 +214,7 @@ export default function Search() {
     }
 
     return result;
-  }, [filters, sortBy, destination]);
+  }, [filters, sortBy, destination, allHotels]);
 
   const paginatedHotels = useMemo(
     () => filteredHotels.slice(0, page * ITEMS_PER_PAGE),

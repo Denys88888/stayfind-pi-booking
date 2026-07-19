@@ -30,6 +30,8 @@ import {
   LogOut,
   CheckCircle2,
   AlertTriangle,
+  Home as HomeIcon,
+  Plus,
 } from 'lucide-react';
 import {
   formatPiAmount,
@@ -39,6 +41,7 @@ import { getBookings, fetchBookingsRemote, cancelBookingRemote, type Booking as 
 import { useFavoriteIds, toggleFavorite } from '@/lib/favoritesStorage';
 import { hotels } from '@/data/hotelData';
 import { getProfileSettings, saveProfileSettings, type ProfileSettings } from '@/lib/profileSettings';
+import { fetchMyListings, type Listing } from '@/lib/listingsStorage';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -396,6 +399,103 @@ function FavoritesTab() {
   );
 }
 
+/* ─── Tab: My Listings ─── */
+function MyListingsTab({ piUid }: { piUid: string }) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchMyListings(piUid).then((l) => {
+      if (!cancelled) {
+        setListings(l);
+        setLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [piUid]);
+
+  const statusBadge = (status: Listing['status']) => {
+    if (status === 'approved') {
+      return <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 font-body text-xs font-medium">{t('listing.statusApproved')}</Badge>;
+    }
+    if (status === 'rejected') {
+      return <Badge className="bg-rose-50 text-rose-700 hover:bg-rose-50 font-body text-xs font-medium">{t('listing.statusRejected')}</Badge>;
+    }
+    return <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-50 font-body text-xs font-medium">{t('listing.statusPending')}</Badge>;
+  };
+
+  return (
+    <AnimatedSection>
+      <div className="flex justify-end mb-4">
+        <Button
+          onClick={() => navigate('/list-property')}
+          className="bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl text-sm"
+        >
+          <Plus size={16} className="mr-1" />
+          {t('listing.heroTitle')}
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-12 font-body text-sm text-[#7A8494]">{t('common.loading')}</div>
+      ) : listings.length === 0 ? (
+        <div className="text-center py-12">
+          <HomeIcon size={48} className="mx-auto text-[#C5CBD4] mb-4" />
+          <h3 className="font-display text-lg font-semibold text-[#0F1B2E] mb-2">
+            {t('listing.noListings')}
+          </h3>
+          <p className="font-body text-sm text-[#7A8494] mb-6">{t('listing.noListingsDesc')}</p>
+          <Button
+            onClick={() => navigate('/list-property')}
+            className="bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl"
+          >
+            {t('listing.heroTitle')}
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {listings.map((l) => (
+            <Card
+              key={l.id}
+              className="border border-[#E2E6EC] rounded-2xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => l.status === 'approved' && navigate(`/listing/${l.id}`)}
+            >
+              <div className="flex flex-col sm:flex-row">
+                <div className="sm:w-40 h-40 sm:h-auto shrink-0">
+                  <img src={l.images[0]} alt={l.name} className="w-full h-full object-cover" />
+                </div>
+                <CardContent className="flex-1 p-5">
+                  <div className="flex justify-between items-start gap-3">
+                    <div>
+                      <h3 className="font-display text-lg font-semibold text-[#0F1B2E]">{l.name}</h3>
+                      <p className="font-body text-sm text-[#7A8494] flex items-center gap-1 mt-1">
+                        <MapPin size={14} />
+                        {l.location}
+                      </p>
+                    </div>
+                    {statusBadge(l.status)}
+                  </div>
+                  <p className="font-body text-sm font-semibold text-[#E85D4A] mt-3">
+                    {formatPiAmount(usdToPi(l.price))} <span className="text-[#7A8494] font-normal">{t('listing.perNight')}</span>
+                  </p>
+                  {l.status === 'rejected' && l.rejectReason && (
+                    <p className="font-body text-xs text-rose-600 mt-2">
+                      {t('listing.rejectedReason')}: {l.rejectReason}
+                    </p>
+                  )}
+                </CardContent>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </AnimatedSection>
+  );
+}
+
 /* ─── Tab: Account Settings ─── */
 function AccountTab() {
   const { t } = useTranslation();
@@ -585,6 +685,7 @@ export default function Profile() {
   const tabList = [
     { value: 'bookings', label: t('profile.bookings'), icon: CalendarDays },
     { value: 'favorites', label: t('profile.favorites'), icon: Heart },
+    { value: 'listings', label: t('listing.myListings'), icon: HomeIcon },
     { value: 'account', label: t('profile.account'), icon: Settings },
   ];
 
@@ -655,6 +756,9 @@ export default function Profile() {
             </TabsContent>
             <TabsContent value="favorites">
               <FavoritesTab />
+            </TabsContent>
+            <TabsContent value="listings">
+              <MyListingsTab piUid={user.uid} />
             </TabsContent>
             <TabsContent value="account">
               <AccountTab />

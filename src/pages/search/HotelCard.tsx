@@ -7,6 +7,7 @@ import type { Hotel } from '@/types/search';
 import { usdToPi, formatPiAmount } from '@/lib/piPayments';
 import { useTranslation } from '@/i18n';
 import { useIsFavorite } from '@/lib/favoritesStorage';
+import { isListingId } from '@/lib/listingsStorage';
 
 interface HotelCardProps {
   hotel: Hotel;
@@ -294,7 +295,7 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
                 <p className="font-body text-[11px] text-[#7A8494]">{t('search.perNight')}</p>
                 <p className="font-body text-[11px] text-[#C5CBD4]">≈ ${hotel.price} USD</p>
                 <Link
-                  to={`/property/${hotel.id}`}
+                  to={isListingId(hotel.id) ? `/listing/${hotel.id}` : `/property/${hotel.id}`}
                   className="inline-block mt-2 px-5 py-2.5 bg-[#E85D4A] hover:bg-[#D14A38] text-white font-body text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(232,93,74,0.35)]"
                 >
                   {t('search.viewDeal')}

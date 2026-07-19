@@ -41,6 +41,7 @@ export default function Navbar() {
     { label: t('navbar.search'), path: '/search' },
     { label: t('navbar.destinations'), path: '/search' },
     { label: t('navbar.deals'), path: '/search' },
+    { label: t('navbar.listProperty'), path: '/list-property' },
   ];
 
   const isOverHero = isHome && !scrolled && !isSandbox;

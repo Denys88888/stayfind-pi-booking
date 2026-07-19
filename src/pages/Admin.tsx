@@ -14,6 +14,16 @@ interface Stats {
   errors: number;
 }
 
+interface ListingAdmin {
+  id: number;
+  ownerUid: string;
+  name: string;
+  location: string;
+  price: number;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+}
+
 interface Payment {
   paymentId: string;
   action: string;
@@ -50,6 +60,7 @@ export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [stats, setStats] = useState<Stats | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [listings, setListings] = useState<ListingAdmin[]>([]);
   const [filterStatus, setFilterStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -63,13 +74,15 @@ export default function Admin() {
     setLoading(true);
     setError('');
     try {
-      const [sRes, pRes] = await Promise.all([
+      const [sRes, pRes, lRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/stats`, { headers }),
         fetch(`${API_URL}/api/admin/payments?limit=100`, { headers }),
+        fetch(`${API_URL}/api/admin/listings`, { headers }),
       ]);
       if (sRes.status === 403) { setError('Неверный ключ'); setAuthed(false); return; }
       setStats(await sRes.json());
       setPayments(await pRes.json());
+      setListings(await lRes.json());
       setAuthed(true);
     } catch {
       setError('Нет связи с бэкендом');
@@ -192,6 +205,61 @@ export default function Admin() {
           </button>
         </div>
         {actionMsg && <p style={{ marginTop: 8, color: actionMsg.startsWith('✓') ? '#10b981' : '#ef4444', fontSize: 14 }}>{actionMsg}</p>}
+      </div>
+
+      {/* Listings moderation */}
+      <div style={styles.card}>
+        <h3 style={styles.cardTitle}>
+          Объявления пользователей ({listings.filter(l => l.status === 'pending').length} на модерации)
+        </h3>
+        {listings.length === 0 ? (
+          <p style={{ color: '#9ca3af', textAlign: 'center', padding: '24px 0' }}>Объявлений нет</p>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  {['Дата', 'Название', 'Локация', 'Цена $', 'Владелец', 'Статус', ''].map(h => (
+                    <th key={h} style={styles.th}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {listings.map((l) => (
+                  <tr key={l.id} style={{ borderBottom: '1px solid #1f2937' }}>
+                    <td style={styles.td}>{fmt(l.createdAt)}</td>
+                    <td style={styles.td}>{l.name}</td>
+                    <td style={styles.td}>{l.location}</td>
+                    <td style={styles.td}>${l.price}</td>
+                    <td style={{ ...styles.td, fontFamily: 'monospace', fontSize: 11 }}>{l.ownerUid}</td>
+                    <td style={styles.td}>
+                      <span style={{
+                        ...styles.badge,
+                        background: l.status === 'approved' ? '#10b981' : l.status === 'rejected' ? '#ef4444' : '#f59e0b',
+                      }}>
+                        {l.status}
+                      </span>
+                    </td>
+                    <td style={styles.td}>
+                      {l.status === 'pending' && (
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <button style={{ ...styles.btnSm, fontSize: 11, padding: '2px 8px', background: '#10b981' }}
+                            onClick={() => action(`/api/admin/listings/${l.id}/approve`)}>
+                            Одобрить
+                          </button>
+                          <button style={{ ...styles.btnSm, fontSize: 11, padding: '2px 8px', background: '#ef4444' }}
+                            onClick={() => action(`/api/admin/listings/${l.id}/reject`, { reason: 'Не соответствует требованиям' })}>
+                            Отклонить
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Payments table */}

@@ -1157,7 +1157,10 @@ export default function Checkout() {
     guests: state.guests || FALLBACK_BOOKING.guests,
     pricePerNight: state.pricePerNight ?? FALLBACK_BOOKING.pricePerNight,
     taxes: state.taxes ?? FALLBACK_BOOKING.taxes,
-    discount: FALLBACK_BOOKING.discount,
+    // FALLBACK_BOOKING.discount is decorative demo data for the no-state
+    // fallback booking; applying it to real bookings could push cheaper
+    // rooms (e.g. user-submitted listings) to a negative total.
+    discount: state.hotelName ? 0 : FALLBACK_BOOKING.discount,
     total: state.totalUsd ?? FALLBACK_BOOKING.total,
     cancellationDate: FALLBACK_BOOKING.cancellationDate,
     address: state.location || FALLBACK_BOOKING.address,

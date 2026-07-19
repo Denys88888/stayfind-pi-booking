@@ -8,6 +8,8 @@ import Profile from './pages/Profile';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Admin from './pages/Admin';
+import ListProperty from './pages/ListProperty';
+import ListingDetail from './pages/ListingDetail';
 
 function NotFound() {
   const { t } = useTranslation();
@@ -29,6 +31,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<Search />} />
       <Route path="/property/:id" element={<PropertyDetail />} />
+      <Route path="/list-property" element={<ListProperty />} />
+      <Route path="/listing/:id" element={<ListingDetail />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/terms" element={<TermsOfService />} />
