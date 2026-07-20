@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Check, ChevronLeft } from 'lucide-react';
+import { MapPin, Check, ChevronLeft, Star } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/i18n';
 import { fetchListing, type Listing } from '@/lib/listingsStorage';
+import { fetchReviews, type Review } from '@/lib/reviewsStorage';
 import { formatPiAmount, usdToPi } from '@/lib/piPayments';
 
 function addDays(date: Date, days: number): string {
@@ -18,17 +19,23 @@ export default function ListingDetail() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [listing, setListing] = useState<Listing | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetchListing(id).then((l) => {
+    Promise.all([fetchListing(id), fetchReviews(id)]).then(([l, r]) => {
       setListing(l);
+      setReviews(r);
       setLoading(false);
     });
   }, [id]);
+
+  const avgRating = reviews.length
+    ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
+    : null;
 
   if (loading) {
     return (
@@ -114,10 +121,19 @@ export default function ListingDetail() {
               <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[#0F1B2E] mb-2">
                 {listing.name}
               </h1>
-              <p className="font-body text-sm text-[#7A8494] flex items-center gap-1 mb-6">
+              <p className="font-body text-sm text-[#7A8494] flex items-center gap-1 mb-2">
                 <MapPin size={14} />
                 {listing.address}, {listing.location}
               </p>
+              {avgRating != null && (
+                <p className="font-body text-sm text-[#4A5468] flex items-center gap-1 mb-6">
+                  <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
+                  <span className="font-semibold">{avgRating}</span>
+                  <span className="text-[#7A8494]">
+                    · {reviews.length} {t('property.reviews')}
+                  </span>
+                </p>
+              )}
 
               <div className="bg-white border border-[#E2E6EC] rounded-2xl p-6 mb-6">
                 <h2 className="font-display text-lg font-semibold text-[#0F1B2E] mb-3">
@@ -138,6 +154,28 @@ export default function ListingDetail() {
                       <div key={a} className="flex items-center gap-2 font-body text-sm text-[#4A5468]">
                         <Check size={16} className="text-emerald-600 shrink-0" />
                         {a}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {reviews.length > 0 && (
+                <div className="bg-white border border-[#E2E6EC] rounded-2xl p-6 mt-6">
+                  <h2 className="font-display text-lg font-semibold text-[#0F1B2E] mb-4">
+                    {t('property.reviews')} ({reviews.length})
+                  </h2>
+                  <div className="space-y-5">
+                    {reviews.map((r) => (
+                      <div key={r.id} className="border-b border-[#F0F2F5] last:border-0 pb-5 last:pb-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-body text-sm font-semibold text-[#0F1B2E]">{r.authorName}</span>
+                          <div className="flex items-center gap-1">
+                            <Star size={13} className="text-[#E8A838] fill-[#E8A838]" />
+                            <span className="font-body text-sm text-[#4A5468]">{r.rating}</span>
+                          </div>
+                        </div>
+                        <p className="font-body text-sm text-[#4A5468] whitespace-pre-line">{r.text}</p>
                       </div>
                     ))}
                   </div>

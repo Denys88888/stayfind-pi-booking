@@ -18,6 +18,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import {
   CalendarDays,
   MapPin,
   Clock,
@@ -41,6 +48,8 @@ import { getBookings, fetchBookingsRemote, cancelBookingRemote, fetchHostEarning
 import { useFavoriteIds, toggleFavorite } from '@/lib/favoritesStorage';
 import { hotels } from '@/data/hotelData';
 import { getProfileSettings, saveProfileSettings, type ProfileSettings } from '@/lib/profileSettings';
+import { submitReview } from '@/lib/reviewsStorage';
+import { isListingId } from '@/lib/listingsStorage';
 import { fetchMyListings, type Listing } from '@/lib/listingsStorage';
 
 /* ─── Animated section wrapper ─── */
@@ -136,10 +145,17 @@ function StatusBadge({ status }: { status: string }) {
 /* ─── Tab: Bookings ─── */
 function BookingsTab({ piUid }: { piUid: string }) {
   const { t } = useTranslation();
+  const { user } = usePiAuth();
   const navigate = useNavigate();
   const [activeSub, setActiveSub] = useState('all');
   const [bookings, setBookings] = useState<StoredBooking[]>(getBookings);
   const [loading, setLoading] = useState(true);
+  const [reviewTarget, setReviewTarget] = useState<StoredBooking | null>(null);
+  const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewError, setReviewError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -155,6 +171,33 @@ function BookingsTab({ piUid }: { piUid: string }) {
   const handleCancel = async (id: string) => {
     const updated = await cancelBookingRemote(piUid, id);
     setBookings(updated);
+  };
+
+  const openReview = (booking: StoredBooking) => {
+    setReviewTarget(booking);
+    setReviewRating(5);
+    setReviewText('');
+    setReviewError('');
+  };
+
+  const submit = async () => {
+    if (!reviewTarget || !reviewText.trim()) return;
+    setReviewSubmitting(true);
+    setReviewError('');
+    const result = await submitReview({
+      bookingId: reviewTarget.id,
+      piUid,
+      rating: reviewRating,
+      text: reviewText.trim(),
+      authorName: user?.username ? `@${user.username}` : undefined,
+    });
+    setReviewSubmitting(false);
+    if (result.ok) {
+      setReviewedIds((prev) => new Set(prev).add(reviewTarget.id));
+      setReviewTarget(null);
+    } else {
+      setReviewError(result.error === 'Already reviewed' ? t('profile.alreadyReviewed') : result.error || t('common.error'));
+    }
   };
 
   const filtered =
@@ -292,10 +335,21 @@ function BookingsTab({ piUid }: { piUid: string }) {
                           {t('profile.cancelBooking')}
                         </Button>
                       )}
+                      {booking.status === 'confirmed' &&
+                        new Date(booking.checkOut) < new Date() &&
+                        !reviewedIds.has(booking.id) && (
+                          <Button
+                            size="sm"
+                            onClick={() => openReview(booking)}
+                            className="font-body text-xs rounded-lg bg-[#E8A838] hover:bg-[#D19426] text-white"
+                          >
+                            {t('profile.leaveReview')}
+                          </Button>
+                        )}
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/property/${booking.hotelId}`)}
+                        onClick={() => navigate(isListingId(Number(booking.hotelId)) ? `/listing/${booking.hotelId}` : `/property/${booking.hotelId}`)}
                         className="font-body text-xs rounded-lg"
                       >
                         {t('profile.viewDetails')}
@@ -309,6 +363,41 @@ function BookingsTab({ piUid }: { piUid: string }) {
         </div>
       )}
 
+      <Dialog open={!!reviewTarget} onOpenChange={(open) => !open && setReviewTarget(null)}>
+        <DialogContent className="sm:max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="font-display text-lg text-[#0F1B2E]">
+              {t('profile.leaveReview')} — {reviewTarget?.hotelName}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="flex gap-1 justify-center">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <button key={n} onClick={() => setReviewRating(n)}>
+                  <Star
+                    size={28}
+                    className={n <= reviewRating ? 'text-[#E8A838] fill-[#E8A838]' : 'text-[#E2E6EC]'}
+                  />
+                </button>
+              ))}
+            </div>
+            <Textarea
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              placeholder={t('profile.reviewPlaceholder')}
+              className="rounded-xl border-[#E2E6EC] min-h-[100px]"
+            />
+            {reviewError && <p className="font-body text-sm text-rose-600">{reviewError}</p>}
+            <Button
+              onClick={submit}
+              disabled={!reviewText.trim() || reviewSubmitting}
+              className="w-full bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl"
+            >
+              {reviewSubmitting ? t('listing.submitting') : t('profile.submitReview')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </AnimatedSection>
   );
 }

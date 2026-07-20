@@ -281,6 +281,10 @@ export interface TranslationSet {
     nights: string;
     room: string;
     cancelBooking: string;
+    leaveReview: string;
+    submitReview: string;
+    reviewPlaceholder: string;
+    alreadyReviewed: string;
     refundCompleted: string;
     refundProcessing: string;
     refundPending: string;
