@@ -39,10 +39,6 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
   const [isFav, toggleFav] = useIsFavorite(hotel.id);
   const [imgHovered, setImgHovered] = useState(false);
 
-  const discount = Math.round(
-    ((hotel.originalPrice - hotel.price) / hotel.originalPrice) * 100
-  );
-
   const nextImg = (e: React.MouseEvent) => {
     e.stopPropagation();
     setImgIndex((prev) => (prev + 1) % hotel.images.length);
@@ -113,13 +109,6 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
             alt={hotel.name}
             className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-[1.03]"
           />
-
-          {/* Discount Badge */}
-          {discount > 0 && (
-            <Badge className="absolute top-3 left-3 bg-[#E85D4A] hover:bg-[#E85D4A] text-white font-body text-[11px] font-semibold px-2 py-1 rounded-md">
-              -{discount}%
-            </Badge>
-          )}
 
           {/* Favorite Button */}
           <button
@@ -284,11 +273,6 @@ export default function HotelCard({ hotel, index, viewMode, isActive, onHover }:
 
               {/* Right: Price + CTA */}
               <div className="text-right shrink-0 ml-4">
-                {hotel.originalPrice > hotel.price && (
-                  <span className="font-body text-sm text-[#C5CBD4] line-through mr-2">
-                    {formatPiAmount(usdToPi(hotel.originalPrice))}
-                  </span>
-                )}
                 <span className="font-display text-xl sm:text-2xl font-bold text-[#E85D4A]">
                   {formatPiAmount(usdToPi(hotel.price))}
                 </span>

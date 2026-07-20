@@ -27,14 +27,7 @@ import {
   Star,
   Wallet,
   ChevronRight,
-  Info,
 } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { usePiAuth } from '@/hooks/usePiAuth';
 import {
   createPiPayment,
@@ -80,7 +73,6 @@ const FALLBACK_BOOKING = {
   guests: '2 Adults',
   pricePerNight: 285,
   taxes: 299,
-  discount: 200,
   total: 2094,
   cancellationDate: 'Dec 13',
   address: '123 Luxury Avenue, Paris, France',
@@ -187,11 +179,10 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
 }
 
 /* ─── Booking Summary Sidebar ─── */
-function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, piTotal }: {
+function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piTotal }: {
   bookingData: BookingData;
   piSubtotal: number;
   piTaxes: number;
-  piDiscount: number;
   piTotal: number;
 }) {
   const { t } = useTranslation();
@@ -263,31 +254,6 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
               </span>
             </span>
           </div>
-          {bookingData.discount > 0 && (
-            <TooltipProvider>
-              <div className="flex justify-between">
-                <span className="font-body text-sm text-[#7A8494] flex items-center gap-1">
-                  {t('checkout.discount')}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button className="cursor-help">
-                        <Info size={13} className="text-[#C5CBD4] hover:text-[#7A8494] transition-colors" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p className="font-body text-xs">{t('checkout.discountTooltip')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </span>
-                <span className="font-body text-sm text-[#2D9F5E]">
-                  - ${bookingData.discount.toLocaleString()}
-                  <span className="text-[#7A8494] ml-1">
-                    (-{formatPiAmount(piDiscount)})
-                  </span>
-                </span>
-              </div>
-            </TooltipProvider>
-          )}
           <div className="border-t border-[#E2E6EC] pt-2 mt-2">
             <div className="flex justify-between">
               <span className="font-body text-base font-semibold text-[#1A2B47]">
@@ -327,14 +293,12 @@ function StepDetails({
   bookingData,
   piSubtotal,
   piTaxes,
-  piDiscount,
   piTotal,
 }: {
   onContinue: (data: Record<string, string>) => void;
   bookingData: BookingData;
   piSubtotal: number;
   piTaxes: number;
-  piDiscount: number;
   piTotal: number;
 }) {
   const { t } = useTranslation();
@@ -569,7 +533,7 @@ function StepDetails({
       {/* Sidebar */}
       <div className="lg:col-span-2">
         <div className="lg:sticky lg:top-[100px]">
-          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
+          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piTotal={piTotal} />
         </div>
       </div>
     </div>
@@ -584,7 +548,6 @@ function StepPayment({
   hotelId,
   piSubtotal,
   piTaxes,
-  piDiscount,
   piTotal,
 }: {
   onPay: (txId: string) => void;
@@ -593,7 +556,6 @@ function StepPayment({
   hotelId: string;
   piSubtotal: number;
   piTaxes: number;
-  piDiscount: number;
   piTotal: number;
 }) {
   const { t } = useTranslation();
@@ -690,7 +652,7 @@ function StepPayment({
         </div>
         <div className="lg:col-span-2">
           <div className="lg:sticky lg:top-[100px]">
-            <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
+            <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piTotal={piTotal} />
           </div>
         </div>
       </div>
@@ -771,16 +733,6 @@ function StepPayment({
                 {formatPiAmount(piTaxes)}
               </span>
             </div>
-            {bookingData.discount > 0 && (
-              <div className="flex justify-between">
-                <span className="font-body text-sm text-white/60">
-                  {t('checkout.discount')}
-                </span>
-                <span className="font-body text-sm text-[#4ADE80]">
-                  -{formatPiAmount(piDiscount)}
-                </span>
-              </div>
-            )}
             <div className="border-t border-white/10 pt-2 mt-2">
               <div className="flex justify-between">
                 <span className="font-body text-sm font-medium text-white">
@@ -934,7 +886,7 @@ function StepPayment({
       {/* Sidebar */}
       <div className="lg:col-span-2">
         <div className="lg:sticky lg:top-[100px]">
-          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piDiscount={piDiscount} piTotal={piTotal} />
+          <BookingSummarySidebar bookingData={bookingData} piSubtotal={piSubtotal} piTaxes={piTaxes} piTotal={piTotal} />
         </div>
       </div>
     </div>
@@ -1166,10 +1118,6 @@ export default function Checkout() {
     guests: state.guests || FALLBACK_BOOKING.guests,
     pricePerNight: state.pricePerNight ?? FALLBACK_BOOKING.pricePerNight,
     taxes: state.taxes ?? FALLBACK_BOOKING.taxes,
-    // FALLBACK_BOOKING.discount is decorative demo data for the no-state
-    // fallback booking; applying it to real bookings could push cheaper
-    // rooms (e.g. user-submitted listings) to a negative total.
-    discount: state.hotelName ? 0 : FALLBACK_BOOKING.discount,
     total: state.totalUsd ?? FALLBACK_BOOKING.total,
     cancellationDate: FALLBACK_BOOKING.cancellationDate,
     address: state.location || FALLBACK_BOOKING.address,
@@ -1177,8 +1125,7 @@ export default function Checkout() {
 
   const piSubtotal = usdToPi(bookingData.pricePerNight * bookingData.nights);
   const piTaxes = usdToPi(bookingData.taxes);
-  const piDiscount = usdToPi(bookingData.discount);
-  const piTotal = piSubtotal + piTaxes - piDiscount;
+  const piTotal = piSubtotal + piTaxes;
 
   const handlePay = async (id: string) => {
     if (user?.uid) {
@@ -1204,7 +1151,7 @@ export default function Checkout() {
     setStep(3);
   };
 
-  const sidebarProps = { bookingData, piSubtotal, piTaxes, piDiscount, piTotal };
+  const sidebarProps = { bookingData, piSubtotal, piTaxes, piTotal };
 
   return (
     <Layout>

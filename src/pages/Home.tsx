@@ -425,107 +425,6 @@ function PropertyTypesSection() {
   );
 }
 
-/* ───────── Section 4: Featured Deals ───────── */
-function DealsSection() {
-  const { t } = useTranslation();
-  const { ref, inView } = useScrollReveal();
-  const navigate = useNavigate();
-
-  const deals = [
-    { title: t('home.deal1Title'), location: 'Paris, France', percent: '30', image: '/dest-paris.jpg' },
-    { title: t('home.deal2Title'), location: 'Tokyo, Japan', percent: '25', image: '/dest-tokyo.jpg' },
-    { title: t('home.deal3Title'), location: 'Ubud, Bali', percent: '35', image: '/dest-bali.jpg' },
-    { title: t('home.deal4Title'), location: 'New York, USA', percent: '20', image: '/dest-newyork.jpg' },
-  ];
-
-  return (
-    <section ref={ref} className="py-24" style={{ background: 'linear-gradient(135deg, #0F1B2E 0%, #1A2B47 50%, #243B5D 100%)' }}>
-      <div className="max-w-[1280px] mx-auto px-6">
-        <motion.div custom={0} variants={fadeUp} initial="hidden" animate={inView ? 'visible' : 'hidden'} className="mb-10">
-          <span className="font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[#E85D4A]">
-            {t('home.dealsTitle')}
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em] mt-2">
-            {t('home.dealsTitle')}
-          </h2>
-          <p className="font-body text-base text-white/70 mt-3">
-            {t('home.dealsSubtitle')}
-          </p>
-        </motion.div>
-
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Featured Deal */}
-          <motion.div
-            custom={1}
-            variants={fadeUp}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="lg:w-[55%] relative rounded-3xl overflow-hidden h-[400px] lg:h-[480px] cursor-pointer group shrink-0"
-          >
-            <img
-              src="/deal-beach.jpg"
-              alt="Summer Escape"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,27,46,0.85)] via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-              <span className="inline-block bg-[#E85D4A] text-white font-body text-xs font-semibold px-3 py-1 rounded-md mb-3">
-                {t('hero.dealSave40')}
-              </span>
-              <h3 className="font-display text-xl sm:text-2xl font-semibold text-white">
-                {t('hero.dealFeaturedTitle')}
-              </h3>
-              <p className="font-body text-sm text-white/80 mt-2 max-w-md">
-                {t('hero.dealFeaturedDesc')}
-              </p>
-              <div className="flex items-center gap-3 mt-4">
-                <span className="font-body text-sm text-white/50 line-through">{formatPiAmount(usdToPi(2400))}</span>
-                <span className="font-display text-2xl font-semibold text-[#E85D4A]">{formatPiAmount(usdToPi(1440))}</span>
-              </div>
-              <p className="font-body text-[11px] text-white/50 mt-1">≈ $1,440 USD</p>
-              <button
-                onClick={() => navigate('/search?destination=Maldives')}
-                className="mt-4 bg-white text-[#1A2B47] font-body text-sm font-semibold px-5 py-3 rounded-xl hover:bg-[#F8F9FB] transition-colors"
-              >
-                {t('home.ctaBtn')}
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Deal Grid */}
-          <div className="lg:w-[45%] grid grid-cols-2 gap-4">
-            {deals.map((deal, i) => (
-              <motion.div
-                key={deal.title}
-                custom={i + 2}
-                variants={fadeUp}
-                initial="hidden"
-                animate={inView ? 'visible' : 'hidden'}
-                onClick={() => navigate(`/search?destination=${deal.location.split(',')[0]}`)}
-                className="relative rounded-2xl overflow-hidden aspect-[16/10] cursor-pointer group"
-              >
-                <img
-                  src={deal.image}
-                  alt={deal.title}
-                  className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-[1.03]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,27,46,0.7)] to-transparent" />
-                <span className="absolute top-3 left-3 bg-[#E85D4A] text-white font-body text-[11px] font-semibold px-2 py-1 rounded">
-                  {t('home.dealSave')} {deal.percent}%
-                </span>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <h4 className="font-body text-sm font-semibold text-white leading-tight">{deal.title}</h4>
-                  <p className="font-body text-[11px] text-white/70 mt-1">{deal.location}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ───────── Section 5: Featured Properties ───────── */
 function PropertiesSection() {
   const { t } = useTranslation();
@@ -894,7 +793,6 @@ export default function Home() {
       <HeroSection />
       <DestinationsSection />
       <PropertyTypesSection />
-      <DealsSection />
       <PropertiesSection />
       <FeaturesSection />
       <TestimonialsSection />
