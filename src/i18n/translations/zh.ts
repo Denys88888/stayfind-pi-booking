@@ -364,6 +364,7 @@ const zh: TranslationSet = {
   listing: {
     heroTitle: '发布您的房源',
     heroSubtitle: '接触使用 Pi 支付的旅行者。提交您的房源——经过快速审核后即可上线。',
+    commissionNote: '我们从每笔预订中收取 {rate}% 的平台佣金，其余归您所有。',
     signInRequired: '使用 Pi 登录以发布您的房源',
     formName: '房源名称',
     formLocation: '位置',
@@ -385,6 +386,8 @@ const zh: TranslationSet = {
     successDesc: '您的房源已提交。我们的团队会进行审核，通过后将出现在搜索结果中。可在“我的房源”中查看状态。',
     backToProfile: '前往我的房源',
     myListings: '我的房源',
+    earningsHeld: '托管中',
+    earningsPaid: '已支付',
     noListings: '您还没有发布任何房源',
     noListingsDesc: '发布您的房源，开始赚取 Pi',
     statusPending: '审核中',

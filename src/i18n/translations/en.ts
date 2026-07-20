@@ -365,6 +365,7 @@ const en: TranslationSet = {
   listing: {
     heroTitle: 'List Your Property',
     heroSubtitle: 'Reach travelers paying with Pi. Submit your property — it goes live after a quick review.',
+    commissionNote: 'We keep a {rate}% platform commission from each booking; the rest goes to you.',
     signInRequired: 'Sign in with Pi to list your property',
     formName: 'Property Name',
     formLocation: 'Location',
@@ -386,6 +387,8 @@ const en: TranslationSet = {
     successDesc: 'Your property has been submitted. Our team will review it, and it will appear in search once approved. Track its status in My Listings.',
     backToProfile: 'Go to My Listings',
     myListings: 'My Listings',
+    earningsHeld: 'In escrow',
+    earningsPaid: 'Paid out',
     noListings: 'You haven\'t listed any properties yet',
     noListingsDesc: 'List your property and start earning Pi',
     statusPending: 'Pending review',

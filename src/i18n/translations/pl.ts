@@ -364,6 +364,7 @@ const pl: TranslationSet = {
   listing: {
     heroTitle: 'Dodaj swój obiekt',
     heroSubtitle: 'Dotrzyj do podróżnych płacących w Pi. Zgłoś swój obiekt — pojawi się po krótkiej weryfikacji.',
+    commissionNote: 'Pobieramy {rate}% prowizji platformy z każdej rezerwacji; reszta trafia do Ciebie.',
     signInRequired: 'Zaloguj się przez Pi, aby dodać swój obiekt',
     formName: 'Nazwa obiektu',
     formLocation: 'Lokalizacja',
@@ -385,6 +386,8 @@ const pl: TranslationSet = {
     successDesc: 'Twój obiekt został wysłany. Nasz zespół go zweryfikuje i pojawi się w wyszukiwarce po zatwierdzeniu. Status sprawdzisz w Moje obiekty.',
     backToProfile: 'Przejdź do Moje obiekty',
     myListings: 'Moje obiekty',
+    earningsHeld: 'W depozycie',
+    earningsPaid: 'Wypłacono',
     noListings: 'Nie dodałeś jeszcze żadnego obiektu',
     noListingsDesc: 'Dodaj swój obiekt i zacznij zarabiać Pi',
     statusPending: 'W weryfikacji',

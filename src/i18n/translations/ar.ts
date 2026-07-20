@@ -364,6 +364,7 @@ const ar: TranslationSet = {
   listing: {
     heroTitle: 'أضف عقارك',
     heroSubtitle: 'تواصل مع المسافرين الذين يدفعون بعملة Pi. أرسل عقارك — سيظهر بعد مراجعة سريعة.',
+    commissionNote: 'نحتفظ بعمولة منصة بنسبة {rate}% من كل حجز؛ والباقي لك.',
     signInRequired: 'سجّل الدخول عبر Pi لإضافة عقارك',
     formName: 'اسم العقار',
     formLocation: 'الموقع',
@@ -385,6 +386,8 @@ const ar: TranslationSet = {
     successDesc: 'تم إرسال عقارك. سيقوم فريقنا بمراجعته وسيظهر في نتائج البحث بعد الموافقة. تابع الحالة في عقاراتي.',
     backToProfile: 'الذهاب إلى عقاراتي',
     myListings: 'عقاراتي',
+    earningsHeld: 'قيد الضمان',
+    earningsPaid: 'تم الدفع',
     noListings: 'لم تقم بإضافة أي عقار بعد',
     noListingsDesc: 'أضف عقارك وابدأ في كسب Pi',
     statusPending: 'قيد المراجعة',

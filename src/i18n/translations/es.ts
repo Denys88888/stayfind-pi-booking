@@ -364,6 +364,7 @@ const es: TranslationSet = {
   listing: {
     heroTitle: 'Publica tu propiedad',
     heroSubtitle: 'Llega a viajeros que pagan con Pi. Envía tu propiedad — se publicará tras una revisión rápida.',
+    commissionNote: 'Retenemos una comisión de plataforma del {rate}% de cada reserva; el resto es para ti.',
     signInRequired: 'Inicia sesión con Pi para publicar tu propiedad',
     formName: 'Nombre de la propiedad',
     formLocation: 'Ubicación',
@@ -385,6 +386,8 @@ const es: TranslationSet = {
     successDesc: 'Tu propiedad ha sido enviada. Nuestro equipo la revisará y aparecerá en la búsqueda una vez aprobada. Sigue el estado en Mis Propiedades.',
     backToProfile: 'Ir a Mis Propiedades',
     myListings: 'Mis Propiedades',
+    earningsHeld: 'En depósito',
+    earningsPaid: 'Pagado',
     noListings: 'Aún no has publicado ninguna propiedad',
     noListingsDesc: 'Publica tu propiedad y empieza a ganar Pi',
     statusPending: 'En revisión',

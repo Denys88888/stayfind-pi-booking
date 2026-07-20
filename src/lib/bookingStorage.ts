@@ -17,6 +17,10 @@ export interface Booking {
   status: 'confirmed' | 'pending' | 'cancelled';
   refundStatus?: 'processing' | 'completed' | 'failed' | 'pending_manual';
   refundTxid?: string;
+  hostUid?: string;
+  hostPayoutAmount?: number;
+  hostPayoutStatus?: 'held' | 'processing' | 'completed' | 'failed' | 'pending_manual' | 'cancelled';
+  platformFeeAmount?: number;
 }
 
 const KEY = 'stayfind_bookings';
@@ -102,6 +106,15 @@ export async function fetchBookingsRemote(piUid: string): Promise<Booking[]> {
     return list;
   } catch {
     return getBookings();
+  }
+}
+
+export async function fetchHostEarnings(hostUid: string): Promise<Booking[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/bookings/host/${encodeURIComponent(hostUid)}`);
+    return res.ok ? await res.json() : [];
+  } catch {
+    return [];
   }
 }
 

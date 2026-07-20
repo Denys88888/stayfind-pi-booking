@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, CheckCircle2, Home as HomeIcon } from 'lucide-react';
 import Layout from '@/components/Layout';
@@ -17,6 +17,8 @@ import {
 import { usePiAuth } from '@/hooks/usePiAuth';
 import { useTranslation } from '@/i18n';
 import { createListing } from '@/lib/listingsStorage';
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://stayfind-api.onrender.com';
 
 const PROPERTY_TYPES = ['Hotel', 'Apartment', 'Resort', 'Villa', 'Hostel', 'B&B', 'Cabin', 'Cottage'];
 const AMENITIES = ['WiFi', 'Pool', 'Spa', 'Restaurant', 'Gym', 'Bar', 'AC', 'Breakfast', 'Kitchen', 'Parking', 'Pet Friendly'];
@@ -37,6 +39,14 @@ export default function ListProperty() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [commissionRate, setCommissionRate] = useState(0.08);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/config`)
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.platformCommissionRate === 'number') setCommissionRate(d.platformCommissionRate); })
+      .catch(() => {});
+  }, []);
 
   const propertyTypeLabels: Record<string, string> = {
     Hotel: t('search.propHotel'),
@@ -156,7 +166,12 @@ export default function ListProperty() {
           <h1 className="font-display text-3xl font-semibold text-[#0F1B2E] mb-2">
             {t('listing.heroTitle')}
           </h1>
-          <p className="font-body text-[#7A8494] mb-8">{t('listing.heroSubtitle')}</p>
+          <p className="font-body text-[#7A8494] mb-4">{t('listing.heroSubtitle')}</p>
+          <div className="bg-[#FEF2F0] border border-[#F5D5CD] rounded-xl px-4 py-3 mb-8">
+            <p className="font-body text-sm text-[#8A4A3D]">
+              {t('listing.commissionNote').replace('{rate}', String(Math.round(commissionRate * 100)))}
+            </p>
+          </div>
 
           <div className="bg-white border border-[#E2E6EC] rounded-2xl p-6 space-y-5">
             <div className="space-y-2">

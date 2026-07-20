@@ -364,6 +364,7 @@ const tr: TranslationSet = {
   listing: {
     heroTitle: 'Mülkünüzü Listeleyin',
     heroSubtitle: 'Pi ile ödeme yapan gezginlere ulaşın. Mülkünüzü gönderin — hızlı bir incelemenin ardından yayına girer.',
+    commissionNote: 'Her rezervasyondan %{rate} platform komisyonu alıyoruz; kalanı size ait.',
     signInRequired: 'Mülkünüzü listelemek için Pi ile giriş yapın',
     formName: 'Mülk Adı',
     formLocation: 'Konum',
@@ -385,6 +386,8 @@ const tr: TranslationSet = {
     successDesc: 'Mülkünüz gönderildi. Ekibimiz inceleyecek ve onaylandıktan sonra aramada görünecek. Durumu Listelerim\'den takip edin.',
     backToProfile: 'Listelerim\'e git',
     myListings: 'Listelerim',
+    earningsHeld: 'Emanette',
+    earningsPaid: 'Ödendi',
     noListings: 'Henüz hiç mülk listelemediniz',
     noListingsDesc: 'Mülkünüzü listeleyin ve Pi kazanmaya başlayın',
     statusPending: 'İnceleniyor',

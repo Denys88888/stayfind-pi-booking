@@ -364,6 +364,7 @@ const de: TranslationSet = {
   listing: {
     heroTitle: 'Unterkunft anbieten',
     heroSubtitle: 'Erreichen Sie Reisende, die mit Pi bezahlen. Reichen Sie Ihre Unterkunft ein — sie geht nach einer kurzen Prüfung online.',
+    commissionNote: 'Wir behalten {rate}% Plattformprovision pro Buchung ein; der Rest geht an Sie.',
     signInRequired: 'Melden Sie sich mit Pi an, um Ihre Unterkunft anzubieten',
     formName: 'Name der Unterkunft',
     formLocation: 'Standort',
@@ -385,6 +386,8 @@ const de: TranslationSet = {
     successDesc: 'Ihre Unterkunft wurde eingereicht. Unser Team prüft sie, danach erscheint sie in der Suche. Status unter Meine Unterkünfte.',
     backToProfile: 'Zu Meine Unterkünfte',
     myListings: 'Meine Unterkünfte',
+    earningsHeld: 'In Treuhand',
+    earningsPaid: 'Ausgezahlt',
     noListings: 'Sie haben noch keine Unterkunft eingestellt',
     noListingsDesc: 'Bieten Sie Ihre Unterkunft an und verdienen Sie Pi',
     statusPending: 'In Prüfung',

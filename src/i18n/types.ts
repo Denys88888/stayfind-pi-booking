@@ -367,6 +367,7 @@ export interface TranslationSet {
   listing: {
     heroTitle: string;
     heroSubtitle: string;
+    commissionNote: string;
     signInRequired: string;
     formName: string;
     formLocation: string;
@@ -388,6 +389,8 @@ export interface TranslationSet {
     successDesc: string;
     backToProfile: string;
     myListings: string;
+    earningsHeld: string;
+    earningsPaid: string;
     noListings: string;
     noListingsDesc: string;
     statusPending: string;

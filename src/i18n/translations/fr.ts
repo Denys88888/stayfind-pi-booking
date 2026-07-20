@@ -364,6 +364,7 @@ const fr: TranslationSet = {
   listing: {
     heroTitle: 'Publiez votre bien',
     heroSubtitle: 'Touchez des voyageurs qui paient en Pi. Envoyez votre bien — il sera publié après une vérification rapide.',
+    commissionNote: 'Nous prélevons une commission de plateforme de {rate}% sur chaque réservation ; le reste vous revient.',
     signInRequired: 'Connectez-vous avec Pi pour publier votre bien',
     formName: 'Nom du bien',
     formLocation: 'Emplacement',
@@ -385,6 +386,8 @@ const fr: TranslationSet = {
     successDesc: 'Votre bien a été envoyé. Notre équipe l\'examinera et il apparaîtra dans la recherche une fois approuvé. Suivez son statut dans Mes Annonces.',
     backToProfile: 'Aller à Mes Annonces',
     myListings: 'Mes Annonces',
+    earningsHeld: 'Sous séquestre',
+    earningsPaid: 'Versé',
     noListings: 'Vous n\'avez encore publié aucun bien',
     noListingsDesc: 'Publiez votre bien et commencez à gagner des Pi',
     statusPending: 'En révision',

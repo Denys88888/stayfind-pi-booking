@@ -364,6 +364,7 @@ const pt: TranslationSet = {
   listing: {
     heroTitle: 'Anuncie sua propriedade',
     heroSubtitle: 'Alcance viajantes que pagam com Pi. Envie sua propriedade — ela ficará ativa após uma rápida revisão.',
+    commissionNote: 'Retemos uma comissão de plataforma de {rate}% de cada reserva; o restante é seu.',
     signInRequired: 'Entre com Pi para anunciar sua propriedade',
     formName: 'Nome da propriedade',
     formLocation: 'Localização',
@@ -385,6 +386,8 @@ const pt: TranslationSet = {
     successDesc: 'Sua propriedade foi enviada. Nossa equipe irá revisá-la e ela aparecerá na busca após aprovação. Acompanhe o status em Minhas Propriedades.',
     backToProfile: 'Ir para Minhas Propriedades',
     myListings: 'Minhas Propriedades',
+    earningsHeld: 'Em custódia',
+    earningsPaid: 'Pago',
     noListings: 'Você ainda não anunciou nenhuma propriedade',
     noListingsDesc: 'Anuncie sua propriedade e comece a ganhar Pi',
     statusPending: 'Em revisão',

@@ -37,7 +37,7 @@ import {
   formatPiAmount,
   usdToPi,
 } from '@/lib/piPayments';
-import { getBookings, fetchBookingsRemote, cancelBookingRemote, type Booking as StoredBooking } from '@/lib/bookingStorage';
+import { getBookings, fetchBookingsRemote, cancelBookingRemote, fetchHostEarnings, type Booking as StoredBooking } from '@/lib/bookingStorage';
 import { useFavoriteIds, toggleFavorite } from '@/lib/favoritesStorage';
 import { hotels } from '@/data/hotelData';
 import { getProfileSettings, saveProfileSettings, type ProfileSettings } from '@/lib/profileSettings';
@@ -404,18 +404,27 @@ function MyListingsTab({ piUid }: { piUid: string }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
+  const [earnings, setEarnings] = useState<StoredBooking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    fetchMyListings(piUid).then((l) => {
+    Promise.all([fetchMyListings(piUid), fetchHostEarnings(piUid)]).then(([l, e]) => {
       if (!cancelled) {
         setListings(l);
+        setEarnings(e);
         setLoading(false);
       }
     });
     return () => { cancelled = true; };
   }, [piUid]);
+
+  const heldTotal = earnings
+    .filter((b) => b.hostPayoutStatus === 'held' || b.hostPayoutStatus === 'processing')
+    .reduce((sum, b) => sum + (b.hostPayoutAmount || 0), 0);
+  const paidTotal = earnings
+    .filter((b) => b.hostPayoutStatus === 'completed')
+    .reduce((sum, b) => sum + (b.hostPayoutAmount || 0), 0);
 
   const statusBadge = (status: Listing['status']) => {
     if (status === 'approved') {
@@ -429,6 +438,22 @@ function MyListingsTab({ piUid }: { piUid: string }) {
 
   return (
     <AnimatedSection>
+      {earnings.length > 0 && (
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Card className="border border-[#E2E6EC] rounded-2xl">
+            <CardContent className="p-5">
+              <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">{t('listing.earningsHeld')}</p>
+              <p className="font-display text-xl font-semibold text-[#0F1B2E] mt-1">{formatPiAmount(heldTotal)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-[#E2E6EC] rounded-2xl">
+            <CardContent className="p-5">
+              <p className="font-body text-xs text-[#7A8494] uppercase tracking-wider">{t('listing.earningsPaid')}</p>
+              <p className="font-display text-xl font-semibold text-emerald-600 mt-1">{formatPiAmount(paidTotal)}</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
       <div className="flex justify-end mb-4">
         <Button
           onClick={() => navigate('/list-property')}

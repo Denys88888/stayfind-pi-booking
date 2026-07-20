@@ -364,6 +364,7 @@ const it: TranslationSet = {
   listing: {
     heroTitle: 'Pubblica la tua struttura',
     heroSubtitle: 'Raggiungi viaggiatori che pagano con Pi. Invia la tua struttura — sarà pubblicata dopo una rapida verifica.',
+    commissionNote: 'Tratteniamo una commissione della piattaforma del {rate}% su ogni prenotazione; il resto va a te.',
     signInRequired: 'Accedi con Pi per pubblicare la tua struttura',
     formName: 'Nome della struttura',
     formLocation: 'Posizione',
@@ -385,6 +386,8 @@ const it: TranslationSet = {
     successDesc: 'La tua struttura è stata inviata. Il nostro team la esaminerà e apparirà nella ricerca una volta approvata. Segui lo stato in Le mie strutture.',
     backToProfile: 'Vai a Le mie strutture',
     myListings: 'Le mie strutture',
+    earningsHeld: 'In deposito',
+    earningsPaid: 'Pagato',
     noListings: 'Non hai ancora pubblicato nessuna struttura',
     noListingsDesc: 'Pubblica la tua struttura e inizia a guadagnare Pi',
     statusPending: 'In revisione',
