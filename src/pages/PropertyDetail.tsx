@@ -1348,6 +1348,8 @@ export default function PropertyDetail() {
                     checkOut: checkOutParam,
                     nights: nightsFromParams,
                     guests: guestLabel,
+                    rating: hotel.rating,
+                    reviewCount: hotel.reviewCount,
                   },
                 })
               }

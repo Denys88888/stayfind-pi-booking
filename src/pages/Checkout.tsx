@@ -63,6 +63,8 @@ interface BookingState {
   guests?: string;
   checkIn?: string;
   checkOut?: string;
+  rating?: number;
+  reviewCount?: number;
 }
 
 /* ─── fallback booking data ─── */
@@ -82,6 +84,11 @@ const FALLBACK_BOOKING = {
   total: 2094,
   cancellationDate: 'Dec 13',
   address: '123 Luxury Avenue, Paris, France',
+};
+
+type BookingData = Omit<typeof FALLBACK_BOOKING, 'rating' | 'reviews'> & {
+  rating?: number;
+  reviews?: number;
 };
 
 /* ─── form error type ─── */
@@ -181,7 +188,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
 
 /* ─── Booking Summary Sidebar ─── */
 function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, piTotal }: {
-  bookingData: typeof FALLBACK_BOOKING;
+  bookingData: BookingData;
   piSubtotal: number;
   piTaxes: number;
   piDiscount: number;
@@ -199,13 +206,15 @@ function BookingSummarySidebar({ bookingData, piSubtotal, piTaxes, piDiscount, p
       <h3 className="font-display text-lg font-semibold text-[#1A2B47] mt-3">
         {bookingData.hotelName}
       </h3>
-      <div className="flex items-center gap-1 mt-1">
-        <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
-        <span className="font-body text-sm text-[#7A8494]">
-          {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString()}{' '}
-          {t('property.reviews')}
-        </span>
-      </div>
+      {bookingData.rating != null && bookingData.reviews != null && (
+        <div className="flex items-center gap-1 mt-1">
+          <Star size={14} className="text-[#E8A838] fill-[#E8A838]" />
+          <span className="font-body text-sm text-[#7A8494]">
+            {bookingData.rating} {t('property.wonderful')} · {bookingData.reviews.toLocaleString()}{' '}
+            {t('property.reviews')}
+          </span>
+        </div>
+      )}
 
       <div className="mt-5 space-y-2">
         {[
@@ -322,7 +331,7 @@ function StepDetails({
   piTotal,
 }: {
   onContinue: (data: Record<string, string>) => void;
-  bookingData: typeof FALLBACK_BOOKING;
+  bookingData: BookingData;
   piSubtotal: number;
   piTaxes: number;
   piDiscount: number;
@@ -580,7 +589,7 @@ function StepPayment({
 }: {
   onPay: (txId: string) => void;
   onBack: () => void;
-  bookingData: typeof FALLBACK_BOOKING;
+  bookingData: BookingData;
   hotelId: string;
   piSubtotal: number;
   piTaxes: number;
@@ -933,7 +942,7 @@ function StepPayment({
 }
 
 /* ─── Step 3: Confirmation ─── */
-function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: string; bookingData: typeof FALLBACK_BOOKING; piTotal: number; userEmail?: string }) {
+function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: string; bookingData: BookingData; piTotal: number; userEmail?: string }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
@@ -1149,8 +1158,8 @@ export default function Checkout() {
     hotelName: state.hotelName || FALLBACK_BOOKING.hotelName,
     roomType: state.roomType || FALLBACK_BOOKING.roomType,
     image: state.image || FALLBACK_BOOKING.image,
-    rating: FALLBACK_BOOKING.rating,
-    reviews: FALLBACK_BOOKING.reviews,
+    rating: state.hotelName ? state.rating : FALLBACK_BOOKING.rating,
+    reviews: state.hotelName ? state.reviewCount : FALLBACK_BOOKING.reviews,
     checkIn: state.checkIn || FALLBACK_BOOKING.checkIn,
     checkOut: state.checkOut || FALLBACK_BOOKING.checkOut,
     nights: state.nights ?? FALLBACK_BOOKING.nights,
