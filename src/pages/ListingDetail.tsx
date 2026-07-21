@@ -7,6 +7,7 @@ import { useTranslation } from '@/i18n';
 import { fetchListing, type Listing } from '@/lib/listingsStorage';
 import { fetchReviews, type Review } from '@/lib/reviewsStorage';
 import { formatPiAmount, usdToPi } from '@/lib/piPayments';
+import { checkAvailability } from '@/lib/bookingStorage';
 
 function addDays(date: Date, days: number): string {
   const d = new Date(date);
@@ -22,6 +23,9 @@ export default function ListingDetail() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
+  const [checkIn, setCheckIn] = useState(addDays(new Date(), 7));
+  const [checkOut, setCheckOut] = useState(addDays(new Date(), 8));
+  const [availability, setAvailability] = useState<'checking' | 'available' | 'unavailable'>('available');
 
   useEffect(() => {
     if (!id) return;
@@ -32,6 +36,20 @@ export default function ListingDetail() {
       setLoading(false);
     });
   }, [id]);
+
+  useEffect(() => {
+    if (!id || !listing || !checkIn || !checkOut || checkOut <= checkIn) return;
+    setAvailability('checking');
+    let cancelled = false;
+    checkAvailability(id, listing.propertyType, checkIn, checkOut).then((ok) => {
+      if (!cancelled) setAvailability(ok ? 'available' : 'unavailable');
+    });
+    return () => { cancelled = true; };
+  }, [id, listing, checkIn, checkOut]);
+
+  const nights = checkIn && checkOut && checkOut > checkIn
+    ? Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000)
+    : 0;
 
   const avgRating = reviews.length
     ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
@@ -58,21 +76,22 @@ export default function ListingDetail() {
   }
 
   const piPrice = usdToPi(listing.price);
+  const subtotal = listing.price * Math.max(nights, 1);
+  const taxes = Math.round(subtotal * 0.1 * 100) / 100;
 
   const handleBook = () => {
-    const checkIn = addDays(new Date(), 7);
-    const checkOut = addDays(new Date(), 8);
+    if (availability !== 'available' || nights < 1) return;
     navigate('/checkout', {
       state: {
         hotelId: String(listing.id),
         hotelName: listing.name,
-        roomType: t('search.propHotel'),
+        roomType: listing.propertyType,
         image: listing.images[0],
         location: listing.location,
         pricePerNight: listing.price,
-        taxes: Math.round(listing.price * 0.1 * 100) / 100,
-        totalUsd: Math.round(listing.price * 1.1 * 100) / 100,
-        nights: 1,
+        taxes,
+        totalUsd: Math.round((subtotal + taxes) * 100) / 100,
+        nights,
         guests: '2 Adults',
         checkIn,
         checkOut,
@@ -191,11 +210,50 @@ export default function ListingDetail() {
                 <p className="font-body text-sm text-[#7A8494] mb-4">
                   {t('listing.perNight')} · ≈ ${listing.price} USD
                 </p>
+
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <div>
+                    <label className="font-body text-[11px] text-[#7A8494] uppercase tracking-wider">
+                      {t('profile.checkIn')}
+                    </label>
+                    <input
+                      type="date"
+                      value={checkIn}
+                      min={addDays(new Date(), 0)}
+                      onChange={(e) => setCheckIn(e.target.value)}
+                      className="w-full mt-1 px-2 py-2 rounded-lg border border-[#E2E6EC] font-body text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-body text-[11px] text-[#7A8494] uppercase tracking-wider">
+                      {t('profile.checkOut')}
+                    </label>
+                    <input
+                      type="date"
+                      value={checkOut}
+                      min={checkIn}
+                      onChange={(e) => setCheckOut(e.target.value)}
+                      className="w-full mt-1 px-2 py-2 rounded-lg border border-[#E2E6EC] font-body text-sm"
+                    />
+                  </div>
+                </div>
+
+                {nights > 0 && (
+                  <p className="font-body text-xs text-[#7A8494] mb-3">
+                    {nights} {t('property.nights')} · {formatPiAmount(usdToPi(subtotal + taxes))}
+                  </p>
+                )}
+
+                {availability === 'unavailable' && (
+                  <p className="font-body text-xs text-rose-600 mb-3">{t('checkout.roomUnavailable')}</p>
+                )}
+
                 <Button
                   onClick={handleBook}
-                  className="w-full bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl py-6"
+                  disabled={availability !== 'available' || nights < 1}
+                  className="w-full bg-[#E85D4A] hover:bg-[#D14A38] font-body rounded-xl py-6 disabled:opacity-50"
                 >
-                  {t('listing.bookNow')}
+                  {availability === 'checking' ? t('common.loading') : t('listing.bookNow')}
                 </Button>
               </div>
             </div>
