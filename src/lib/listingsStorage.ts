@@ -9,6 +9,7 @@ export interface Listing {
   images: string[];
   amenities: string[];
   propertyType: string;
+  coordinates: [number, number] | null;
   status: 'pending' | 'approved' | 'rejected';
   rejectReason?: string;
   createdAt: string;

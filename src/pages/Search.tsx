@@ -36,7 +36,11 @@ function listingToHotel(l: Listing): Hotel {
     images: l.images,
     tags: [],
     amenities: l.amenities,
-    coordinates: [48.8566, 2.3522],
+    // Real coordinates from geocoding at listing submission time; null only
+    // if geocoding failed (unrecognizable address) — falls back to Paris
+    // only as a last resort so the map still renders a pin, not because
+    // that's where the listing actually is.
+    coordinates: l.coordinates || [48.8566, 2.3522],
     starRating: 0,
     propertyType: l.propertyType,
     freeCancellation: false,
