@@ -24,6 +24,16 @@ interface ListingAdmin {
   createdAt: string;
 }
 
+interface FlaggedBooking {
+  id: string;
+  piUid: string;
+  hotelId: string;
+  hotelName: string;
+  totalPi: number;
+  txid?: string;
+  createdAt: string;
+}
+
 interface Payment {
   paymentId: string;
   action: string;
@@ -62,6 +72,7 @@ export default function Admin() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [listings, setListings] = useState<ListingAdmin[]>([]);
   const [allowDemoBookings, setAllowDemoBookings] = useState(false);
+  const [flaggedBookings, setFlaggedBookings] = useState<FlaggedBooking[]>([]);
   const [filterStatus, setFilterStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -75,11 +86,12 @@ export default function Admin() {
     setLoading(true);
     setError('');
     try {
-      const [sRes, pRes, lRes, setRes] = await Promise.all([
+      const [sRes, pRes, lRes, setRes, fRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/stats`, { headers }),
         fetch(`${API_URL}/api/admin/payments?limit=100`, { headers }),
         fetch(`${API_URL}/api/admin/listings`, { headers }),
         fetch(`${API_URL}/api/admin/settings`, { headers }),
+        fetch(`${API_URL}/api/admin/flagged-bookings`, { headers }),
       ]);
       if (sRes.status === 403) { setError('Неверный ключ'); setAuthed(false); return; }
       setStats(await sRes.json());
@@ -87,6 +99,7 @@ export default function Admin() {
       setListings(await lRes.json());
       const settings = await setRes.json();
       setAllowDemoBookings(!!settings.allowDemoBookings);
+      setFlaggedBookings(await fRes.json());
       setAuthed(true);
     } catch {
       setError('Нет связи с бэкендом');
@@ -210,6 +223,42 @@ export default function Admin() {
           </button>
         </div>
       </div>
+
+      {/* Flagged bookings: real payments on demo hotels that slipped through */}
+      {flaggedBookings.length > 0 && (
+        <div style={{ ...styles.card, border: '1px solid #ef4444' }}>
+          <h3 style={styles.cardTitle}>
+            ⚠️ Требуют внимания: реальный платёж за демо-отель ({flaggedBookings.length})
+          </h3>
+          <p style={{ margin: '0 0 12px', fontSize: 13, color: '#9ca3af' }}>
+            Эти брони прошли реальную оплату Pi за отель без настоящего хозяина — фронтенд должен
+            был это заблокировать заранее. Проверьте вручную и, если нужно, оформите возврат гостю.
+          </p>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  {['Дата', 'Booking ID', 'Отель ID', 'Гость', 'Сумма π', 'txid'].map(h => (
+                    <th key={h} style={styles.th}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {flaggedBookings.map((b) => (
+                  <tr key={b.id} style={{ borderBottom: '1px solid #1f2937' }}>
+                    <td style={styles.td}>{fmt(b.createdAt)}</td>
+                    <td style={{ ...styles.td, fontFamily: 'monospace', fontSize: 11 }}>{b.id}</td>
+                    <td style={styles.td}>{b.hotelId}</td>
+                    <td style={{ ...styles.td, fontFamily: 'monospace', fontSize: 11 }}>{b.piUid}</td>
+                    <td style={styles.td}>{b.totalPi}</td>
+                    <td style={{ ...styles.td, fontFamily: 'monospace', fontSize: 10 }}>{b.txid ?? '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Manual operations */}
       <div style={styles.card}>
