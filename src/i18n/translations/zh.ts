@@ -402,6 +402,8 @@ const zh: TranslationSet = {
     bookNow: '立即预订',
     perNight: '/晚',
     notFound: '未找到该房源',
+    manageAvailability: '管理可预订日期',
+    blockDates: '屏蔽这些日期',
   },
   footer: {
     aboutUs: '关于我们',

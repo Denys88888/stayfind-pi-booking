@@ -50,7 +50,7 @@ import { hotels } from '@/data/hotelData';
 import { getProfileSettings, saveProfileSettings, type ProfileSettings } from '@/lib/profileSettings';
 import { submitReview } from '@/lib/reviewsStorage';
 import { isListingId } from '@/lib/listingsStorage';
-import { fetchMyListings, type Listing } from '@/lib/listingsStorage';
+import { fetchMyListings, blockDates, unblockDates, type Listing } from '@/lib/listingsStorage';
 
 /* ─── Animated section wrapper ─── */
 function AnimatedSection({
@@ -495,6 +495,14 @@ function MyListingsTab({ piUid }: { piUid: string }) {
   const [listings, setListings] = useState<Listing[]>([]);
   const [earnings, setEarnings] = useState<StoredBooking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [calendarOpenId, setCalendarOpenId] = useState<number | null>(null);
+  const [blockCheckIn, setBlockCheckIn] = useState('');
+  const [blockCheckOut, setBlockCheckOut] = useState('');
+  const [blockError, setBlockError] = useState('');
+
+  const reload = () => {
+    fetchMyListings(piUid).then(setListings);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -507,6 +515,24 @@ function MyListingsTab({ piUid }: { piUid: string }) {
     });
     return () => { cancelled = true; };
   }, [piUid]);
+
+  const handleBlock = async (listingId: number) => {
+    setBlockError('');
+    if (!blockCheckIn || !blockCheckOut) return;
+    const result = await blockDates(listingId, piUid, blockCheckIn, blockCheckOut);
+    if (result.ok) {
+      setBlockCheckIn('');
+      setBlockCheckOut('');
+      reload();
+    } else {
+      setBlockError(result.error || t('common.error'));
+    }
+  };
+
+  const handleUnblock = async (listingId: number, index: number) => {
+    await unblockDates(listingId, piUid, index);
+    reload();
+  };
 
   const heldTotal = earnings
     .filter((b) => b.hostPayoutStatus === 'held' || b.hostPayoutStatus === 'processing')
@@ -599,6 +625,65 @@ function MyListingsTab({ piUid }: { piUid: string }) {
                     <p className="font-body text-xs text-rose-600 mt-2">
                       {t('listing.rejectedReason')}: {l.rejectReason}
                     </p>
+                  )}
+
+                  {l.status === 'approved' && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => setCalendarOpenId(calendarOpenId === l.id ? null : l.id)}
+                        className="font-body text-xs text-[#7A8494] hover:text-[#E85D4A] mt-3 underline"
+                      >
+                        {t('listing.manageAvailability')}
+                      </button>
+
+                      {calendarOpenId === l.id && (
+                        <div className="mt-3 p-3 bg-[#F8F9FB] rounded-xl space-y-3">
+                          {(l.blockedRanges || []).length > 0 && (
+                            <div className="space-y-1">
+                              {(l.blockedRanges || []).map((r, i) => (
+                                <div key={i} className="flex items-center justify-between font-body text-xs text-[#4A5468]">
+                                  <span>{r.checkIn} → {r.checkOut}</span>
+                                  <button
+                                    onClick={() => handleUnblock(l.id, i)}
+                                    className="text-rose-600 hover:underline"
+                                  >
+                                    {t('common.delete')}
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div className="flex gap-2 items-end flex-wrap">
+                            <div className="space-y-1">
+                              <Label className="font-body text-[11px] text-[#7A8494]">{t('profile.checkIn')}</Label>
+                              <Input
+                                type="date"
+                                value={blockCheckIn}
+                                onChange={(e) => setBlockCheckIn(e.target.value)}
+                                className="rounded-lg border-[#E2E6EC] text-xs h-9"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="font-body text-[11px] text-[#7A8494]">{t('profile.checkOut')}</Label>
+                              <Input
+                                type="date"
+                                value={blockCheckOut}
+                                onChange={(e) => setBlockCheckOut(e.target.value)}
+                                className="rounded-lg border-[#E2E6EC] text-xs h-9"
+                              />
+                            </div>
+                            <Button
+                              size="sm"
+                              onClick={() => handleBlock(l.id)}
+                              className="bg-[#E85D4A] hover:bg-[#D14A38] font-body text-xs rounded-lg h-9"
+                            >
+                              {t('listing.blockDates')}
+                            </Button>
+                          </div>
+                          {blockError && <p className="font-body text-xs text-rose-600">{blockError}</p>}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </CardContent>
               </div>

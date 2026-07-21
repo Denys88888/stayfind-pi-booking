@@ -13,6 +13,7 @@ export interface Listing {
   status: 'pending' | 'approved' | 'rejected';
   rejectReason?: string;
   createdAt: string;
+  blockedRanges?: { checkIn: string; checkOut: string }[];
 }
 
 export type NewListing = Pick<
@@ -63,6 +64,49 @@ export async function fetchMyListings(piUid: string): Promise<Listing[]> {
     return res.ok ? await res.json() : [];
   } catch {
     return [];
+  }
+}
+
+export async function blockDates(
+  listingId: number,
+  piUid: string,
+  checkIn: string,
+  checkOut: string
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${API_URL}/api/listings/${listingId}/block-dates`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ piUid, checkIn, checkOut }),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      return { ok: false, error: d.error || `Failed: ${res.status}` };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
+export async function unblockDates(
+  listingId: number,
+  piUid: string,
+  index: number
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${API_URL}/api/listings/${listingId}/unblock-dates`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ piUid, index }),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      return { ok: false, error: d.error || `Failed: ${res.status}` };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
   }
 }
 

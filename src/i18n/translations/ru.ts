@@ -402,6 +402,8 @@ const ru: TranslationSet = {
     bookNow: 'Забронировать',
     perNight: '/ночь',
     notFound: 'Объявление не найдено',
+    manageAvailability: 'Управление доступностью',
+    blockDates: 'Заблокировать даты',
   },
   footer: {
     aboutUs: 'О нас',

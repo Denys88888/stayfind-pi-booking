@@ -405,6 +405,8 @@ export interface TranslationSet {
     bookNow: string;
     perNight: string;
     notFound: string;
+    manageAvailability: string;
+    blockDates: string;
   };
   footer: {
     aboutUs: string;

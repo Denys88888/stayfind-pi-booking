@@ -402,6 +402,8 @@ const it: TranslationSet = {
     bookNow: 'Prenota ora',
     perNight: '/notte',
     notFound: 'Struttura non trovata',
+    manageAvailability: 'Gestisci disponibilità',
+    blockDates: 'Blocca queste date',
   },
   footer: {
     aboutUs: 'Chi siamo',

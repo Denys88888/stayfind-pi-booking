@@ -402,6 +402,8 @@ const tr: TranslationSet = {
     bookNow: 'Şimdi Rezervasyon Yap',
     perNight: '/gece',
     notFound: 'Liste bulunamadı',
+    manageAvailability: 'Uygunluğu yönet',
+    blockDates: 'Bu tarihleri engelle',
   },
   footer: {
     aboutUs: 'Hakkımızda',

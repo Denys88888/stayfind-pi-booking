@@ -403,6 +403,8 @@ const en: TranslationSet = {
     bookNow: 'Book Now',
     perNight: '/night',
     notFound: 'Listing not found',
+    manageAvailability: 'Manage availability',
+    blockDates: 'Block these dates',
   },
   footer: {
     aboutUs: 'About Us',

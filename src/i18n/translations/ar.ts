@@ -402,6 +402,8 @@ const ar: TranslationSet = {
     bookNow: 'احجز الآن',
     perNight: '/الليلة',
     notFound: 'العقار غير موجود',
+    manageAvailability: 'إدارة التوفر',
+    blockDates: 'حظر هذه التواريخ',
   },
   footer: {
     aboutUs: 'من نحن',

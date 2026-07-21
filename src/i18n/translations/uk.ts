@@ -402,6 +402,8 @@ const uk: TranslationSet = {
     bookNow: 'Забронювати',
     perNight: '/ніч',
     notFound: 'Оголошення не знайдено',
+    manageAvailability: 'Керування доступністю',
+    blockDates: 'Заблокувати дати',
   },
   footer: {
     aboutUs: 'Про нас',
