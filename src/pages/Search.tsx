@@ -21,16 +21,25 @@ import MapView from './search/MapView';
 import { hotels } from '@/data/hotelData';
 import type { FilterState, SortOption, Hotel } from '@/types/search';
 import { fetchApprovedListings, type Listing } from '@/lib/listingsStorage';
+import { fetchReviewSummaries, type ReviewSummary } from '@/lib/reviewsStorage';
 
-function listingToHotel(l: Listing): Hotel {
+function ratingLabelFor(rating: number, t: (k: string) => string): string {
+  if (rating >= 9) return t('search.ratingWonderful');
+  if (rating >= 8) return t('search.ratingVeryGood');
+  if (rating >= 7) return t('search.ratingGood');
+  return t('search.ratingPleasant');
+}
+
+function listingToHotel(l: Listing, summary: ReviewSummary | undefined, t: (k: string) => string): Hotel {
+  const rating = summary ? Math.round(summary.avgRating * 2 * 10) / 10 : 0; // 1-5 stars → 0-10 scale
   return {
     id: l.id,
     name: l.name,
     location: l.location,
     address: l.address,
-    rating: 0,
-    ratingLabel: '',
-    reviewCount: 0,
+    rating,
+    ratingLabel: summary ? ratingLabelFor(rating, t) : '',
+    reviewCount: summary?.count || 0,
     price: l.price,
     originalPrice: l.price,
     images: l.images,
@@ -107,8 +116,11 @@ export default function Search() {
 
   /* ── User-submitted listings, merged into the static catalog ── */
   useEffect(() => {
-    fetchApprovedListings().then((listings) => setListingHotels(listings.map(listingToHotel)));
-  }, []);
+    fetchApprovedListings().then(async (listings) => {
+      const summaries = await fetchReviewSummaries(listings.map((l) => l.id));
+      setListingHotels(listings.map((l) => listingToHotel(l, summaries[String(l.id)], t)));
+    });
+  }, [t]);
 
   const allHotels = useMemo(() => [...hotels, ...listingHotels], [listingHotels]);
 

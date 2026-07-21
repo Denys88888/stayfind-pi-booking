@@ -20,6 +20,21 @@ export async function fetchReviews(hotelId: string): Promise<Review[]> {
   }
 }
 
+export interface ReviewSummary {
+  avgRating: number;
+  count: number;
+}
+
+export async function fetchReviewSummaries(hotelIds: (string | number)[]): Promise<Record<string, ReviewSummary>> {
+  if (!hotelIds.length) return {};
+  try {
+    const res = await fetch(`${API_URL}/api/reviews/summary?hotelIds=${hotelIds.map(String).join(',')}`);
+    return res.ok ? await res.json() : {};
+  } catch {
+    return {};
+  }
+}
+
 export async function submitReview(data: {
   bookingId: string;
   piUid: string;
