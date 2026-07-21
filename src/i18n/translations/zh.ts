@@ -252,6 +252,7 @@ const zh: TranslationSet = {
     completionFailed: '您的付款已完成，但服务器确认失败。下次登录时将自动完成。',
     paymentCancelled: '付款已取消。',
     roomUnavailable: '该房间在所选日期已不可预订。',
+    demoHotelBlocked: '这是一个演示房源，无法使用真实的 Pi 付款进行预订。',
     downloadReceipt: '下载收据',
   },
   profile: {

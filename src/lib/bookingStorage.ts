@@ -75,6 +75,18 @@ export async function checkAvailability(
   }
 }
 
+export async function checkRealPaymentEligibility(
+  hotelId: string
+): Promise<{ allowed: boolean; reason?: string }> {
+  try {
+    const res = await fetch(`${API_URL}/api/bookings/real-payment-eligibility?hotelId=${encodeURIComponent(hotelId)}`);
+    if (!res.ok) return { allowed: true }; // fail open — don't block on a backend hiccup
+    return await res.json();
+  } catch {
+    return { allowed: true };
+  }
+}
+
 export async function createBookingRemote(
   piUid: string,
   booking: Booking

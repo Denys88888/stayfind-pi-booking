@@ -61,6 +61,7 @@ export default function Admin() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [listings, setListings] = useState<ListingAdmin[]>([]);
+  const [allowDemoBookings, setAllowDemoBookings] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -74,15 +75,18 @@ export default function Admin() {
     setLoading(true);
     setError('');
     try {
-      const [sRes, pRes, lRes] = await Promise.all([
+      const [sRes, pRes, lRes, setRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/stats`, { headers }),
         fetch(`${API_URL}/api/admin/payments?limit=100`, { headers }),
         fetch(`${API_URL}/api/admin/listings`, { headers }),
+        fetch(`${API_URL}/api/admin/settings`, { headers }),
       ]);
       if (sRes.status === 403) { setError('Неверный ключ'); setAuthed(false); return; }
       setStats(await sRes.json());
       setPayments(await pRes.json());
       setListings(await lRes.json());
+      const settings = await setRes.json();
+      setAllowDemoBookings(!!settings.allowDemoBookings);
       setAuthed(true);
     } catch {
       setError('Нет связи с бэкендом');
@@ -116,6 +120,16 @@ export default function Admin() {
     const d = await r.json();
     setActionMsg(r.ok ? '✓ Готово' : `✗ ${JSON.stringify(d)}`);
     load();
+  }
+
+  async function toggleDemoBookings() {
+    const next = !allowDemoBookings;
+    setAllowDemoBookings(next);
+    await fetch(`${API_URL}/api/admin/settings`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ allowDemoBookings: next }),
+    });
   }
 
   const filtered = filterStatus ? payments.filter(p => p.status === filterStatus) : payments;
@@ -177,6 +191,25 @@ export default function Admin() {
           <StatCard label="Uptime" value={uptime(stats.uptime)} />
         </div>
       )}
+
+      {/* Safety toggle: real payments on demo hotels */}
+      <div style={{ ...styles.card, border: allowDemoBookings ? '1px solid #ef4444' : undefined }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          <div>
+            <h3 style={{ ...styles.cardTitle, marginBottom: 4 }}>Реальные платежи за демо-отели</h3>
+            <p style={{ margin: 0, fontSize: 13, color: '#9ca3af', maxWidth: 480 }}>
+              По умолчанию выключено: статичный каталог отелей — витрина без реального хозяина,
+              брать за неё реальные Pi нельзя. Включайте только для собственного тестирования.
+            </p>
+          </div>
+          <button
+            style={{ ...styles.btnSm, background: allowDemoBookings ? '#ef4444' : '#374151', flexShrink: 0 }}
+            onClick={toggleDemoBookings}
+          >
+            {allowDemoBookings ? 'Включено — выключить' : 'Выключено — включить'}
+          </button>
+        </div>
+      </div>
 
       {/* Manual operations */}
       <div style={styles.card}>

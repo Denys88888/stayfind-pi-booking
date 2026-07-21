@@ -256,6 +256,7 @@ export interface TranslationSet {
     completionFailed: string;
     paymentCancelled: string;
     roomUnavailable: string;
+    demoHotelBlocked: string;
   };
   profile: {
     welcome: string;

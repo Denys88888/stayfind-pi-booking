@@ -252,6 +252,7 @@ const ar: TranslationSet = {
     completionFailed: 'تم الدفع، لكن تأكيد الخادم فشل. سيكتمل تلقائياً عند تسجيل دخولك التالي.',
     paymentCancelled: 'تم إلغاء الدفع.',
     roomUnavailable: 'هذه الغرفة لم تعد متاحة للتواريخ المحددة.',
+    demoHotelBlocked: 'هذا عقار تجريبي ولا يمكن حجزه بدفعة Pi حقيقية.',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {

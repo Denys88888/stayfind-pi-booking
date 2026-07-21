@@ -252,6 +252,7 @@ const pl: TranslationSet = {
     completionFailed: 'Płatność przeszła, ale potwierdzenie serwera nie powiodło się. Zostanie sfinalizowana automatycznie przy następnym logowaniu.',
     paymentCancelled: 'Płatność została anulowana.',
     roomUnavailable: 'Ten pokój nie jest już dostępny na wybrane daty.',
+    demoHotelBlocked: 'To jest obiekt demonstracyjny i nie można go zarezerwować z prawdziwą płatnością Pi.',
     downloadReceipt: 'Pobierz potwierdzenie',
   },
   profile: {

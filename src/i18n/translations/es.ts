@@ -252,6 +252,7 @@ const es: TranslationSet = {
     completionFailed: 'El pago se realizó, pero la confirmación del servidor falló. Se completará automáticamente en tu próximo inicio de sesión.',
     paymentCancelled: 'El pago fue cancelado.',
     roomUnavailable: 'Esta habitación ya no está disponible para las fechas seleccionadas.',
+    demoHotelBlocked: 'Esta es una propiedad de demostración y no se puede reservar con un pago real de Pi.',
     downloadReceipt: 'Descargar recibo',
   },
   profile: {

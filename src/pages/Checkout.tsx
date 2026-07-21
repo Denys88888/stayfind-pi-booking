@@ -34,7 +34,7 @@ import {
   usdToPi,
   formatPiAmount,
 } from '@/lib/piPayments';
-import { createBookingRemote, checkAvailability, generateBookingId } from '@/lib/bookingStorage';
+import { createBookingRemote, checkAvailability, checkRealPaymentEligibility, generateBookingId } from '@/lib/bookingStorage';
 import { isPiSdkAvailable, isPiBrowser } from '@/hooks/usePiAuth';
 import PiBrowserRequired from '@/components/PiBrowserRequired';
 
@@ -608,6 +608,15 @@ function StepPayment({
         setProcessing(false);
         onPay('demo_' + Date.now().toString(36));
       }, 1500);
+      return;
+    }
+
+    /* Static demo hotels have no real host and deliver no real service —
+       block real Pi payments there before money moves, not after. */
+    const eligibility = await checkRealPaymentEligibility(hotelId);
+    if (!eligibility.allowed) {
+      setProcessing(false);
+      setPaymentError(eligibility.reason || t('checkout.demoHotelBlocked'));
       return;
     }
 

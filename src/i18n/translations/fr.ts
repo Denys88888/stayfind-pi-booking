@@ -252,6 +252,7 @@ const fr: TranslationSet = {
     completionFailed: 'Le paiement a été effectué, mais la confirmation du serveur a échoué. Elle sera finalisée automatiquement à votre prochaine connexion.',
     paymentCancelled: 'Le paiement a été annulé.',
     roomUnavailable: "Cette chambre n'est plus disponible pour les dates sélectionnées.",
+    demoHotelBlocked: 'Ceci est un bien de démonstration et ne peut pas être réservé avec un paiement Pi réel.',
     downloadReceipt: 'Télécharger le reçu',
   },
   profile: {

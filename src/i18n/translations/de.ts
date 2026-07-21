@@ -252,6 +252,7 @@ const de: TranslationSet = {
     completionFailed: 'Die Zahlung war erfolgreich, aber die Serverbestätigung ist fehlgeschlagen. Sie wird bei Ihrer nächsten Anmeldung automatisch abgeschlossen.',
     paymentCancelled: 'Die Zahlung wurde storniert.',
     roomUnavailable: 'Dieses Zimmer ist für die ausgewählten Daten nicht mehr verfügbar.',
+    demoHotelBlocked: 'Dies ist eine Demo-Unterkunft und kann nicht mit einer echten Pi-Zahlung gebucht werden.',
     downloadReceipt: 'Quittung herunterladen',
   },
   profile: {

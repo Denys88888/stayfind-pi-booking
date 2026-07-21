@@ -252,6 +252,7 @@ const tr: TranslationSet = {
     completionFailed: 'Ödemeniz gerçekleşti ancak sunucu onayı başarısız oldu. Bir sonraki girişinizde otomatik olarak tamamlanacak.',
     paymentCancelled: 'Ödeme iptal edildi.',
     roomUnavailable: 'Bu oda seçilen tarihler için artık müsait değil.',
+    demoHotelBlocked: 'Bu bir demo mülktür ve gerçek bir Pi ödemesiyle rezerve edilemez.',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {

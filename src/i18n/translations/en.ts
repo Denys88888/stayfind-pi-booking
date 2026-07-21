@@ -253,6 +253,7 @@ const en: TranslationSet = {
     completionFailed: 'Your payment went through, but server confirmation failed. It will finalize automatically on your next sign-in.',
     paymentCancelled: 'Payment was cancelled.',
     roomUnavailable: 'This room is no longer available for the selected dates.',
+    demoHotelBlocked: 'This is a demo property and cannot be booked with a real Pi payment.',
     downloadReceipt: 'Download Receipt',
   },
   profile: {
