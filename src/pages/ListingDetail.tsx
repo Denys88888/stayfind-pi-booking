@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Check, ChevronLeft, Star } from 'lucide-react';
+import { MapPin, Check, ChevronLeft, Star, Minus, Plus } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/i18n';
@@ -26,6 +26,8 @@ export default function ListingDetail() {
   const [checkIn, setCheckIn] = useState(addDays(new Date(), 7));
   const [checkOut, setCheckOut] = useState(addDays(new Date(), 8));
   const [availability, setAvailability] = useState<'checking' | 'available' | 'unavailable'>('available');
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -50,6 +52,10 @@ export default function ListingDetail() {
   const nights = checkIn && checkOut && checkOut > checkIn
     ? Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000)
     : 0;
+
+  const guestLabel = `${adults} ${adults === 1 ? t('hero.adult') : t('hero.adults')}${
+    children > 0 ? ` · ${children} ${children === 1 ? t('hero.child') : t('hero.children')}` : ''
+  }`;
 
   const avgRating = reviews.length
     ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
@@ -92,7 +98,7 @@ export default function ListingDetail() {
         taxes,
         totalUsd: Math.round((subtotal + taxes) * 100) / 100,
         nights,
-        guests: '2 Adults',
+        guests: guestLabel,
         checkIn,
         checkOut,
       },
@@ -235,6 +241,46 @@ export default function ListingDetail() {
                       onChange={(e) => setCheckOut(e.target.value)}
                       className="w-full mt-1 px-2 py-2 rounded-lg border border-[#E2E6EC] font-body text-sm"
                     />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="font-body text-[11px] text-[#7A8494] uppercase tracking-wider">
+                    {t('hero.guests')}
+                  </label>
+                  <div className="flex items-center justify-between mt-1 px-3 py-2 rounded-lg border border-[#E2E6EC]">
+                    <div className="flex items-center gap-2">
+                      <span className="font-body text-sm text-[#0F1B2E]">{t('hero.adults')}</span>
+                      <button
+                        onClick={() => setAdults((a) => Math.max(1, a - 1))}
+                        className="w-6 h-6 rounded-full border border-[#E2E6EC] flex items-center justify-center text-[#7A8494] hover:border-[#E85D4A] hover:text-[#E85D4A]"
+                      >
+                        <Minus size={12} />
+                      </button>
+                      <span className="font-body text-sm w-4 text-center">{adults}</span>
+                      <button
+                        onClick={() => setAdults((a) => a + 1)}
+                        className="w-6 h-6 rounded-full border border-[#E2E6EC] flex items-center justify-center text-[#7A8494] hover:border-[#E85D4A] hover:text-[#E85D4A]"
+                      >
+                        <Plus size={12} />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-body text-sm text-[#0F1B2E]">{t('hero.children')}</span>
+                      <button
+                        onClick={() => setChildren((c) => Math.max(0, c - 1))}
+                        className="w-6 h-6 rounded-full border border-[#E2E6EC] flex items-center justify-center text-[#7A8494] hover:border-[#E85D4A] hover:text-[#E85D4A]"
+                      >
+                        <Minus size={12} />
+                      </button>
+                      <span className="font-body text-sm w-4 text-center">{children}</span>
+                      <button
+                        onClick={() => setChildren((c) => c + 1)}
+                        className="w-6 h-6 rounded-full border border-[#E2E6EC] flex items-center justify-center text-[#7A8494] hover:border-[#E85D4A] hover:text-[#E85D4A]"
+                      >
+                        <Plus size={12} />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
