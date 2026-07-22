@@ -72,6 +72,8 @@ export default function Admin() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [listings, setListings] = useState<ListingAdmin[]>([]);
   const [allowDemoBookings, setAllowDemoBookings] = useState(false);
+  const [commissionPct, setCommissionPct] = useState('8');
+  const [commissionMsg, setCommissionMsg] = useState('');
   const [flaggedBookings, setFlaggedBookings] = useState<FlaggedBooking[]>([]);
   const [filterStatus, setFilterStatus] = useState('');
   const [loading, setLoading] = useState(false);
@@ -99,6 +101,9 @@ export default function Admin() {
       setListings(await lRes.json());
       const settings = await setRes.json();
       setAllowDemoBookings(!!settings.allowDemoBookings);
+      if (typeof settings.platformCommissionRate === 'number') {
+        setCommissionPct(String(Math.round(settings.platformCommissionRate * 1000) / 10));
+      }
       setFlaggedBookings(await fRes.json());
       setAuthed(true);
     } catch {
@@ -143,6 +148,21 @@ export default function Admin() {
       headers,
       body: JSON.stringify({ allowDemoBookings: next }),
     });
+  }
+
+  async function saveCommission() {
+    setCommissionMsg('');
+    const pct = Number(commissionPct);
+    if (!Number.isFinite(pct) || pct < 0 || pct > 50) {
+      setCommissionMsg('Введите число от 0 до 50');
+      return;
+    }
+    const r = await fetch(`${API_URL}/api/admin/settings`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ platformCommissionRate: pct / 100 }),
+    });
+    setCommissionMsg(r.ok ? '✓ Сохранено' : '✗ Ошибка сохранения');
   }
 
   const filtered = filterStatus ? payments.filter(p => p.status === filterStatus) : payments;
@@ -221,6 +241,33 @@ export default function Admin() {
           >
             {allowDemoBookings ? 'Включено — выключить' : 'Выключено — включить'}
           </button>
+        </div>
+      </div>
+
+      {/* Platform commission rate */}
+      <div style={styles.card}>
+        <h3 style={{ ...styles.cardTitle, marginBottom: 4 }}>Комиссия платформы</h3>
+        <p style={{ margin: '0 0 12px', fontSize: 13, color: '#9ca3af', maxWidth: 480 }}>
+          Доля от каждой брони на объявление пользователя, которая остаётся у платформы;
+          остальное автоматически уходит хозяину после выезда гостя. Применяется к новым броням сразу.
+        </p>
+        <div style={styles.row}>
+          <input
+            style={{ ...styles.input, width: 100 }}
+            type="number"
+            min={0}
+            max={50}
+            step={0.5}
+            value={commissionPct}
+            onChange={e => setCommissionPct(e.target.value)}
+          />
+          <span style={{ color: '#9ca3af', fontSize: 14 }}>%</span>
+          <button style={styles.btnSm} onClick={saveCommission}>Сохранить</button>
+          {commissionMsg && (
+            <span style={{ color: commissionMsg.startsWith('✓') ? '#10b981' : '#ef4444', fontSize: 14 }}>
+              {commissionMsg}
+            </span>
+          )}
         </div>
       </div>
 
