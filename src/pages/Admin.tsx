@@ -6,6 +6,7 @@ const STORAGE_KEY = 'stayfind_admin_key';
 interface Stats {
   mode: string;
   sandbox: boolean;
+  storage?: string;
   uptime: number;
   total: number;
   todayTotal: number;
@@ -212,6 +213,18 @@ export default function Admin() {
       </div>
 
       {error && <p style={styles.err}>{error}</p>}
+
+      {/* Storage warning: in-memory data is wiped on every redeploy/restart */}
+      {stats && stats.storage === 'IN_MEMORY' && (
+        <div style={{ ...styles.card, background: '#451a03', border: '1px solid #f59e0b' }}>
+          <p style={{ margin: 0, fontSize: 14, color: '#fbbf24', fontWeight: 600 }}>
+            ⚠️ Хранилище: IN_MEMORY — брони и объявления пропадут при следующем деплое или рестарте
+          </p>
+          <p style={{ margin: '6px 0 0', fontSize: 13, color: '#d1a35c' }}>
+            Подключи Postgres на Render и задай DATABASE_URL, чтобы данные сохранялись постоянно.
+          </p>
+        </div>
+      )}
 
       {/* Stats */}
       {stats && (
