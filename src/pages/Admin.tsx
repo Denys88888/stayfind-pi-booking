@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
+import { usePiAuth } from '@/hooks/usePiAuth';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://stayfind-api.onrender.com';
 const STORAGE_KEY = 'stayfind_admin_key';
+// Same identity check already used to hide the Admin link in Navbar.tsx —
+// duplicated here as the actual access gate, not just link visibility.
+// The admin key alone was reachable by anyone who found /admin and could
+// try to guess it; this closes that gap with a second, independent factor.
+const DEVELOPER_USERNAME = 'cherry19899';
 
 interface Stats {
   mode: string;
@@ -66,6 +72,8 @@ function uptime(s: number) {
 }
 
 export default function Admin() {
+  const { user, isAuthenticated, authenticate } = usePiAuth();
+  const isDeveloper = isAuthenticated && user?.username?.toLowerCase() === DEVELOPER_USERNAME;
   const [key, setKey] = useState(() => localStorage.getItem(STORAGE_KEY) || '');
   const [input, setInput] = useState('');
   const [authed, setAuthed] = useState(false);
@@ -168,7 +176,29 @@ export default function Admin() {
 
   const filtered = filterStatus ? payments.filter(p => p.status === filterStatus) : payments;
 
-  // ── Login screen ──────────────────────────────────────────────────────────
+  // ── Pi identity gate: only the developer's own Pi account may even try
+  //    the admin key. Anyone else — not signed in, or signed in as someone
+  //    else — never sees the key-entry form at all.
+  if (!isDeveloper) {
+    return (
+      <div style={styles.page}>
+        <div style={styles.loginBox}>
+          <div style={styles.logo}>🚫</div>
+          <h2 style={styles.loginTitle}>Доступ ограничен</h2>
+          <p style={styles.loginSub}>
+            {isAuthenticated
+              ? 'Эта панель доступна только разработчику приложения.'
+              : 'Войдите через Pi под аккаунтом разработчика, чтобы открыть эту панель.'}
+          </p>
+          {!isAuthenticated && (
+            <button style={styles.btn} onClick={() => authenticate()}>Войти через Pi</button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Login screen (admin key — second factor, after Pi identity) ────────────
   if (!authed) {
     return (
       <div style={styles.page}>
