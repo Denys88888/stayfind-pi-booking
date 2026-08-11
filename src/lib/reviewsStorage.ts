@@ -35,17 +35,21 @@ export async function fetchReviewSummaries(hotelIds: (string | number)[]): Promi
   }
 }
 
-export async function submitReview(data: {
-  bookingId: string;
-  piUid: string;
-  rating: number;
-  text: string;
-  authorName?: string;
-}): Promise<{ ok: boolean; error?: string }> {
+export async function submitReview(
+  data: {
+    bookingId: string;
+    piUid: string;
+    rating: number;
+    text: string;
+    authorName?: string;
+  },
+  accessToken?: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!accessToken) return { ok: false, error: 'Not signed in' };
   try {
     const res = await fetch(`${API_URL}/api/reviews`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify(data),
     });
     if (!res.ok) {

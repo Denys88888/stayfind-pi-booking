@@ -190,7 +190,7 @@ function BookingsTab({ piUid }: { piUid: string }) {
       rating: reviewRating,
       text: reviewText.trim(),
       authorName: user?.username ? `@${user.username}` : undefined,
-    });
+    }, user?.accessToken);
     setReviewSubmitting(false);
     if (result.ok) {
       setReviewedIds((prev) => new Set(prev).add(reviewTarget.id));
