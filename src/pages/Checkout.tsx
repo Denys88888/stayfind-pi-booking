@@ -1174,7 +1174,10 @@ export default function Checkout() {
         bookedAt: new Date().toISOString(),
         status: 'confirmed',
       }, user.accessToken);
-      if (!result.ok) {
+      // A demo booking (browsing outside Pi Browser) is not a real stay and
+      // has no real payment behind it, so the backend rightly refuses it —
+      // that is expected, not something to alarm the guest about.
+      if (!result.ok && !id.startsWith('demo_')) {
         console.error('[Checkout] Remote booking save failed:', result.error);
         setSyncWarning(true);
       }
