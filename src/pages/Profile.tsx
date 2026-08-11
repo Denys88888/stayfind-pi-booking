@@ -573,6 +573,63 @@ function MyListingsTab({ piUid }: { piUid: string }) {
           </Card>
         </div>
       )}
+
+      {/* Who is actually coming. The totals above say how much is owed but not
+          which guest arrives when, which is what a host needs day to day. */}
+      {earnings.length > 0 && (
+        <div className="mb-6">
+          <h3 className="font-display text-base font-semibold text-[#0F1B2E] mb-3">
+            {t('listing.guestBookings')}
+          </h3>
+          <div className="space-y-3">
+            {earnings
+              .slice()
+              .sort((a, b) => a.checkIn.localeCompare(b.checkIn))
+              .map((b) => (
+                <Card key={b.id} className="border border-[#E2E6EC] rounded-2xl">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-body text-sm font-semibold text-[#0F1B2E] truncate">
+                          {b.hotelName}
+                        </p>
+                        <p className="font-body text-sm text-[#4A5468] mt-1">
+                          {b.checkIn} – {b.checkOut} · {b.nights} {t('property.nights')}
+                        </p>
+                        <p className="font-body text-xs text-[#7A8494] mt-0.5">{b.guests}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="font-display text-base font-semibold text-[#0F1B2E]">
+                          {formatPiAmount(b.hostPayoutAmount || 0)}
+                        </p>
+                        <div className="mt-1">
+                          {b.status === 'cancelled' ? (
+                            <Badge className="bg-rose-50 text-rose-700 hover:bg-rose-50 font-body text-xs font-medium">
+                              {t('profile.cancelled')}
+                            </Badge>
+                          ) : b.hostPayoutStatus === 'completed' ? (
+                            <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 font-body text-xs font-medium">
+                              {t('listing.payoutPaid')}
+                            </Badge>
+                          ) : b.hostPayoutStatus === 'held' ? (
+                            <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-50 font-body text-xs font-medium">
+                              {t('listing.payoutHeld')}
+                            </Badge>
+                          ) : (
+                            <Badge className="bg-slate-100 text-slate-600 hover:bg-slate-100 font-body text-xs font-medium">
+                              {t('listing.payoutPending')}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-end mb-4">
         <Button
           onClick={() => navigate('/list-property')}

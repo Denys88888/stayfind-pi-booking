@@ -408,6 +408,11 @@ const pt: TranslationSet = {
     notFound: 'Propriedade não encontrada',
     manageAvailability: 'Gerenciar disponibilidade',
     blockDates: 'Bloquear estas datas',
+    guestBookings: 'Reservas nas suas propriedades',
+    noGuestBookings: 'Ainda não há reservas',
+    payoutHeld: 'Em custódia',
+    payoutPaid: 'Pago',
+    payoutPending: 'Aguardando pagamento',
   },
   footer: {
     aboutUs: 'Sobre nós',

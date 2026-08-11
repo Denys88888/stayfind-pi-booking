@@ -408,6 +408,11 @@ const ru: TranslationSet = {
     notFound: 'Объявление не найдено',
     manageAvailability: 'Управление доступностью',
     blockDates: 'Заблокировать даты',
+    guestBookings: 'Брони в вашем жилье',
+    noGuestBookings: 'Броней пока нет',
+    payoutHeld: 'В escrow',
+    payoutPaid: 'Выплачено',
+    payoutPending: 'Ожидает выплаты',
   },
   footer: {
     aboutUs: 'О нас',

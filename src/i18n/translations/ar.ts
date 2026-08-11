@@ -408,6 +408,11 @@ const ar: TranslationSet = {
     notFound: 'العقار غير موجود',
     manageAvailability: 'إدارة التوفر',
     blockDates: 'حظر هذه التواريخ',
+    guestBookings: 'الحجوزات في عقاراتك',
+    noGuestBookings: 'لا توجد حجوزات بعد',
+    payoutHeld: 'في الضمان',
+    payoutPaid: 'تم الدفع',
+    payoutPending: 'في انتظار الدفع',
   },
   footer: {
     aboutUs: 'من نحن',

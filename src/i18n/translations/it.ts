@@ -408,6 +408,11 @@ const it: TranslationSet = {
     notFound: 'Struttura non trovata',
     manageAvailability: 'Gestisci disponibilità',
     blockDates: 'Blocca queste date',
+    guestBookings: 'Prenotazioni nelle tue strutture',
+    noGuestBookings: 'Ancora nessuna prenotazione',
+    payoutHeld: 'In deposito',
+    payoutPaid: 'Pagato',
+    payoutPending: 'In attesa di pagamento',
   },
   footer: {
     aboutUs: 'Chi siamo',

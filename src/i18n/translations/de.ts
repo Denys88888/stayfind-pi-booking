@@ -408,6 +408,11 @@ const de: TranslationSet = {
     notFound: 'Unterkunft nicht gefunden',
     manageAvailability: 'Verfügbarkeit verwalten',
     blockDates: 'Diese Termine blockieren',
+    guestBookings: 'Buchungen in deinen Unterkünften',
+    noGuestBookings: 'Noch keine Buchungen',
+    payoutHeld: 'Im Treuhandkonto',
+    payoutPaid: 'Ausgezahlt',
+    payoutPending: 'Auszahlung ausstehend',
   },
   footer: {
     aboutUs: 'Über uns',

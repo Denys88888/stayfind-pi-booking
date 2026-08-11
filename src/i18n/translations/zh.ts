@@ -408,6 +408,11 @@ const zh: TranslationSet = {
     notFound: '未找到该房源',
     manageAvailability: '管理可预订日期',
     blockDates: '屏蔽这些日期',
+    guestBookings: '您房源的预订',
+    noGuestBookings: '暂无预订',
+    payoutHeld: '托管中',
+    payoutPaid: '已支付',
+    payoutPending: '等待支付',
   },
   footer: {
     aboutUs: '关于我们',

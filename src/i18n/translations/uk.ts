@@ -408,6 +408,11 @@ const uk: TranslationSet = {
     notFound: 'Оголошення не знайдено',
     manageAvailability: 'Керування доступністю',
     blockDates: 'Заблокувати дати',
+    guestBookings: 'Бронювання у вашому житлі',
+    noGuestBookings: 'Бронювань поки немає',
+    payoutHeld: 'В escrow',
+    payoutPaid: 'Виплачено',
+    payoutPending: 'Очікує виплати',
   },
   footer: {
     aboutUs: 'Про нас',

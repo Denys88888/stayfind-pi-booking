@@ -408,6 +408,11 @@ const tr: TranslationSet = {
     notFound: 'Liste bulunamadı',
     manageAvailability: 'Uygunluğu yönet',
     blockDates: 'Bu tarihleri engelle',
+    guestBookings: 'Mülklerinizdeki rezervasyonlar',
+    noGuestBookings: 'Henüz rezervasyon yok',
+    payoutHeld: 'Emanette',
+    payoutPaid: 'Ödendi',
+    payoutPending: 'Ödeme bekliyor',
   },
   footer: {
     aboutUs: 'Hakkımızda',

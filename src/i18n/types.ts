@@ -411,6 +411,11 @@ export interface TranslationSet {
     notFound: string;
     manageAvailability: string;
     blockDates: string;
+    guestBookings: string;
+    noGuestBookings: string;
+    payoutHeld: string;
+    payoutPaid: string;
+    payoutPending: string;
   };
   footer: {
     aboutUs: string;

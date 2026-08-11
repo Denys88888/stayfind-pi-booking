@@ -409,6 +409,11 @@ const en: TranslationSet = {
     notFound: 'Listing not found',
     manageAvailability: 'Manage availability',
     blockDates: 'Block these dates',
+    guestBookings: 'Bookings on your properties',
+    noGuestBookings: 'No bookings yet',
+    payoutHeld: 'In escrow',
+    payoutPaid: 'Paid out',
+    payoutPending: 'Awaiting payout',
   },
   footer: {
     aboutUs: 'About Us',
