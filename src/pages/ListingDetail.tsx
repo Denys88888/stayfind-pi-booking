@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/i18n';
 import { fetchListing, type Listing } from '@/lib/listingsStorage';
 import { fetchReviews, type Review } from '@/lib/reviewsStorage';
-import { formatPiAmount, usdToPi } from '@/lib/piPayments';
+import { formatPiAmount, usdToPi, getTaxRate } from '@/lib/piPayments';
 import { checkAvailability } from '@/lib/bookingStorage';
 
 function addDays(date: Date, days: number): string {
@@ -83,7 +83,7 @@ export default function ListingDetail() {
 
   const piPrice = usdToPi(listing.price);
   const subtotal = listing.price * Math.max(nights, 1);
-  const taxes = Math.round(subtotal * 0.1 * 100) / 100;
+  const taxes = Math.round(subtotal * getTaxRate() * 100) / 100;
 
   const handleBook = () => {
     if (availability !== 'available' || nights < 1) return;

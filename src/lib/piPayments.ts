@@ -10,17 +10,32 @@
  * Phase 3: Server-Side Completion (/complete)
  */
 
-// Pi Network realistic market rate: 1 PI ≈ $0.15 USD
-const PI_USD_RATE = 0.15;
+/* The backend is the authority on pricing — it re-checks what a guest paid
+   against what the stay costs, so both sides must use the same numbers.
+   These are only the values used until /api/config answers; they match the
+   server's own defaults, so nothing shifts under the guest in the meantime. */
+let piUsdRate = 0.15;
+let taxRate = 0.1;
+
+/** Adopt the server's pricing rates. Called once at startup. */
+export function setPricingRates(rates: { piUsdRate?: number; taxRate?: number }): void {
+  if (typeof rates.piUsdRate === 'number' && rates.piUsdRate > 0) piUsdRate = rates.piUsdRate;
+  if (typeof rates.taxRate === 'number' && rates.taxRate >= 0 && rates.taxRate < 1) taxRate = rates.taxRate;
+}
+
+/** Service fee applied on top of the nightly subtotal. */
+export function getTaxRate(): number {
+  return taxRate;
+}
 
 /** Convert a USD amount to Pi */
 export function usdToPi(usdAmount: number): number {
-  return Math.round((usdAmount / PI_USD_RATE) * 100) / 100;
+  return Math.round((usdAmount / piUsdRate) * 100) / 100;
 }
 
 /** Convert Pi amount back to USD string */
 export function piToUsd(piAmount: number): string {
-  return `$${(piAmount * PI_USD_RATE).toFixed(2)}`;
+  return `$${(piAmount * piUsdRate).toFixed(2)}`;
 }
 
 /** Format a Pi amount for display, e.g. 6.33 π */
@@ -30,7 +45,7 @@ export function formatPiAmount(piAmount: number): string {
 
 /** Convert Pi to USD for display reference */
 export function piToUsdNumber(piAmount: number): number {
-  return Math.round(piAmount * PI_USD_RATE * 100) / 100;
+  return Math.round(piAmount * piUsdRate * 100) / 100;
 }
 
 /* ------------------------------------------------------------------ */
