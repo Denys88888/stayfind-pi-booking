@@ -59,9 +59,12 @@ export async function fetchListing(id: string): Promise<Listing | null> {
   }
 }
 
-export async function fetchMyListings(piUid: string): Promise<Listing[]> {
+export async function fetchMyListings(piUid: string, accessToken?: string): Promise<Listing[]> {
+  if (!accessToken) return [];
   try {
-    const res = await fetch(`${API_URL}/api/listings/owner/${encodeURIComponent(piUid)}`);
+    const res = await fetch(`${API_URL}/api/listings/owner/${encodeURIComponent(piUid)}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     return res.ok ? await res.json() : [];
   } catch {
     return [];
@@ -70,15 +73,16 @@ export async function fetchMyListings(piUid: string): Promise<Listing[]> {
 
 export async function blockDates(
   listingId: number,
-  piUid: string,
   checkIn: string,
-  checkOut: string
+  checkOut: string,
+  accessToken?: string
 ): Promise<{ ok: boolean; error?: string }> {
+  if (!accessToken) return { ok: false, error: 'Not signed in' };
   try {
     const res = await fetch(`${API_URL}/api/listings/${listingId}/block-dates`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ piUid, checkIn, checkOut }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ checkIn, checkOut }),
     });
     if (!res.ok) {
       const d = await res.json().catch(() => ({}));
@@ -92,14 +96,15 @@ export async function blockDates(
 
 export async function unblockDates(
   listingId: number,
-  piUid: string,
-  index: number
+  index: number,
+  accessToken?: string
 ): Promise<{ ok: boolean; error?: string }> {
+  if (!accessToken) return { ok: false, error: 'Not signed in' };
   try {
     const res = await fetch(`${API_URL}/api/listings/${listingId}/unblock-dates`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ piUid, index }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ index }),
     });
     if (!res.ok) {
       const d = await res.json().catch(() => ({}));

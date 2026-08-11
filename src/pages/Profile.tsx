@@ -502,12 +502,15 @@ function MyListingsTab({ piUid }: { piUid: string }) {
   const [blockError, setBlockError] = useState('');
 
   const reload = () => {
-    fetchMyListings(piUid).then(setListings);
+    fetchMyListings(piUid, user?.accessToken).then(setListings);
   };
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchMyListings(piUid), fetchHostEarnings(piUid, user?.accessToken)]).then(([l, e]) => {
+    Promise.all([
+      fetchMyListings(piUid, user?.accessToken),
+      fetchHostEarnings(piUid, user?.accessToken),
+    ]).then(([l, e]) => {
       if (!cancelled) {
         setListings(l);
         setEarnings(e);
@@ -520,7 +523,7 @@ function MyListingsTab({ piUid }: { piUid: string }) {
   const handleBlock = async (listingId: number) => {
     setBlockError('');
     if (!blockCheckIn || !blockCheckOut) return;
-    const result = await blockDates(listingId, piUid, blockCheckIn, blockCheckOut);
+    const result = await blockDates(listingId, blockCheckIn, blockCheckOut, user?.accessToken);
     if (result.ok) {
       setBlockCheckIn('');
       setBlockCheckOut('');
@@ -531,7 +534,7 @@ function MyListingsTab({ piUid }: { piUid: string }) {
   };
 
   const handleUnblock = async (listingId: number, index: number) => {
-    await unblockDates(listingId, piUid, index);
+    await unblockDates(listingId, index, user?.accessToken);
     reload();
   };
 
