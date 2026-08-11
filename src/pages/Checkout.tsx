@@ -550,7 +550,7 @@ function StepPayment({
   piTaxes,
   piTotal,
 }: {
-  onPay: (txId: string) => void;
+  onPay: (txId: string, paymentId?: string) => void;
   onBack: () => void;
   bookingData: BookingData;
   hotelId: string;
@@ -621,6 +621,10 @@ function StepPayment({
     }
 
     try {
+      // Captured from Pi's approval phase and handed to the backend with the
+      // booking — it's what lets the server verify the real amount paid
+      // instead of trusting the number this page sends.
+      let piPaymentId: string | undefined;
       await createPiPayment({
         amount: piTotal,
         memo: `StayFind: ${bookingData.hotelName} - ${bookingData.roomType}`,
@@ -634,9 +638,12 @@ function StepPayment({
           guests: bookingData.guests,
           totalPi: piTotal,
         },
+        onPaymentId: (paymentId) => {
+          piPaymentId = paymentId;
+        },
         onTransactionId: (txid) => {
           setProcessing(false);
-          onPay(txid);
+          onPay(txid, piPaymentId);
         },
       });
     } catch (err: unknown) {
@@ -1143,7 +1150,7 @@ export default function Checkout() {
   const piTaxes = usdToPi(bookingData.taxes);
   const piTotal = piSubtotal + piTaxes;
 
-  const handlePay = async (id: string) => {
+  const handlePay = async (id: string, paymentId?: string) => {
     if (user?.uid) {
       // Payment already went through on Pi's side by this point — a failed
       // remote save must never block confirmation (the local cache in
@@ -1163,9 +1170,10 @@ export default function Checkout() {
         totalUsd: bookingData.total,
         totalPi: piTotal,
         txid: id,
+        paymentId,
         bookedAt: new Date().toISOString(),
         status: 'confirmed',
-      });
+      }, user.accessToken);
       if (!result.ok) {
         console.error('[Checkout] Remote booking save failed:', result.error);
         setSyncWarning(true);

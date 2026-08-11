@@ -169,7 +169,7 @@ function BookingsTab({ piUid }: { piUid: string }) {
   }, [piUid, user?.accessToken]);
 
   const handleCancel = async (id: string) => {
-    const updated = await cancelBookingRemote(piUid, id);
+    const updated = await cancelBookingRemote(piUid, id, user?.accessToken);
     setBookings(updated);
   };
 

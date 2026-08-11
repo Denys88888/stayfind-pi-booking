@@ -13,6 +13,9 @@ export interface Booking {
   totalUsd: number;
   totalPi: number;
   txid?: string;
+  /** Pi payment identifier — the backend uses it to verify what was actually
+   *  paid, so it must be sent along with the booking. */
+  paymentId?: string;
   bookedAt: string;
   status: 'confirmed' | 'pending' | 'cancelled';
   refundStatus?: 'processing' | 'completed' | 'failed' | 'pending_manual';
@@ -89,14 +92,18 @@ export async function checkRealPaymentEligibility(
 
 export async function createBookingRemote(
   piUid: string,
-  booking: Booking
+  booking: Booking,
+  accessToken?: string
 ): Promise<{ ok: boolean; error?: string }> {
   const payload = { ...booking, piUid };
   saveBooking(payload); // optimistic local cache
   try {
     const res = await fetch(`${API_URL}/api/bookings`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
       body: JSON.stringify(payload),
     });
     if (!res.ok) {
@@ -136,15 +143,22 @@ export async function fetchHostEarnings(hostUid: string, accessToken?: string): 
   }
 }
 
-export async function cancelBookingRemote(piUid: string, id: string): Promise<Booking[]> {
+export async function cancelBookingRemote(
+  piUid: string,
+  id: string,
+  accessToken?: string
+): Promise<Booking[]> {
   cancelBooking(id); // optimistic local cache
   try {
     const res = await fetch(`${API_URL}/api/bookings/${encodeURIComponent(id)}/cancel`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
       body: JSON.stringify({ piUid }),
     });
-    if (res.ok) return fetchBookingsRemote(piUid);
+    if (res.ok) return fetchBookingsRemote(piUid, accessToken);
   } catch {
     /* keep local cancellation */
   }
