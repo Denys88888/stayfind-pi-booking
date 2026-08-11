@@ -13,6 +13,8 @@ const ar: TranslationSet = {
     bookings: 'حجوزاتي',
     language: 'اللغة',
     listProperty: 'أضف عقارك',
+    sandboxBanner: 'وضع Pi التجريبي — وضع الاختبار',
+    sandboxBadge: 'تجريبي',
   },
   hero: {
     title: 'اعثر على إقامتك المثالية',
@@ -236,6 +238,7 @@ const ar: TranslationSet = {
     piTransaction: 'معاملة Pi',
     paid: 'مدفوع',
     totalPaid: 'إجمالي المدفوع',
+    syncWarning: 'تم إتمام الدفع بنجاح، لكن مزامنة الحجز مع الخادم فشلت — احتفظ برقم المعاملة كإيصال.',
     backHome: 'العودة للرئيسية',
     discountTooltip: 'تم تطبيق خصم العضو الحصري',
     memo: 'ملاحظة',

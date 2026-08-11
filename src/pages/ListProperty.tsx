@@ -102,7 +102,7 @@ export default function ListProperty() {
       images: images.map((i) => i.trim()).filter(Boolean),
       amenities,
       propertyType,
-    });
+    }, user.accessToken);
     setSubmitting(false);
     if (result.ok) {
       setSubmitted(true);

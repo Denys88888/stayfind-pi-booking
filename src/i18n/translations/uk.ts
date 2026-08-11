@@ -13,6 +13,8 @@ const uk: TranslationSet = {
     bookings: 'Мої бронювання',
     language: 'Мова',
     listProperty: 'Розмістити оголошення',
+    sandboxBanner: 'Pi Sandbox — Тестовий режим',
+    sandboxBadge: 'Sandbox',
   },
   hero: {
     title: 'Знайдіть ідеальне житло',
@@ -236,6 +238,7 @@ const uk: TranslationSet = {
     piTransaction: 'Транзакція Pi',
     paid: 'Сплачено',
     totalPaid: 'Усього сплачено',
+    syncWarning: 'Оплата пройшла успішно, але синхронізація бронювання із сервером не вдалася — збережіть ID транзакції як чек.',
     backHome: 'На головну',
     discountTooltip: 'Застосовано ексклюзивну знижку для учасників',
     memo: 'Нотатка',

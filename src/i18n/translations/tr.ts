@@ -13,6 +13,8 @@ const tr: TranslationSet = {
     bookings: 'Rezervasyonlarım',
     language: 'Dil',
     listProperty: 'Mülkünüzü Listeleyin',
+    sandboxBanner: 'Pi Sandbox — Test Modu',
+    sandboxBadge: 'Sandbox',
   },
   hero: {
     title: 'Mükemmel Konaklamanı Bul',
@@ -236,6 +238,7 @@ const tr: TranslationSet = {
     piTransaction: 'Pi İşlemi',
     paid: 'Ödendi',
     totalPaid: 'Toplam ödenen',
+    syncWarning: 'Ödeme başarılı oldu, ancak rezervasyon sunucuyla senkronize edilemedi — işlem kimliğinizi makbuz olarak saklayın.',
     backHome: 'Ana Sayfaya Dön',
     discountTooltip: 'Özel üye indirimi uygulandı',
     memo: 'Not',

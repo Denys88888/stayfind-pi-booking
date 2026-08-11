@@ -13,6 +13,8 @@ const it: TranslationSet = {
     bookings: 'Le mie prenotazioni',
     language: 'Lingua',
     listProperty: 'Pubblica la tua struttura',
+    sandboxBanner: 'Pi Sandbox — Modalità test',
+    sandboxBadge: 'Sandbox',
   },
   hero: {
     title: 'Trova il soggiorno perfetto',
@@ -236,6 +238,7 @@ const it: TranslationSet = {
     piTransaction: 'Transazione Pi',
     paid: 'Pagato',
     totalPaid: 'Totale pagato',
+    syncWarning: 'Il pagamento è andato a buon fine, ma la sincronizzazione della prenotazione con il server non è riuscita — conserva l\'ID transazione come ricevuta.',
     backHome: 'Torna alla home',
     discountTooltip: 'Sconto esclusivo membro applicato',
     memo: 'Nota',

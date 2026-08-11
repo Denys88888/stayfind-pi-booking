@@ -13,6 +13,8 @@ const zh: TranslationSet = {
     bookings: '我的预订',
     language: '语言',
     listProperty: '发布您的房源',
+    sandboxBanner: 'Pi 沙盒 — 测试模式',
+    sandboxBadge: '沙盒',
   },
   hero: {
     title: '找到您的理想住宿',
@@ -236,6 +238,7 @@ const zh: TranslationSet = {
     piTransaction: 'Pi 交易',
     paid: '已支付',
     totalPaid: '支付总额',
+    syncWarning: '支付成功，但预订未能同步到服务器 —— 请保存您的交易ID作为收据。',
     backHome: '返回首页',
     discountTooltip: '已享会员专属折扣',
     memo: '备注',

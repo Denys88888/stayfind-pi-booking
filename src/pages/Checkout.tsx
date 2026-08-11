@@ -903,7 +903,7 @@ function StepPayment({
 }
 
 /* ─── Step 3: Confirmation ─── */
-function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: string; bookingData: BookingData; piTotal: number; userEmail?: string }) {
+function StepConfirmation({ txId, bookingData, piTotal, userEmail, syncWarning }: { txId: string; bookingData: BookingData; piTotal: number; userEmail?: string; syncWarning?: boolean }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
@@ -1084,6 +1084,12 @@ function StepConfirmation({ txId, bookingData, piTotal, userEmail }: { txId: str
         </div>
       </div>
 
+      {syncWarning && (
+        <div className="mt-6 rounded-xl border border-[#E8A838] bg-[#FDF6E9] px-4 py-3 text-left">
+          <p className="font-body text-sm text-[#8A5A0A]">{t('checkout.syncWarning')}</p>
+        </div>
+      )}
+
       {/* Action Buttons */}
       <div className="mt-6 flex flex-col sm:flex-row gap-3">
         <Button
@@ -1111,6 +1117,7 @@ export default function Checkout() {
   const [step, setStep] = useState(1);
   const [txId, setTxId] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [syncWarning, setSyncWarning] = useState(false);
   const location = useLocation();
   const state = (location.state || {}) as BookingState;
 
@@ -1138,7 +1145,11 @@ export default function Checkout() {
 
   const handlePay = async (id: string) => {
     if (user?.uid) {
-      await createBookingRemote(user.uid, {
+      // Payment already went through on Pi's side by this point — a failed
+      // remote save must never block confirmation (the local cache in
+      // createBookingRemote already keeps the booking). Just surface a
+      // non-blocking warning so the guest knows to keep their receipt.
+      const result = await createBookingRemote(user.uid, {
         id: generateBookingId(),
         hotelId: String(state.hotelId || '1'),
         hotelName: bookingData.hotelName,
@@ -1155,6 +1166,10 @@ export default function Checkout() {
         bookedAt: new Date().toISOString(),
         status: 'confirmed',
       });
+      if (!result.ok) {
+        console.error('[Checkout] Remote booking save failed:', result.error);
+        setSyncWarning(true);
+      }
     }
     setTxId(id);
     setStep(3);
@@ -1184,7 +1199,7 @@ export default function Checkout() {
             />
           )}
           {step === 3 && (
-            <StepConfirmation txId={txId} bookingData={bookingData} piTotal={piTotal} userEmail={userEmail} />
+            <StepConfirmation txId={txId} bookingData={bookingData} piTotal={piTotal} userEmail={userEmail} syncWarning={syncWarning} />
           )}
         </div>
       </div>

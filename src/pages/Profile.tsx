@@ -159,14 +159,14 @@ function BookingsTab({ piUid }: { piUid: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetchBookingsRemote(piUid).then((list) => {
+    fetchBookingsRemote(piUid, user?.accessToken).then((list) => {
       if (!cancelled) {
         setBookings(list);
         setLoading(false);
       }
     });
     return () => { cancelled = true; };
-  }, [piUid]);
+  }, [piUid, user?.accessToken]);
 
   const handleCancel = async (id: string) => {
     const updated = await cancelBookingRemote(piUid, id);
@@ -491,6 +491,7 @@ function FavoritesTab() {
 /* ─── Tab: My Listings ─── */
 function MyListingsTab({ piUid }: { piUid: string }) {
   const { t } = useTranslation();
+  const { user } = usePiAuth();
   const navigate = useNavigate();
   const [listings, setListings] = useState<Listing[]>([]);
   const [earnings, setEarnings] = useState<StoredBooking[]>([]);
@@ -506,7 +507,7 @@ function MyListingsTab({ piUid }: { piUid: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchMyListings(piUid), fetchHostEarnings(piUid)]).then(([l, e]) => {
+    Promise.all([fetchMyListings(piUid), fetchHostEarnings(piUid, user?.accessToken)]).then(([l, e]) => {
       if (!cancelled) {
         setListings(l);
         setEarnings(e);
@@ -514,7 +515,7 @@ function MyListingsTab({ piUid }: { piUid: string }) {
       }
     });
     return () => { cancelled = true; };
-  }, [piUid]);
+  }, [piUid, user?.accessToken]);
 
   const handleBlock = async (listingId: number) => {
     setBlockError('');
@@ -851,8 +852,8 @@ export default function Profile() {
 
   useEffect(() => {
     if (!user?.uid) return;
-    fetchBookingsRemote(user.uid).then(setProfileBookings);
-  }, [user?.uid]);
+    fetchBookingsRemote(user.uid, user.accessToken).then(setProfileBookings);
+  }, [user?.uid, user?.accessToken]);
 
   /* ─── Unauthenticated state ─── */
   if (!isAuthenticated || !user) {

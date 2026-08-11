@@ -22,6 +22,8 @@ export interface TranslationSet {
     bookings: string;
     language: string;
     listProperty: string;
+    sandboxBanner: string;
+    sandboxBadge: string;
   };
   hero: {
     title: string;
@@ -239,6 +241,7 @@ export interface TranslationSet {
     piTransaction: string;
     paid: string;
     totalPaid: string;
+    syncWarning: string;
     backHome: string;
     downloadReceipt: string;
     discountTooltip: string;

@@ -23,11 +23,12 @@ export type NewListing = Pick<
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://stayfind-api.onrender.com';
 
-export async function createListing(data: NewListing): Promise<{ ok: boolean; error?: string }> {
+export async function createListing(data: NewListing, accessToken?: string): Promise<{ ok: boolean; error?: string }> {
+  if (!accessToken) return { ok: false, error: 'Not signed in' };
   try {
     const res = await fetch(`${API_URL}/api/listings`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify(data),
     });
     if (!res.ok) {

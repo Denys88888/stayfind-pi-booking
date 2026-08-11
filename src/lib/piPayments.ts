@@ -100,9 +100,8 @@ export async function serverSideComplete(paymentId: string, txid: string): Promi
 
 export async function serverSideCancel(paymentId: string): Promise<void> {
   console.log('[PiServer] Server-Side Cancel:', paymentId);
-  // PRODUCTION: const res = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/cancel`, {
-  //   method: 'POST', headers: { 'Authorization': `Key ${PI_SERVER_API_KEY}` }
-  // });
+  const res = await fetch(`${API_URL}/api/payments/cancel/${paymentId}`, { method: 'POST' });
+  if (!res.ok) throw new Error(`Cancel failed: ${res.status}`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -144,15 +143,26 @@ export async function createPiPayment(
 
   return new Promise((resolve, reject) => {
     window.Pi!.createPayment!(paymentData, {
-      /** Phase 1: Server-Side Approval */
+      /** Phase 1: Server-Side Approval.
+       *  If our backend can't approve, the payment must not proceed — retry,
+       *  then reject and cancel it rather than letting the SDK move on. */
       async onReadyForServerApproval(paymentId: string) {
         console.log('[PiPayment] Phase 1 — Ready for server approval:', paymentId);
-        try {
-          await serverSideApprove(paymentId);
-        } catch (err) {
-          console.error('[PiPayment] Server-side approval failed:', err);
+        let lastErr: unknown;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            await serverSideApprove(paymentId);
+            onPaymentId?.(paymentId);
+            return;
+          } catch (err) {
+            lastErr = err;
+            console.warn(`[PiPayment] Approval attempt ${attempt}/3 failed:`, err);
+            if (attempt < 3) await new Promise((r) => setTimeout(r, 1500 * attempt));
+          }
         }
-        onPaymentId?.(paymentId);
+        console.error('[PiPayment] Server approval failed after retries:', lastErr);
+        await serverSideCancel(paymentId).catch(() => {});
+        reject(new Error('APPROVAL_FAILED'));
       },
 
       /** Phase 3: Server-Side Completion.
@@ -180,6 +190,9 @@ export async function createPiPayment(
 
       onCancel(paymentId: string) {
         console.warn('[PiPayment] Cancelled:', paymentId);
+        serverSideCancel(paymentId).catch((err) =>
+          console.error('[PiPayment] Server-side cancel failed:', err)
+        );
         reject(new Error('Payment was cancelled'));
       },
 

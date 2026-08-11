@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className="fixed top-0 left-0 right-0 z-[60] bg-[#E8A838] text-[#0F1B2E] px-4 py-1.5 text-center">
           <div className="flex items-center justify-center gap-2 font-body text-xs font-semibold">
             <AlertTriangle size={14} />
-            Pi Sandbox — Testing Mode
+            {t('navbar.sandboxBanner')}
           </div>
         </div>
       )}
@@ -124,7 +124,7 @@ export default function Navbar() {
                   <span>@{user.username}</span>
                   {isSandbox && (
                     <span className="ml-1 px-1.5 py-0.5 rounded bg-[#E8A838]/20 text-[#B07D1A] text-[10px] font-bold uppercase">
-                      Sandbox
+                      {t('navbar.sandboxBadge')}
                     </span>
                   )}
                 </Link>
@@ -202,7 +202,7 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
-                  {user.username.toLowerCase() === 'cherry19899' && (
+                  {user.username?.toLowerCase() === 'cherry19899' && (
                     <Link
                       to="/admin"
                       className="font-body text-base font-medium text-[#6366f1] py-2"

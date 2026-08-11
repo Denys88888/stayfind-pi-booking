@@ -13,6 +13,8 @@ const ru: TranslationSet = {
     bookings: 'Мои бронирования',
     language: 'Язык',
     listProperty: 'Разместить объявление',
+    sandboxBanner: 'Pi Sandbox — Тестовый режим',
+    sandboxBadge: 'Sandbox',
   },
   hero: {
     title: 'Найдите идеальное жилье',
@@ -236,6 +238,7 @@ const ru: TranslationSet = {
     piTransaction: 'Транзакция Pi',
     paid: 'Оплачено',
     totalPaid: 'Всего оплачено',
+    syncWarning: 'Оплата прошла успешно, но синхронизация брони с сервером не удалась — сохраните ID транзакции как чек.',
     backHome: 'На главную',
     discountTooltip: 'Применена эксклюзивная скидка для участников',
     memo: 'Заметка',

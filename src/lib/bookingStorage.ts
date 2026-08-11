@@ -109,9 +109,12 @@ export async function createBookingRemote(
   }
 }
 
-export async function fetchBookingsRemote(piUid: string): Promise<Booking[]> {
+export async function fetchBookingsRemote(piUid: string, accessToken?: string): Promise<Booking[]> {
+  if (!accessToken) return getBookings();
   try {
-    const res = await fetch(`${API_URL}/api/bookings/${encodeURIComponent(piUid)}`);
+    const res = await fetch(`${API_URL}/api/bookings/${encodeURIComponent(piUid)}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     if (!res.ok) return getBookings();
     const list: Booking[] = await res.json();
     cacheBookings(list);
@@ -121,9 +124,12 @@ export async function fetchBookingsRemote(piUid: string): Promise<Booking[]> {
   }
 }
 
-export async function fetchHostEarnings(hostUid: string): Promise<Booking[]> {
+export async function fetchHostEarnings(hostUid: string, accessToken?: string): Promise<Booking[]> {
+  if (!accessToken) return [];
   try {
-    const res = await fetch(`${API_URL}/api/bookings/host/${encodeURIComponent(hostUid)}`);
+    const res = await fetch(`${API_URL}/api/bookings/host/${encodeURIComponent(hostUid)}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     return res.ok ? await res.json() : [];
   } catch {
     return [];
