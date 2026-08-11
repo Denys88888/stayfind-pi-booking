@@ -260,6 +260,7 @@ export interface TranslationSet {
     paymentCancelled: string;
     roomUnavailable: string;
     demoHotelBlocked: string;
+    paymentsUnavailable: string;
   };
   profile: {
     welcome: string;

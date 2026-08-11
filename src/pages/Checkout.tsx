@@ -616,7 +616,15 @@ function StepPayment({
     const eligibility = await checkRealPaymentEligibility(hotelId);
     if (!eligibility.allowed) {
       setProcessing(false);
-      setPaymentError(eligibility.reason || t('checkout.demoHotelBlocked'));
+      // Prefer a translated message; the server's English text is the fallback
+      // for reasons this build doesn't have a translation for yet.
+      setPaymentError(
+        eligibility.code === 'not_configured' || eligibility.code === 'unreachable'
+          ? t('checkout.paymentsUnavailable')
+          : eligibility.code === 'demo_listing'
+            ? t('checkout.demoHotelBlocked')
+            : eligibility.reason || t('checkout.demoHotelBlocked')
+      );
       return;
     }
 

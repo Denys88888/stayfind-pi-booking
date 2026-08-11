@@ -256,6 +256,7 @@ const uk: TranslationSet = {
     paymentCancelled: 'Платіж було скасовано.',
     roomUnavailable: 'Цей номер більше недоступний на обрані дати.',
     demoHotelBlocked: "Це демо-об'єкт, його не можна забронювати з реальним Pi-платежем.",
+    paymentsUnavailable: 'Оплата Pi тимчасово недоступна — сервіс налаштовується. Спробуйте пізніше.',
     downloadReceipt: 'Завантажити чек',
   },
   profile: {

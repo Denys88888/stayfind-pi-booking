@@ -256,6 +256,7 @@ const zh: TranslationSet = {
     paymentCancelled: '付款已取消。',
     roomUnavailable: '该房间在所选日期已不可预订。',
     demoHotelBlocked: '这是一个演示房源，无法使用真实的 Pi 付款进行预订。',
+    paymentsUnavailable: '服务配置期间，Pi 付款暂时不可用。请稍后再试。',
     downloadReceipt: '下载收据',
   },
   profile: {

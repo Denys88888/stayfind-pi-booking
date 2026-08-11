@@ -80,13 +80,16 @@ export async function checkAvailability(
 
 export async function checkRealPaymentEligibility(
   hotelId: string
-): Promise<{ allowed: boolean; reason?: string }> {
+): Promise<{ allowed: boolean; code?: string; reason?: string }> {
+  // Fails closed: this gate decides whether to take real Pi, and a backend we
+  // can't reach is a backend that can't record the booking either. Better a
+  // guest who has to retry than a guest whose payment lands nowhere.
   try {
     const res = await fetch(`${API_URL}/api/bookings/real-payment-eligibility?hotelId=${encodeURIComponent(hotelId)}`);
-    if (!res.ok) return { allowed: true }; // fail open — don't block on a backend hiccup
+    if (!res.ok) return { allowed: false, code: 'unreachable' };
     return await res.json();
   } catch {
-    return { allowed: true };
+    return { allowed: false, code: 'unreachable' };
   }
 }
 

@@ -256,6 +256,7 @@ const tr: TranslationSet = {
     paymentCancelled: 'Ödeme iptal edildi.',
     roomUnavailable: 'Bu oda seçilen tarihler için artık müsait değil.',
     demoHotelBlocked: 'Bu bir demo mülktür ve gerçek bir Pi ödemesiyle rezerve edilemez.',
+    paymentsUnavailable: 'Hizmet kurulurken Pi ödemeleri geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.',
     downloadReceipt: 'Makbuzu İndir',
   },
   profile: {

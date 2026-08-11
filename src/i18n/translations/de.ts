@@ -256,6 +256,7 @@ const de: TranslationSet = {
     paymentCancelled: 'Die Zahlung wurde storniert.',
     roomUnavailable: 'Dieses Zimmer ist für die ausgewählten Daten nicht mehr verfügbar.',
     demoHotelBlocked: 'Dies ist eine Demo-Unterkunft und kann nicht mit einer echten Pi-Zahlung gebucht werden.',
+    paymentsUnavailable: 'Pi-Zahlungen sind vorübergehend nicht verfügbar, während der Dienst eingerichtet wird. Bitte versuche es später erneut.',
     downloadReceipt: 'Quittung herunterladen',
   },
   profile: {

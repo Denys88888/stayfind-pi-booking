@@ -256,6 +256,7 @@ const ru: TranslationSet = {
     paymentCancelled: 'Платёж был отменён.',
     roomUnavailable: 'Этот номер больше недоступен на выбранные даты.',
     demoHotelBlocked: 'Это демо-объект, его нельзя забронировать с реальным Pi-платежом.',
+    paymentsUnavailable: 'Оплата Pi временно недоступна — сервис настраивается. Попробуйте позже.',
     downloadReceipt: 'Скачать чек',
   },
   profile: {

@@ -256,6 +256,7 @@ const it: TranslationSet = {
     paymentCancelled: 'Il pagamento è stato annullato.',
     roomUnavailable: 'Questa camera non è più disponibile per le date selezionate.',
     demoHotelBlocked: 'Questa è una struttura demo e non può essere prenotata con un pagamento Pi reale.',
+    paymentsUnavailable: 'I pagamenti in Pi non sono temporaneamente disponibili mentre il servizio viene configurato. Riprova più tardi.',
     downloadReceipt: 'Scarica ricevuta',
   },
   profile: {

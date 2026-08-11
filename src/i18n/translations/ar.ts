@@ -256,6 +256,7 @@ const ar: TranslationSet = {
     paymentCancelled: 'تم إلغاء الدفع.',
     roomUnavailable: 'هذه الغرفة لم تعد متاحة للتواريخ المحددة.',
     demoHotelBlocked: 'هذا عقار تجريبي ولا يمكن حجزه بدفعة Pi حقيقية.',
+    paymentsUnavailable: 'الدفع بـ Pi غير متاح مؤقتًا بينما يتم إعداد الخدمة. يرجى المحاولة لاحقًا.',
     downloadReceipt: 'تحميل الإيصال',
   },
   profile: {
