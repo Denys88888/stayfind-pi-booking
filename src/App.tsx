@@ -1,15 +1,21 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n';
 import Home from './pages/Home';
-import Search from './pages/Search';
-import PropertyDetail from './pages/PropertyDetail';
-import Checkout from './pages/Checkout';
-import Profile from './pages/Profile';
-import TermsOfService from './pages/TermsOfService';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Admin from './pages/Admin';
-import ListProperty from './pages/ListProperty';
-import ListingDetail from './pages/ListingDetail';
+
+/* Home is the landing page and stays in the main bundle; everything else is
+   fetched on first visit to that route. Otherwise every guest downloads the
+   admin panel, the checkout flow and the map library (leaflet) just to look
+   at the home page — which is slow over mobile data in Pi Browser. */
+const Search = lazy(() => import('./pages/Search'));
+const PropertyDetail = lazy(() => import('./pages/PropertyDetail'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Profile = lazy(() => import('./pages/Profile'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const Admin = lazy(() => import('./pages/Admin'));
+const ListProperty = lazy(() => import('./pages/ListProperty'));
+const ListingDetail = lazy(() => import('./pages/ListingDetail'));
 
 function NotFound() {
   const { t } = useTranslation();
@@ -25,8 +31,15 @@ function NotFound() {
   );
 }
 
+/* Holds the page's background while a route chunk loads, so navigation shows
+   a steady surface rather than a flash of white. */
+function RouteFallback() {
+  return <div className="min-h-[100dvh] bg-[#F8F9FB]" />;
+}
+
 export default function App() {
   return (
+    <Suspense fallback={<RouteFallback />}>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<Search />} />
@@ -40,5 +53,6 @@ export default function App() {
       <Route path="/admin" element={<Admin />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </Suspense>
   );
 }
